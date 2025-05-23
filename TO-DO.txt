@@ -1,0 +1,12 @@
+PENDIENTE:
+
+poner en orden requerimientos
+poner en orden casos de uso
+poner en orden detalles de sistema
+
+HACIENDO:
+
+
+
+
+HECHO:
