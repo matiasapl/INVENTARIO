@@ -1,0 +1,50 @@
+Lenguajes:
+MYSQL
+PHP
+HTML
+CSS
+JAVASCRIPT
+
+
+PATRONES DE DISEÑO
+MVC(modelo, vista, controlador)
+
+
+
+
+
+
+
+CONTENIDO:
+//VISTA -> CONTENIDO DE INTERRACION DE USUARIO
+//MODELO -> BASES DE DATOS
+//CONTROLADOR -> INTERFAZ ENTRE VISTA Y MODELO
+
+
+//ARCHIVOS
+//archivos de configuracion 
+    //.htaccess
+    //RUTAS.php
+
+//MVC
+    //MODELO
+        //ddbb
+            //DDBB.db
+        //vistas
+            //Inventario.db
+    //CONTROLADOR
+            //controller.php
+    //VISTA
+        //Principales
+            //Index.php
+            //Publico
+        //layouts
+            //Inventario.php
+            //Uri
+            //Alertas.php
+            //Reportes.php
+            //Registros.php
+            //Administracion.php
+            //Login.php
+            //Comun.php
+            //Styless.css

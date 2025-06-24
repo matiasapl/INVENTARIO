@@ -1,8 +1,8 @@
 PENDIENTE:
+crear EXEL 1 hoja por interfaz
+detallar campos de dato en las hojas
+crear 3 ejemplos y definir tipos de datos acorde a MySQL
 
-poner en orden requerimientos
-poner en orden casos de uso
-poner en orden detalles de sistema
 
 HACIENDO:
 
@@ -10,3 +10,7 @@ HACIENDO:
 
 
 HECHO:
+poner en orden wireframes
+poner en orden requerimientos
+poner en orden casos de uso
+poner en orden detalles de sistema

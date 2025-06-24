@@ -1,0 +1,19 @@
+#header{
+  background: lightgray; 
+  width: 100%;
+  margin: 0% auto;
+  border: 1px solid black;
+}
+#aside{
+  background: lightgray; 
+  width: min-content;
+  margin: 0% right;
+  border: 1px solid black;
+}
+
+#footer{
+  background: lightgray; 
+  width: 100%;
+  margin: 0% auto;
+  border: 1px solid black;
+}
