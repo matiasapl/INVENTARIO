@@ -1,10 +1,9 @@
-
-
 //rutas de los archivos PHP
 var Recargar_Inventario_PHP = "../../MODELO/DDBB/Recargar_Inventario.php";
 var CrearProductoInventario_PHP = "../../MODELO/DDBB/CrearProductoInventario.php";
 var EliminarProductoInventario_PHP = "../../MODELO/DDBB/EliminarProductoInventario.php";
 var EditarStockInventario_PHP = "../../MODELO/DDBB/EditarStockInventario.php";
+var EliminarenLote_PHP = "../../MODELO/DDBB/EliminarProductosLote.php";
 
 //funcion para recargar el inventario
 function RecargarInventario() {
@@ -141,14 +140,46 @@ function EditarProducto(){
                 }, {once: true});
             }
 })
-
-
-
 }
 
 
 
 
+function obtenerProductosSeleccionados() {
+  const checkboxes = document.querySelectorAll(".SelectorProducto:checked");
+  return Array.from(checkboxes).map(cb => cb.dataset.id);
+}
+
+function habilitarBotones() {
+document.addEventListener("change", e => {
+  if (e.target.classList.contains("SelectorProducto") || e.target.id === "selectAllProductos") {
+    const seleccionados = obtenerProductosSeleccionados();
+    //document.getElementById("btnEditarSeleccionados").disabled = seleccionados.length !== 1;
+    document.getElementById("btnEliminarSeleccionados").disabled = seleccionados.length === 0;
+  }
+});
+}
+
+
+
+function EliminarenLote() {
+document.getElementById("btnEliminarSeleccionados").addEventListener("click", () => {
+  const ids = obtenerProductosSeleccionados();
+  console.log("IDs seleccionados para eliminar:", JSON.stringify(ids));
+  if (confirm(`¿Eliminar ${ids.length} productos?`)) {
+    fetch(EliminarenLote_PHP, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({ IDs: JSON.stringify(ids) })
+    })
+    .then(() => {
+      RecargarInventario();
+      console.log("Productos eliminados");
+    })
+    .catch(error => console.error("Error eliminando productos:", error));
+  }
+});
+}
 
 //llamados a funciones de inicio
 document.addEventListener("DOMContentLoaded", () => {
@@ -156,19 +187,14 @@ RecargarInventario();
 CrearProducto();
 EliminarProducto();
 EditarProducto();
-
-
+obtenerProductosSeleccionados();
+habilitarBotones();
+EliminarenLote()
 //escuchar eventos de los botones
 document.getElementById("btnActualizarInventario").addEventListener("click", () => {
 RecargarInventario();
 console.log("Inventario actualizado");
 })
-
-
-
-
-
-
 })
 
 

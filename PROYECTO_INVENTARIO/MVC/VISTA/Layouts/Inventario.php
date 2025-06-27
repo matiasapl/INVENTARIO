@@ -3,6 +3,11 @@
     
     <head>
         <?php
+        require 'Comun.php';
+        require '..\..\..\RUTAS.php';
+        HeaderComun();
+        AsideComun();
+        FooterComun();
         ?>
         <script src="..\..\CONTROLADOR\AjaxController.js"></script>
 
@@ -54,4 +59,7 @@
 
 
     </body>
+        <?php
+        FooterComun();
+        ?>
 </html>

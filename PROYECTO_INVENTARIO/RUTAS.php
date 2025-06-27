@@ -35,8 +35,8 @@ $DDBB = 'DDBB.db';
 
 //VARIABLES DE ARCHIVOS
 $Index = "'" . $_MVC . $_Principales . $_Index . "'";
-$INVENTARIO = "'" . $_MVC . $_Layouts . $Layout_Inventario ."'";
-$COMUN = "'" . $_MVC . $_Layouts . $Layout_Comun ."'";
+$INVENTARIO = "'" . $_MVC . $_Layouts . $Layout_Inventario . "'";
+$COMUN = "'" . $_MVC . $_Layouts . $Layout_Comun . "'";
 $CSS = "'" . $_MVC . $_Layouts . $Layout_Css . "'";
 
 ?>
