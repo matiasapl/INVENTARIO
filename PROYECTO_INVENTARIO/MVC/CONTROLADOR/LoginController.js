@@ -69,7 +69,7 @@ RegistrarUsuario();
 document.addEventListener("DOMContentLoaded", () => {
   const loginContainer = document.getElementById("loginContainer");
   const registerContainer = document.getElementById("registerContainer");
-  const recoverPassword = document.getElementById("recoverPassword");
+  const recoverPassword = document.getElementById("recoverPasswordContainer");
 
   function mostrarSeccion(seccion) {
     loginContainer.style.display = (seccion === "login") ? "block" : "none";
