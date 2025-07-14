@@ -18,8 +18,8 @@ function AsideComun() {
     echo '<button disabled class="btn btn-secondary w-75 mx-auto">URI</button><br><br>';
     echo '<button disabled class="btn btn-secondary w-75 mx-auto">Registros</button><br><br>';
     echo '<button disabled class="btn btn-secondary w-75 mx-auto">Reportes</button><br><br>';
-    echo '<button disabled class="btn btn-secondary w-75 mx-auto">Administración</button><br><br>';
-    echo '<button disabled class="btn btn-secondary w-75 mx-auto">Cerrar Sesión</button><br>';
+    echo '<button onclick="location.href=' . $ADMINISTRACION . '" class="btn btn-secondary w-75 mx-auto">Administración</button><br><br>';
+    echo '<button class="btn btn-secondary w-75 mx-auto" id="Logout">Cerrar Sesión</button><br>';
     echo '</aside>';
 }
 
