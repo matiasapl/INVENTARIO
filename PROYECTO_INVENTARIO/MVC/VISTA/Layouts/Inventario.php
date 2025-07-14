@@ -6,7 +6,7 @@
         require 'Comun.php';
         require '..\..\..\RUTAS.php';
         HeaderComun();
-        //AsideComun();
+        AsideComun();
         ?>
         <script src="..\..\CONTROLADOR\AjaxController.js"></script>  
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" 

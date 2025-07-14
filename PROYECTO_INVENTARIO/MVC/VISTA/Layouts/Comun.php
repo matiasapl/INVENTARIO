@@ -5,21 +5,21 @@ function HeaderComun() {
     require '..\..\..\RUTAS.php';
     echo '<header id="header" class="bg-secondary m-3">';
 
-    echo '<button onclick="location.href=' . $Index . '" class="btn btn-outline-info">MENU</button>';
+    echo '<button onclick="" class="btn btn-outline-info" data-bs-toggle="offcanvas" data-bs-target="#aside">MENU</button>';
     echo '</header>';
 }
 
 function AsideComun() {
     require '..\..\..\RUTAS.php';
-    echo '<aside id="aside">';
+    echo '<aside id="aside" class="d-inline-block bg-dark p-3 text-white offcanvas" style="width: 200px; height: 100vh;">';
     echo '<p>NAVEGACIÓN</p>';
-    echo '<button onclick="location.href=' . $INVENTARIO . '">Inventario</button><br><br>';
-    echo '<button disabled>Alertas</button><br><br>';
-    echo '<button disabled>URI</button><br><br>';
-    echo '<button disabled>Registros</button><br><br>';
-    echo '<button disabled>Reportes</button><br><br>';
-    echo '<button disabled>Administración</button><br><br>';
-    echo '<button disabled>Cerrar Sesión</button><br>';
+    echo '<button onclick="location.href=' . $INVENTARIO . '" class="btn btn-secondary w-75 mx-auto">Inventario</button><br><br>';
+    echo '<button disabled class="btn btn-secondary w-75 mx-auto">Alertas</button><br><br>';
+    echo '<button disabled class="btn btn-secondary w-75 mx-auto">URI</button><br><br>';
+    echo '<button disabled class="btn btn-secondary w-75 mx-auto">Registros</button><br><br>';
+    echo '<button disabled class="btn btn-secondary w-75 mx-auto">Reportes</button><br><br>';
+    echo '<button disabled class="btn btn-secondary w-75 mx-auto">Administración</button><br><br>';
+    echo '<button disabled class="btn btn-secondary w-75 mx-auto">Cerrar Sesión</button><br>';
     echo '</aside>';
 }
 
