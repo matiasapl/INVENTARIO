@@ -3,9 +3,9 @@ require '..\..\..\RUTAS.php';
 
 function HeaderComun() {
     require '..\..\..\RUTAS.php';
-    echo '<header id="header">';
-    echo '<h1>ESTO ES UN ARCHIVO DE HEADER COMUN AL PROYECTO</h1>';
-    echo '<button onclick="location.href=' . $Index . '">MENU</button>';
+    echo '<header id="header" class="bg-secondary m-3">';
+
+    echo '<button onclick="location.href=' . $Index . '" class="btn btn-outline-info">MENU</button>';
     echo '</header>';
 }
 
@@ -23,10 +23,4 @@ function AsideComun() {
     echo '</aside>';
 }
 
-function FooterComun() {
-    require '..\..\..\RUTAS.php';
-    echo '<footer id="footer">';
-    echo '<h1>ESTO ES UN ARCHIVO DE FOOTER COMUN AL PROYECTO</h1>';
-    echo '</footer>';
-}
 ?>
