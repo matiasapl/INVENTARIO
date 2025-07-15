@@ -17,7 +17,7 @@
         HeaderComun();
         AsideComun();
         ?>
-
+        <script src="..\..\CONTROLADOR\Verificador_Sesion.js"></script>
 
 </head>
 <body class="bg-secondary">

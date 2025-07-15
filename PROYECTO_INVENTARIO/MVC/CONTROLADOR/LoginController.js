@@ -16,8 +16,13 @@ fetch(Verificar_Usuario_PHP, {
     .then(Response => Response.json())
     .then(data =>{
             if (data.status === "ok") {
-        console.log("Login exitoso:", data.usuario);
         // Aquí podrías guardar datos o iniciar una sesión
+        sessionStorage.setItem("ID", data.usuario.ID);
+        sessionStorage.setItem("Username", data.usuario.Username);
+        sessionStorage.setItem("Email", data.usuario.Email);
+
+        //Redirigir al usuario a la página de administración
+        window.location.href = Administracion_PHP;
     } else {
         alert(data.mensaje);
     }
@@ -45,7 +50,8 @@ fetch(RegistrarUsuario_PHP, {
 
     })
     .then(Response => {
-        //console.log(Response);
+        console.log(Response);
+
 
     })
     .catch(Error => {

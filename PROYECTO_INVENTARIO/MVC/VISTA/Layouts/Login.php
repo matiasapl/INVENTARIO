@@ -4,11 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="..\Layouts\Login.css">
     <script src="..\..\CONTROLADOR\LoginController.js"></script>
-    <link rel="stylesheet" href="Login.css">
+    <script src="..\..\CONTROLADOR\Verificador_Sesion.js"></script>
 </head>
 <body>
-    
+
     <div style="display: block" id="loginContainer" class="FormContainer">
         <h1>Login</h1>
         <form action="#" method="POST" id="loginForm" class="Form">
