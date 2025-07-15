@@ -1,6 +1,7 @@
 <?php
 require 'Conexion.php';
-$resultado = mysqli_query($conn, "SELECT * FROM productos");
+$usuario = $_POST['User_ID'];
+$resultado = mysqli_query($conn, "SELECT * FROM productos where Username = '$usuario'");
 $str_resultado = array();
 if (mysqli_num_rows($resultado) > 0) {
     while($row = mysqli_fetch_assoc($resultado)) {

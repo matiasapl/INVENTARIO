@@ -12,7 +12,10 @@ function RecargarInventario() {
         cuerpo.innerHTML = "";
 
 
-fetch(Recargar_Inventario_PHP)
+fetch(Recargar_Inventario_PHP, {   
+        method: "POST",
+        body: new URLSearchParams({ User_ID: sessionStorage.getItem("ID") }),
+})
     .then(response =>{
     return response.json();
     })
@@ -57,7 +60,9 @@ function CrearProducto() {
     window.addEventListener("DOMContentLoaded", () => {
     document.getElementById("formInventario").addEventListener("submit", e => {
         e.preventDefault();
+
         const formdata = new FormData(e.target);
+        formdata.append("User_ID", sessionStorage.getItem("ID"));
         fetch(CrearProductoInventario_PHP, {
             method: "POST",
             body: formdata
