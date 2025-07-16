@@ -180,6 +180,7 @@ document.getElementById("btnEliminarSeleccionados").addEventListener("click", ()
     .then(() => {
       RecargarInventario();
       console.log("Productos eliminados");
+      document.getElementById("btnEliminarSeleccionados").disabled = true;
     })
     .catch(error => console.error("Error eliminando productos:", error));
   }

@@ -3,6 +3,9 @@ var Inventario_PHP = "../Layouts/Inventario.php";
 var Login_PHP = "../Layouts/Login.php";
 var Comun_PHP = "../Layouts/Comun.php";
 var Administracion_PHP = "../Layouts/Administracion.php";
+
+
+
 document.addEventListener("DOMContentLoaded", () => {
 let path = window.location.pathname;
 const page = path.substring(path.lastIndexOf('/') + 1);
@@ -51,6 +54,11 @@ if (page === "Inventario.php") {
 
 }
 
-
+document.getElementById("Logout").addEventListener("click", () => {
+    sessionStorage.removeItem("ID");
+    sessionStorage.removeItem("Username");
+    sessionStorage.removeItem("Email");
+    window.location.href = Login_PHP;
+}, {once: true});
 
 });
