@@ -27,8 +27,8 @@
             <!-- Personal Info -->
             <div class="col-md-6 d-flex flex-column justify-content-between">
                 <div>
-                    <input type="text" value="TU NOMBRE" class="form-control mb-2" readonly>
-                    <input type="text" value="TU EMAIL" class="form-control mb-2" readonly>
+                    <input type="text" value="TU NOMBRE" class="form-control mb-2" id="Nombre" readonly>
+                    <input type="text" value="TU EMAIL" class="form-control mb-2" id="Email" readonly>
                 </div>
                 <div class="mt-auto">
                     <input type="button" value="Cambiar Contraseña" class="btn btn-outline-light w-100 mb-2">
