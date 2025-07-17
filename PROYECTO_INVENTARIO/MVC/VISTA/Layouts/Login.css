@@ -17,7 +17,7 @@ body {
   padding: 2rem;
   box-sizing: border-box;
   border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.4);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
 }
 
 .FormContainer h1 {
@@ -76,4 +76,3 @@ body {
   display: block;
   margin: 0.3rem 0;
 }
-

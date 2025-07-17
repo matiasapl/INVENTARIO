@@ -5,8 +5,6 @@
         <?php
         require 'Comun.php';
         require '..\..\..\RUTAS.php';
-        HeaderComun();
-        AsideComun();
         ?>
         <script src="..\..\CONTROLADOR\Verificador_Sesion.js"></script>
         
