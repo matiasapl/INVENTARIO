@@ -1,5 +1,10 @@
 <?php
-require 'conexion.php';
+require_once 'Conexion.php';
+
+?>
+
+<?php
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Obtener los datos del formulario
     $ID = $_POST['ID'];

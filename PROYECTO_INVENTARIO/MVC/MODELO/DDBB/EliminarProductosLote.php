@@ -1,5 +1,9 @@
 <?php
-require_once 'Conexion.php'; 
+require_once 'Conexion.php';
+
+?>
+
+<?php
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['IDs'])) {
         $ids = json_decode($_POST['IDs'], true);

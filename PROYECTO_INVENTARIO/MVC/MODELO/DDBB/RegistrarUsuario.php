@@ -1,5 +1,10 @@
 <?php
-require 'Conexion.php';
+require_once 'Conexion.php';
+
+?>
+
+<?php
+
 
 $USERNAME = $_POST['username'];
 $EMAIL = $_POST['email'];

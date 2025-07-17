@@ -1,6 +1,4 @@
-
 <?php 
-require '..\..\..\RUTAS.php';
-include_once '..\Layouts\Comun.php';
+require_once '..\Layouts\Comun.php';
 
 ?> 

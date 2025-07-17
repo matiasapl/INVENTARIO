@@ -1,5 +1,9 @@
 <?php
-require 'Conexion.php';
+require_once 'Conexion.php';
+
+?>
+
+<?php
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = $_POST['username'];

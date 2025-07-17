@@ -1,5 +1,9 @@
 <?php
-require 'Conexion.php';
+require_once 'Conexion.php';
+
+?>
+
+<?php
 $ID = $_POST['ID'] ?? '';
 
 

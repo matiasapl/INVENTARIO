@@ -1,11 +1,12 @@
+<?php
+require_once '..\..\..\RUTAS.php';
+
+?>
 <!DOCTYPE html>
 <html lang="es">
     
     <head>
-        <?php
-        require 'Comun.php';
-        require '..\..\..\RUTAS.php';
-        ?>
+
         <script src="..\..\CONTROLADOR\Verificador_Sesion.js"></script>
         
         <script src="..\..\CONTROLADOR\AjaxController.js"></script>  

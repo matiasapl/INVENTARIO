@@ -1,5 +1,9 @@
 <?php
-require 'Conexion.php';
+require_once 'Conexion.php';
+
+?>
+
+<?php
 $usuario = $_POST['User_ID'];
 $resultado = mysqli_query($conn, "SELECT * FROM productos where Username = '$usuario'");
 $str_resultado = array();

@@ -1,5 +1,10 @@
 <?php
-require 'Conexion.php';
+require_once 'Conexion.php';
+
+?>
+
+<?php
+
 $User_ID = $_POST['User_ID'] ?? '';
 $producto = $_POST['producto'] ?? '';
 $stock = $_POST['stock'] ?? '';
