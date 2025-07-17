@@ -1,7 +1,8 @@
 <?php
-require_once '..\..\..\RUTAS.php';
+require_once 'Comun.php';
 
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
     
