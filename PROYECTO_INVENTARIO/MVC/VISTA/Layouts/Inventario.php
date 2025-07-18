@@ -2,7 +2,7 @@
 <html lang="es">
 
 <?php
-require_once 'Comun.php';
+    require_once 'Comun.php';
 
 ?>
 
