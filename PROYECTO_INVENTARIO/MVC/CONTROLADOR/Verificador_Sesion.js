@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
   //verifica desde login si hay una sesion activa
   if (page === "Login.php") {
     //verificar si hay una sesion activa (en Login)
-    console.log("ejecutando desde Login.php");
+    //console.log("ejecutando desde Login.php");
     if (
       sessionStorage.getItem("ID") &&
       sessionStorage.getItem("Username") &&
@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (page === "Administracion.php") {
     //verificar si hay una sesion activa (en Administracion)
-    console.log("ejecutando desde Administracion.php");
+    //console.log("ejecutando desde Administracion.php");
     if (
       sessionStorage.getItem("ID") &&
       sessionStorage.getItem("Username") &&
@@ -47,7 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (page === "Inventario.php") {
     //verificar si hay una sesion activa (en Inventario)
-    console.log("ejecutando desde Inventario.php");
+    //console.log("ejecutando desde Inventario.php");
     if (
       sessionStorage.getItem("ID") &&
       sessionStorage.getItem("Username") &&

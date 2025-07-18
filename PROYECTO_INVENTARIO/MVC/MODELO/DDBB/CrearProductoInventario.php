@@ -3,23 +3,32 @@
 
 ?>
 
-<?php
+<?php // consulta para Insertar un nuevo producto en la base de datos
+// Verificar si la solicitud es POST
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    //verificar si se recibieron los datos necesarios y define variables
+    if (isset($_POST['User_ID']) && isset($_POST['producto']) && isset($_POST['stock'])) {
+        $User_ID = $_POST['User_ID'];
+        $producto = $_POST['producto'];
+        $stock = $_POST['stock'];
 
-$User_ID = $_POST['User_ID'] ?? '';
-$producto = $_POST['producto'] ?? '';
-$stock = $_POST['stock'] ?? '';
+        //Valida que los datos no estén vacíos
+        if (!empty($User_ID) && !empty($producto) && is_numeric($stock)) {
+            // Prepara la consulta e inserta los datos en la base de datos
+            $stmt = $conn->prepare("INSERT INTO productos (producto, stock, Username) VALUES (?, ?, ?)");
+            $stmt->bind_param("ssi", $producto, $stock, $User_ID);
+            $stmt->execute();
+            $stmt->close();
+            echo "Producto agregado exitosamente";
+        }else { // Si los datos no son válidos, muestra un mensaje de error
+            echo "Error: datos incompletos o inválidos";
+        }
 
-if ($producto && is_numeric($stock)) {
-    // Aquí podrías guardar en una base de datos
-
-    $insert = "INSERT INTO productos (PRODUCTO, STOCK, Username) VALUES ('$producto', $stock, '$User_ID')";
-    $conn->query($insert);
-    echo "Producto guardado: $producto ($stock)";
-} else {
-    echo "Error: datos incompletos";
+    }else { // Si no se recibieron los datos necesarios, muestra un mensaje de error
+        echo "Error: no se recibieron los datos necesarios";
+    }
+}else { // Si la solicitud no es POST, muestra un mensaje de error
+    echo "Error: método de solicitud no válido";
 }
-
-
-
 ?>
 

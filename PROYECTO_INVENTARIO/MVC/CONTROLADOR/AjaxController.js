@@ -41,7 +41,7 @@ function RecargarInventario() {
     })
 
     .catch((error) => {
-      console.log("Error al cargar el inventario:", error);
+      //console.log("Error al cargar el inventario:", error);
     });
 }
 
@@ -201,10 +201,4 @@ document.addEventListener("DOMContentLoaded", () => {
   habilitarBotones();
   EliminarenLote();
   //escuchar eventos de los botones
-  document
-    .getElementById("btnActualizarInventario")
-    .addEventListener("click", () => {
-      RecargarInventario();
-      console.log("Inventario actualizado");
-    });
 });
