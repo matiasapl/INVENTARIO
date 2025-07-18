@@ -9,8 +9,8 @@
     <!-- Fin Meta Etiquetas -->
     
     <!-- Inicio ETIQUETAS DE PESTAÑA -->
-    <title>Document</title>
-    <link rel="icon" type="image/x-icon" href="">
+    <title>Login</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
     <!-- Fin ETIQUETAS DE PESTAÑA -->
 
     <!-- Inicio Estilos -->

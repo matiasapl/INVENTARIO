@@ -10,12 +10,12 @@
     <!-- Inicio Meta Etiquetas -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Login Page">
+    <meta name="description" content="Configuracion Personal y Roles de Usuario">
     <!-- Fin Meta Etiquetas -->
     
     <!-- Inicio ETIQUETAS DE PESTAÑA -->
-    <title>Document</title>
-    <link rel="icon" type="image/x-icon" href="">
+    <title>Administracion</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
     <!-- Fin ETIQUETAS DE PESTAÑA -->
 
     <!-- Inicio Scripts -->
