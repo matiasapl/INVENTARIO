@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="..\Layouts\Login.css">
-    <script src="..\..\CONTROLADOR\LoginController.js"></script>
+    <script defer src="..\..\CONTROLADOR\LoginController.js"></script>
     <script src="..\..\CONTROLADOR\Verificador_Sesion.js"></script>
 </head>
 <body>
