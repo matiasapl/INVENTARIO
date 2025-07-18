@@ -1,13 +1,28 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
+
 <head>
+    <!-- Inicio Meta Etiquetas -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Login Page">
+    <!-- Fin Meta Etiquetas -->
+    
+    <!-- Inicio ETIQUETAS DE PESTAÑA -->
     <title>Document</title>
+    <link rel="icon" type="image/x-icon" href="">
+    <!-- Fin ETIQUETAS DE PESTAÑA -->
+
+    <!-- Inicio Estilos -->
     <link rel="stylesheet" href="..\Layouts\Login.css">
+    <!-- Fin Estilos -->
+
+    <!-- Inicio Scripts -->
     <script defer src="..\..\CONTROLADOR\LoginController.js"></script>
     <script src="..\..\CONTROLADOR\Verificador_Sesion.js"></script>
+    <!-- Fin Scripts -->
 </head>
+
 <body>
 
     <div style="display: block" id="loginContainer" class="FormContainer">

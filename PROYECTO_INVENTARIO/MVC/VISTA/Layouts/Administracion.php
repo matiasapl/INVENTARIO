@@ -1,18 +1,28 @@
+<!DOCTYPE html>
+<html lang="es">
+
 <?php
 require_once 'Comun.php';
 
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
 <head>
+    <!-- Inicio Meta Etiquetas -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Login Page">
+    <!-- Fin Meta Etiquetas -->
+    
+    <!-- Inicio ETIQUETAS DE PESTAÑA -->
     <title>Document</title>
+    <link rel="icon" type="image/x-icon" href="">
+    <!-- Fin ETIQUETAS DE PESTAÑA -->
 
-        <script src="..\..\CONTROLADOR\Verificador_Sesion.js"></script>
-
+    <!-- Inicio Scripts -->
+    <script src="..\..\CONTROLADOR\Verificador_Sesion.js"></script>
+    <!-- Fin Scripts -->
 </head>
+
 <body class="bg-secondary">
     <h1 class="text-center text-white py-3">Administración</h1>
     <div class="container">

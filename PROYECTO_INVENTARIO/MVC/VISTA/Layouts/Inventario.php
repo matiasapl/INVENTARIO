@@ -1,19 +1,28 @@
+<!DOCTYPE html>
+<html lang="es">
+
 <?php
 require_once 'Comun.php';
 
 ?>
 
-<!DOCTYPE html>
-<html lang="es">
+<head>
+    <!-- Inicio Meta Etiquetas -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Login Page">
+    <!-- Fin Meta Etiquetas -->
     
-    <head>
-
-        <script src="..\..\CONTROLADOR\Verificador_Sesion.js"></script>
-        <script defer src="..\..\CONTROLADOR\AjaxController.js"></script>
-
-
-    </head>
-
+    <!-- Inicio ETIQUETAS DE PESTAÑA -->
+    <title>Document</title>
+    <link rel="icon" type="image/x-icon" href="">
+    <!-- Fin ETIQUETAS DE PESTAÑA -->
+    
+    <!-- Inicio Scripts -->
+    <script src="..\..\CONTROLADOR\Verificador_Sesion.js"></script>
+    <script defer src="..\..\CONTROLADOR\AjaxController.js"></script>
+    <!-- Fin Scripts -->
+</head>
     
     <body class="bg-secondary">
         <nav id="inventarioNavbar" class="bg-dark">
