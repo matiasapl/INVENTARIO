@@ -132,6 +132,7 @@ function EditarProducto() {
             body: new URLSearchParams({ ID: ID, STOCK: Stock }),
           })
             .then((response) => {
+              //console.log("Servidor:", response);
               RecargarInventario();
               e.target.reset(); // Limpiar
               document.getElementById(

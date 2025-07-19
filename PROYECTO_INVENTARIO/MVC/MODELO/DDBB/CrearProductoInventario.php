@@ -11,19 +11,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $User_ID = $_POST['User_ID'];
         $producto = $_POST['producto'];
         $stock = $_POST['stock'];
-
         //Valida que los datos no estén vacíos
         if (!empty($User_ID) && !empty($producto) && is_numeric($stock)) {
-            // Prepara la consulta e inserta los datos en la base de datos
+            // Prepara y ejecuta la consulta e inserta los datos en la base de datos
             $stmt = $conn->prepare("INSERT INTO productos (producto, stock, Username) VALUES (?, ?, ?)");
-            $stmt->bind_param("ssi", $producto, $stock, $User_ID);
+            $stmt->bind_param("sii", $producto, $stock, $User_ID);
             $stmt->execute();
             $stmt->close();
             echo "Producto agregado exitosamente";
         }else { // Si los datos no son válidos, muestra un mensaje de error
             echo "Error: datos incompletos o inválidos";
         }
-
     }else { // Si no se recibieron los datos necesarios, muestra un mensaje de error
         echo "Error: no se recibieron los datos necesarios";
     }
