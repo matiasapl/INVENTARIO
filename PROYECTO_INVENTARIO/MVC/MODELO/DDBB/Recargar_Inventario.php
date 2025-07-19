@@ -9,7 +9,6 @@ $resultado = mysqli_query($conn, "SELECT * FROM productos where Username = '$usu
 $str_resultado = array();
 if (mysqli_num_rows($resultado) > 0) {
     while($row = mysqli_fetch_assoc($resultado)) {
-        //echo "id: " . $row["ID"]. " - Name: " . $row["PRODUCTO"]. $row["STOCK"]. $row["ULTIMA_ACTUALIZACION"]. "<br>";
         $str_resultado[] = array(
             'ID' => $row["ID"],
             'PRODUCTO' => $row["PRODUCTO"],

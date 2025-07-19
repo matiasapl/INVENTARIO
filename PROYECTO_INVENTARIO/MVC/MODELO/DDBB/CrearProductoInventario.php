@@ -17,7 +17,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt = $conn->prepare("INSERT INTO productos (producto, stock, Username) VALUES (?, ?, ?)");
             $stmt->bind_param("sii", $producto, $stock, $User_ID);
             $stmt->execute();
-            $stmt->close();
+            $stmt->close(); // Cierra la declaración preparada
+            $conn->close(); // Cierra la conexión a la base de datos
             echo "Producto agregado exitosamente";
         }else { // Si los datos no son válidos, muestra un mensaje de error
             echo "Error: datos incompletos o inválidos";
