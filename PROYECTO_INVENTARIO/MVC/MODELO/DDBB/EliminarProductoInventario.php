@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $query = "DELETE FROM productos WHERE ID = ?";
             $stmt = $conn->prepare($query);
             $stmt->bind_param("i", $ID);
-            $stmt->execute();
+            $stmt->execute(); // Ejecuta la consulta
             $stmt->close(); // Cierra la declaración preparada
             $conn->close(); // Cierra la conexión a la base de datos
             echo "Producto eliminado exitosamente"; // Mensaje de éxito

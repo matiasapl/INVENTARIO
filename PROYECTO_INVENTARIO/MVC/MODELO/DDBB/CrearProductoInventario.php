@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Prepara y ejecuta la consulta e inserta los datos en la base de datos
             $stmt = $conn->prepare("INSERT INTO productos (producto, stock, Username) VALUES (?, ?, ?)");
             $stmt->bind_param("sii", $producto, $stock, $User_ID);
-            $stmt->execute();
+            $stmt->execute(); // Ejecuta la consulta
             $stmt->close(); // Cierra la declaración preparada
             $conn->close(); // Cierra la conexión a la base de datos
             echo "Producto agregado exitosamente";

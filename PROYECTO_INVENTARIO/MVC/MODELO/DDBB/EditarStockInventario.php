@@ -16,7 +16,7 @@
         $query = "UPDATE productos SET STOCK = ?, ULTIMA_ACTUALIZACION = NOW() WHERE ID = ?";
         $stmt = $conn->prepare($query);
         $stmt->bind_param("ii", $STOCK, $ID);
-        $stmt->execute();
+        $stmt->execute(); // Ejecuta la consulta
         $stmt->close(); // Cierra la declaración preparada
         $conn->close(); // Cierra la conexión a la base de datos
         echo "Stock actualizado correctamente."; // Mensaje de éxito
