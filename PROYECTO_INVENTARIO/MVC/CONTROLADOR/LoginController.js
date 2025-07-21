@@ -2,19 +2,24 @@ var RegistrarUsuario_PHP = "../../MODELO/DDBB/RegistrarUsuario.php";
 var Verificar_Usuario_PHP = "../../MODELO/DDBB/VerificarUsuario.php";
 
 function VerificarUsuario() {
+  //login verifica usuario e inicia la sesion
   document.getElementById("loginForm").addEventListener("submit", (e) => {
-    e.preventDefault();
-    console.log("Formulario de inicio de sesión enviado");
-    const formData = new FormData(e.target);
+    // Captura el evento de envío del formulario
+    e.preventDefault(); // Evita la recarga del formulario
+    //console.log("Formulario de inicio de sesión enviado");
+    const formData = new FormData(e.target); // Crea un objeto FormData con los datos del formulario
 
     fetch(Verificar_Usuario_PHP, {
+      // Realiza una petición al servidor para verificar el usuario la exitencia del usuario
       method: "POST",
       body: formData,
     })
-      .then((Response) => Response.json())
+      .then((Response) => Response.json()) // Convierte la respuesta del servidor a JSON
       .then((data) => {
+        // Procesa la respuesta del servidor
         if (data.status === "ok") {
-          // Aquí podrías guardar datos o iniciar una sesión
+          // Si la verificación es exitosa
+          // inicia la sesión
           sessionStorage.setItem("ID", data.usuario.ID);
           sessionStorage.setItem("Username", data.usuario.Username);
           sessionStorage.setItem("Email", data.usuario.Email);
@@ -22,11 +27,11 @@ function VerificarUsuario() {
           //Redirigir al usuario a la página de administración
           window.location.href = Administracion_PHP;
         } else {
-          alert(data.mensaje);
+          alert(data.mensaje); // muestra el mensaje de error si la verificacion falla (usuario o contraseña incorrectos)
         }
       })
       .catch((Error) => {
-        console.error("error al verificar el usuario", Error);
+        //console.error("error al verificar el usuario", Error);
       });
   });
 }
@@ -34,27 +39,28 @@ function VerificarUsuario() {
 function RegistrarUsuario() {
   document.getElementById("registerForm").addEventListener("submit", (e) => {
     e.preventDefault();
-    console.log("Formulario de registro enviado");
     const formData = new FormData(e.target);
-
+    //console.log("Formulario de registro enviado");
     fetch(RegistrarUsuario_PHP, {
       method: "POST",
       body: formData,
     })
       .then((Response) => {
-        console.log(Response);
+        //console.log(Response);
       })
       .catch((Error) => {
-        console.error("error al verificar el usuario", Error);
+        //console.error("error al verificar el usuario", Error);
       });
   });
 }
 
+// Main -> Ejecutar las funciones de verificación y registro al cargar el documento
 document.addEventListener("DOMContentLoaded", () => {
   VerificarUsuario();
   RegistrarUsuario();
 });
 
+// aspecto del Login.php
 document.addEventListener("DOMContentLoaded", () => {
   const loginContainer = document.getElementById("loginContainer");
   const registerContainer = document.getElementById("registerContainer");
