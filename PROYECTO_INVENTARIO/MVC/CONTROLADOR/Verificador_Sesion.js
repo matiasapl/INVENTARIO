@@ -4,70 +4,63 @@ var Login_PHP = "../Layouts/Login.php";
 var Comun_PHP = "../Layouts/Comun.php";
 var Administracion_PHP = "../Layouts/Administracion.php";
 
-document.addEventListener("DOMContentLoaded", () => {
-  let path = window.location.pathname;
-  const page = path.substring(path.lastIndexOf("/") + 1);
+// Obtener el nombre de la página actual
+let path = window.location.pathname;
+const page = path.substring(path.lastIndexOf("/") + 1);
 
-  //verifica desde login si hay una sesion activa
-  if (page === "Login.php") {
-    //verificar si hay una sesion activa (en Login)
-    //console.log("ejecutando desde Login.php");
-    if (
-      sessionStorage.getItem("ID") &&
-      sessionStorage.getItem("Username") &&
-      sessionStorage.getItem("Email")
-    ) {
-      // Si hay una sesión activa, redirigir al usuario a la página de inicio
+// Función para verificar si hay una sesión activa
+function verificarSesion() {
+  if (
+    // Verificar si los datos de sesion estan en sessionStorage
+    sessionStorage.getItem("ID") &&
+    sessionStorage.getItem("Username") &&
+    sessionStorage.getItem("Email")
+  ) {
+    // Si hay una sesión activa, y la pagina es login, redirigir al usuario a la página de inicio
+    if (page === "Login.php") {
       window.location.href = Administracion_PHP;
     }
+  } else {
+    // Si no hay sesión activa, redirigir al usuario a la página de inicio de sesión
+    if (page !== "Login.php") {
+      window.location.href = Login_PHP;
+    }
   }
+}
 
-  if (page === "Administracion.php") {
-    //verificar si hay una sesion activa (en Administracion)
-    //console.log("ejecutando desde Administracion.php");
-    if (
-      sessionStorage.getItem("ID") &&
-      sessionStorage.getItem("Username") &&
-      sessionStorage.getItem("Email")
-    ) {
-      let Username = sessionStorage.getItem("Username");
-      let Email = sessionStorage.getItem("Email");
-      console.log("Username: " + Username);
-      console.log("Email: " + Email);
+// Cargar datos en la pagina de Administracion
+function cargarDatosAdministracion() {
+  if (page == "Administracion.php") {
+    let Username = sessionStorage.getItem("Username");
+    let Email = sessionStorage.getItem("Email");
 
+    if (Username != null && Email != null) {
       let nombre = document.getElementById("Nombre");
       let email = document.getElementById("Email");
       nombre.value = Username;
       email.value = Email;
-    } else {
-      // Si no hay sesión activa, redirigir al usuario a la página de inicio de sesión
-      window.location.href = Login_PHP;
     }
   }
+}
 
-  if (page === "Inventario.php") {
-    //verificar si hay una sesion activa (en Inventario)
-    //console.log("ejecutando desde Inventario.php");
-    if (
-      sessionStorage.getItem("ID") &&
-      sessionStorage.getItem("Username") &&
-      sessionStorage.getItem("Email")
-    ) {
-      // Si hay una sesión activa, redirigir al usuario a la página de inicio
-    } else {
-      // Si no hay sesión activa, redirigir al usuario a la página de inicio de sesión
-      window.location.href = Login_PHP;
-    }
-  }
-
+// cerrar sesion
+function cerrarSesion() {
   document.getElementById("Logout").addEventListener(
+    // Evento de clic para cerrar sesión
     "click",
     () => {
-      sessionStorage.removeItem("ID");
+      sessionStorage.removeItem("ID"); //remueve datos de sessionStorage
       sessionStorage.removeItem("Username");
       sessionStorage.removeItem("Email");
-      window.location.href = Login_PHP;
+      window.location.href = Login_PHP; // redirige a la pagina de login
     },
-    { once: true }
+    { once: true } // Elimina el evento después de ejecutarlo una vez
   );
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  //verifica si el DOM esta cargado antes de ejecutar el script
+  verificarSesion();
+  cargarDatosAdministracion();
+  cerrarSesion();
 });
