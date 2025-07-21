@@ -20,7 +20,7 @@
     
     <!-- Inicio Scripts -->
     <script src="..\..\CONTROLADOR\Verificador_Sesion.js"></script>
-    <script defer src="..\..\CONTROLADOR\AjaxController.js"></script>
+    <script defer src="..\..\CONTROLADOR\InventarioController.js"></script>
     <!-- Fin Scripts -->
 </head>
     
