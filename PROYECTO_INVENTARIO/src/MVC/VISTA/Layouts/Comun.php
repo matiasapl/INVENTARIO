@@ -1,5 +1,5 @@
 <?php
-    require_once '..\..\..\RUTAS.php';
+    require_once '..\..\..\..\RUTAS.php';
 
 ?>
 
