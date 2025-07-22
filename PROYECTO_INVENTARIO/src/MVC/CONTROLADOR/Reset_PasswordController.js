@@ -1,0 +1,48 @@
+// variables
+var Login_PHP = "../Layouts/Login.php";
+let email;
+let token;
+var Reset_Password_PHP = "../../MODELO/DDBB/Cambiar_Contrasena.php";
+var Validar_Tocken_PHP = "../../MODELO/DDBB/Validar_Tocken.php";
+//verifica los datos exitan en url de lo contrario redirecciona
+const params = new URLSearchParams(window.location.search);
+token = params.get("token");
+email = params.get("email");
+
+function Validar_Url(tocken, email) {
+  if (typeof tocken === "string" && typeof email === "string") {
+    console.log("entro en el if: " + tocken + " " + email);
+  } else {
+    console.log("Validacion fallida");
+    window.location.href = Login_PHP;
+  }
+}
+
+//verifica que los datos coincidan con base de datos de lo contrario redirecciona
+function Validar_Tocken(token, email) {
+  fetch(Validar_Tocken_PHP, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ token, email }),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.valido === true) {
+        console.log("Token y email válidos");
+      } else {
+        console.log("Token y/o email no válidos, mostrar mensaje de error");
+        window.location.href = Login_PHP;
+      }
+    })
+    .catch((error) => {
+      console.error("Error en la validación:", error);
+      //window.location.href = Login_PHP;
+    });
+}
+//resive la nueva contraseña, añade email a form data y envia Reset_Password envia alert de exito y redirecciona a login
+
+//invocar metodos
+Validar_Url(token, email);
+Validar_Tocken(token, email);

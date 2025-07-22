@@ -7,11 +7,11 @@
 
 
     <CDN>
-        <!-- Inicio CDN DE BOOTSTRAP -->
+        <!-- BOOTSTRAP -->
         <link rel="stylesheet" href="../../../../vendor/twbs/bootstrap/dist/css/bootstrap.min.css">
         <script src="../../../../vendor/twbs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
-        <!-- Fin CDN DE BOOTSTRAP -->
+        <!-- BOOTSTRAP -->
     </CDN>
 
     <!-- Header Comun -->
