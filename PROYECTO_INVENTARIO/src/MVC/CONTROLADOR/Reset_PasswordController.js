@@ -30,19 +30,47 @@ function Validar_Tocken(token, email) {
     .then((response) => response.json())
     .then((data) => {
       if (data.valido === true) {
-        console.log("Token y email válidos");
+        //console.log("Token y email válidos");
       } else {
-        console.log("Token y/o email no válidos, mostrar mensaje de error");
+        //console.log("Token y/o email no válidos, mostrar mensaje de error");
         window.location.href = Login_PHP;
       }
     })
     .catch((error) => {
-      console.error("Error en la validación:", error);
-      //window.location.href = Login_PHP;
+      //console.error("Error en la validación:", error);
+      window.location.href = Login_PHP;
     });
 }
 //resive la nueva contraseña, añade email a form data y envia Reset_Password envia alert de exito y redirecciona a login
-
+function Reset_Password(email) {
+  document.getElementById("Reset_Password").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const formdata = new FormData(e.target);
+    formdata.append("email", email);
+    formdata.append("token", token);
+    fetch(Reset_Password_PHP, {
+      method: "POST",
+      body: formdata,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.value === true) {
+          alert("Contraseña Actualizada Con Exito");
+          window.location.href = Login_PHP;
+        } else {
+          alert("no se ah podido actualizar la contraseña");
+          window.location.href = Login_PHP;
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        window.location.href = Login_PHP;
+      });
+  });
+}
 //invocar metodos
-Validar_Url(token, email);
-Validar_Tocken(token, email);
+document.addEventListener("DOMContentLoaded", () => {
+  Validar_Url(token, email);
+  Validar_Tocken(token, email);
+  Reset_Password(email);
+});

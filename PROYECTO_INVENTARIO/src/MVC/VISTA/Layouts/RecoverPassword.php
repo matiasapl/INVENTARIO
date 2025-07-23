@@ -12,11 +12,11 @@
     <div style="display: block" id="loginContainer" class="FormContainer">
         <h1>Recuperar Contraseña</h1>
         <!-- Formulario de Login -->
-        <form action="#" method="POST" id="loginForm" class="Form">
+        <form action="#" method="POST" id="Reset_Password" class="Form">
             <label for="Password">Nueva Contraseña</label>
-            <input type="password" name="Nueva Contraseña" placeholder="Nueva Contraseña" required>
+            <input type="password" name="Contrasena" placeholder="Nueva Contraseña" required>
             <label for="password">Repita Contraseña</label>
-            <input type="password" name="Repita Contraseña" placeholder="Repita Contraseña" required>
+            <input type="password" name="Contrasena_Confirmacion" placeholder="Repita Contraseña" required>
             <button type="submit">Enviar</button>
         </form>
 </body>
