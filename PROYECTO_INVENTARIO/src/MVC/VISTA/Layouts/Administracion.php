@@ -39,8 +39,8 @@
             </div>
             <!-- Botones de Cambio -->
             <div class="mt-auto">
-                <input type="button" value="Cambiar Contraseña" class="btn btn-outline-light w-100 mb-2">
-                <input type="button" value="Cambiar Email" class="btn btn-outline-light w-100">
+                <input disabled type="button" value="Cambiar Contraseña" class="btn btn-outline-light w-100 mb-2">
+                <input disabled type="button" value="Cambiar Email" class="btn btn-outline-light w-100">
             </div>
         </div>
         <!-- Fin Interfaz Datos Personales -->

@@ -14,9 +14,9 @@
         <!-- Formulario de Login -->
         <form action="#" method="POST" id="Reset_Password" class="Form">
             <label for="Password">Nueva Contraseña</label>
-            <input type="password" name="Contrasena" placeholder="Nueva Contraseña" required>
+            <input type="password" name="Contrasena" placeholder="Nueva Contraseña" id="Contrasena" required>
             <label for="password">Repita Contraseña</label>
-            <input type="password" name="Contrasena_Confirmacion" placeholder="Repita Contraseña" required>
+            <input type="password" name="Contrasena_Confirmacion" placeholder="Repita Contraseña" id="Contrasena_Confirmacion" required>
             <button type="submit">Enviar</button>
         </form>
 </body>

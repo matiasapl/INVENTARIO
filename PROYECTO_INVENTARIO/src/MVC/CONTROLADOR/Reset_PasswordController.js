@@ -45,27 +45,40 @@ function Validar_Tocken(token, email) {
 function Reset_Password(email) {
   document.getElementById("Reset_Password").addEventListener("submit", (e) => {
     e.preventDefault();
-    const formdata = new FormData(e.target);
-    formdata.append("email", email);
-    formdata.append("token", token);
-    fetch(Reset_Password_PHP, {
-      method: "POST",
-      body: formdata,
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.value === true) {
-          alert("Contraseña Actualizada Con Exito");
-          window.location.href = Login_PHP;
-        } else {
-          alert("no se ah podido actualizar la contraseña");
-          window.location.href = Login_PHP;
-        }
+
+    // Obtener los valores de ambos campos de contraseña
+    const password = document.getElementById("Contrasena").value;
+    const confirmPassword = document.getElementById(
+      "Contrasena_Confirmacion"
+    ).value;
+
+    // Validar que ambas contraseñas coincidan
+    if (password == confirmPassword) {
+      const formdata = new FormData(e.target);
+      formdata.append("email", email);
+      formdata.append("token", token);
+      fetch(Reset_Password_PHP, {
+        method: "POST",
+        body: formdata,
       })
-      .catch((error) => {
-        console.error(error);
-        window.location.href = Login_PHP;
-      });
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.value === true) {
+            alert("Contraseña Actualizada Con Exito");
+            window.location.href = Login_PHP;
+          } else {
+            alert("no se ah podido actualizar la contraseña");
+            window.location.href = Login_PHP;
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+          window.location.href = Login_PHP;
+        });
+    } else {
+      alert("Las contraseñas no coinciden. Por favor verifica los campos.");
+      return; // Detiene el envío del formulario
+    }
   });
 }
 //invocar metodos
