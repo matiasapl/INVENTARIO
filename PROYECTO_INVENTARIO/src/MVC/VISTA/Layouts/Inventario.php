@@ -36,7 +36,7 @@
 
         <!-- buscador de productos -->
         <div class="input-group">
-            <input type="search" name="Producto" id="Buscar_Producto" class="form-control my-3" placeholder="Buscar Producto">
+            <input type="search" disabled name="Producto" id="Buscar_Producto" class="form-control my-3" placeholder="Buscar Producto">
         </div>
     </nav>
 <!-- Fin Contenedor Nav -->

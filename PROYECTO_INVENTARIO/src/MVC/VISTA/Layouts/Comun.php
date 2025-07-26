@@ -4,8 +4,6 @@
 ?>
 
 <Comun>
-
-
     <CDN>
         <!-- BOOTSTRAP -->
         <link rel="stylesheet" href="../../../../vendor/twbs/bootstrap/dist/css/bootstrap.min.css">
