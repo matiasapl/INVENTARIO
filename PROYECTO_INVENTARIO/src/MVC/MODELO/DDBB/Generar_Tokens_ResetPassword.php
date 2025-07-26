@@ -1,9 +1,9 @@
 <?php
-    require_once '../MODELO/DDBB/Conexion.php';
+    require_once 'Conexion.php';
 
     use PHPMailer\PHPMailer\PHPMailer;
     use PHPMailer\PHPMailer\Exception;
-    require 'Email_Config.php'; // Aquí ya configuraste PHPMailer con Gmail
+    require '../../NEGOCIO/Email_Config.php'; // Aquí ya configuraste PHPMailer con Gmail
 
 ?>
 

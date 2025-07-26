@@ -2,7 +2,7 @@
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-require '../../../vendor/autoload.php';
+require '../../../../vendor/autoload.php';
 
 $mail = new PHPMailer(true);
 
@@ -14,13 +14,13 @@ try {
     $mail->isSMTP();  
     $mail->Host = 'smtp.gmail.com';
     $mail->SMTPAuth = true;
-    $mail->Username = 'correo gmail';
-    $mail->Password = 'app_password';
+    $mail->Username = 'prbs.software.matias@gmail.com';
+    $mail->Password = 'gjnzdjvfxferhgst';
     $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
     $mail->Port = 587;
 
     // Configuración por defecto del remitente
-    $mail->setFrom('correo gmail', 'INVENTARIOS_TEST_VERSION');
+    $mail->setFrom('prbs.software.matias@gmail.com', 'INVENTARIOS_TEST_VERSION');
 
 } catch (Exception $e) {
     echo "Error al configurar PHPMailer: {$mail->ErrorInfo}";

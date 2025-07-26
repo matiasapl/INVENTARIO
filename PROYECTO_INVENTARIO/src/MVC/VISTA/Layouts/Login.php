@@ -20,7 +20,7 @@
     <!-- Inicio Scripts -->
     <script defer src="..\..\CONTROLADOR\LoginController.js"></script>
     <script src="..\..\CONTROLADOR\Verificador_Sesion.js"></script>
-    <script src="..\..\Negocio\Recuperar_Contrasena.js"></script>
+    <script src="..\..\CONTROLADOR\Recuperar_Contrasena.js"></script>
     <!-- Fin Scripts -->
 </head>
 

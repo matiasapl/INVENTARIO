@@ -1,4 +1,4 @@
-let Generar_Token_PHP = "../../NEGOCIO/Generar_Tokens_ResetPassword.php";
+let Generar_Token_PHP = "../../MODELO/DDBB/Generar_Tokens_ResetPassword.php";
 
 function Enviar_Correo() {
   document.getElementById("recoverForm").addEventListener("submit", (e) => {

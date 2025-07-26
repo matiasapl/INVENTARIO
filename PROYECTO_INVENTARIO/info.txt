@@ -4,6 +4,17 @@ HTML,
 CSS,
 JS,
 PHP,
+MySql,
 
-Librerias/Frameworks:
-Boostrap
+Librerias:
+Boostrap,
+PHPMailer
+
+
+REQUERIMIENTOS DE EJECUCION:
+XAMPP: https://www.apachefriends.org/es/download.html
+
+EJECUTAR QUERRY PARA BASE DE DATOS: https://www.mysql.com/products/workbench/
+
+UBICACION DE ARCHIVO .SQL = SRC/MVC/MODELO/DDBB/CREAR_DDBB.sql
+
