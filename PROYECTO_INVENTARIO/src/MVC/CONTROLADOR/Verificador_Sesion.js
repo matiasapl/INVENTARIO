@@ -49,12 +49,16 @@ function cerrarSesion() {
     // Evento de clic para cerrar sesión
     "click",
     () => {
-      sessionStorage.removeItem("ID"); //remueve datos de sessionStorage
-      sessionStorage.removeItem("Username");
-      sessionStorage.removeItem("Email");
-      window.location.href = Login_PHP; // redirige a la pagina de login
-    },
-    { once: true } // Elimina el evento después de ejecutarlo una vez
+      const confirmar = confirm("¿Estás seguro de que deseas cerrar sesión?");
+      if (confirmar) {
+        sessionStorage.removeItem("ID"); //remueve datos de sessionStorage
+        sessionStorage.removeItem("Username");
+        sessionStorage.removeItem("Email");
+        window.location.href = Login_PHP; // redirige a la pagina de login
+      } else {
+        console.log("se cancelo el cierre de sesion"); // mensaje para depuracion
+      }
+    }
   );
 }
 

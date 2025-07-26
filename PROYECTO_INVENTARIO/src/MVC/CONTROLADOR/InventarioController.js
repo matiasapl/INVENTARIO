@@ -90,25 +90,30 @@ function EliminarProducto() {
     // Escucha el evento click en el cuerpo de la tabla
     const ID = e.target.dataset.id; // Obtiene el ID del producto desde el atributo data-id del botón clickeado
     if (e.target.classList.contains("EliminarProducto")) {
-      // Verifica si el botón clickeado tiene la clase "EliminarProducto"
-      fetch(EliminarProductoInventario_PHP, {
-        // Llama al archivo PHP para eliminar el producto
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-        body: new URLSearchParams({ ID: ID }), // Envía el ID del producto a eliminar
-      })
-        .then((response) => {
-          //console.log(response);
-          RecargarInventario(); // Recarga el inventario después de eliminar el producto
+      const confirmar = confirm(
+        "¿Estas Seguro que deseas ELIMINAR este producto, ESTA ACCION NO SE PUEDE DESHACER?"
+      );
+      if (confirmar) {
+        // Verifica si el botón clickeado tiene la clase "EliminarProducto"
+        fetch(EliminarProductoInventario_PHP, {
+          // Llama al archivo PHP para eliminar el producto
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: new URLSearchParams({ ID: ID }), // Envía el ID del producto a eliminar
         })
+          .then((response) => {
+            //console.log(response);
+            RecargarInventario(); // Recarga el inventario después de eliminar el producto
+          })
 
-        .catch((error) => {
-          //console.error("Error al eliminar el producto:", error); //imprime un error para depuracion
-        });
+          .catch((error) => {
+            //console.error("Error al eliminar el producto:", error); //imprime un error para depuracion
+          });
 
-      //console.log("Producto eliminado con ID:", ID); // imprime el ID del producto eliminado para depuracion
+        //console.log("Producto eliminado con ID:", ID); // imprime el ID del producto eliminado para depuracion
+      }
     }
   });
 }
@@ -128,33 +133,54 @@ function EditarProducto() {
         // escucha el evento submit del formulario
         "submit",
         (e) => {
-          const Stock = document.getElementById("nuevoStock").value; // Obtiene el nuevo stock del campo de entrada
           e.preventDefault(); // Evita que el formulario se recargue de forma predeterminada
-          /*console.log( // Depuración: imprime los valores a ingresar
+          const Stock = document.getElementById("nuevoStock").value; // Obtiene el nuevo stock del campo de entrada
+          if (Stock >= 0) {
+            const confirmar = confirm(
+              "¿Estas Seguro que deseas EDITAR EL STOCK de este producto, ESTA ACCION NO SE PUEDE DESHACER?"
+            );
+            if (confirmar) {
+              /*console.log( // Depuración: imprime los valores a ingresar
             "ID del producto a editar:",
             ID + " con nuevo stock: " + Stock
           ); // verificar los valores a ingresar
           */
-          //envia datos al servidor
-          fetch(EditarStockInventario_PHP, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/x-www-form-urlencoded",
-            },
-            body: new URLSearchParams({ ID: ID, STOCK: Stock }), //define los datos a enviar
-          })
-            .then((response) => {
-              //console.log("Servidor:", response);
-              RecargarInventario(); // Recarga el inventario después de editar el stock del producto
-              e.target.reset(); // Limpiar el campo del formulario
+              //envia datos al servidor
+              fetch(EditarStockInventario_PHP, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/x-www-form-urlencoded",
+                },
+                body: new URLSearchParams({ ID: ID, STOCK: Stock }), //define los datos a enviar
+              })
+                .then((response) => {
+                  //console.log("Servidor:", response);
+                  RecargarInventario(); // Recarga el inventario después de editar el stock del producto
+                  e.target.reset(); // Limpiar el campo del formulario
+                  document.getElementById(
+                    // Oculta el formulario después de enviar los datos
+                    "formularioContenedorStock"
+                  ).style.display = "none";
+                })
+                .catch((error) => {
+                  //console.error("Error al editar el producto:", error); //imprime un error para depuracion
+                });
+            } else {
+              //console.log("se ah cancelado la edicion de producto"); // mensaje de depuracion
               document.getElementById(
                 // Oculta el formulario después de enviar los datos
                 "formularioContenedorStock"
               ).style.display = "none";
-            })
-            .catch((error) => {
-              //console.error("Error al editar el producto:", error); //imprime un error para depuracion
-            });
+              e.target.reset(); // Limpiar el campo del formulario
+            }
+          } else {
+            alert("no se puede dar un valor negativo al stock de un producto");
+            document.getElementById(
+              // Oculta el formulario después de enviar los datos
+              "formularioContenedorStock"
+            ).style.display = "none";
+            e.target.reset(); // Limpiar el campo del formulario
+          }
         },
         { once: true } // Asegura que el evento se escuche solo una vez para evitar múltiples envíos
       );

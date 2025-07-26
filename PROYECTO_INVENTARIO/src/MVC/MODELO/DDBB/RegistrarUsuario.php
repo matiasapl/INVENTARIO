@@ -10,6 +10,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $USERNAME = $_POST['username'];
         $EMAIL = $_POST['email'];
         $PASS = hash('sha256', $_POST['password'], true); // HASHEA CONTRASEÑA Y GUARDA LA CONTRASEÑA EN BINARIO
+        //verifica que el correo electronico no se encuentre registrado
+        $stmt = $conn->prepare("SELECT 1 FROM usuarios WHERE email = ?");
+        $stmt->bind_param("s", $EMAIL);
+        $stmt->execute();
+        $stmt->store_result();
+
+        if ($stmt->num_rows > 0) {
+            echo "El correo ya está registrado.";
+            $stmt->close();
+            $conn->close();
+            exit;
+        }
+        $stmt->close();
+        $null = null;
         $stmt = $conn->prepare("INSERT INTO usuarios (PASS, EMAIL, USERNAME) VALUES (?, ?, ?)"); //PREPARA LA CONSULTA
         $stmt->bind_param("bss", $null, $EMAIL, $USERNAME); // "b" para BLOB (requiere manejo especial)
         $stmt->send_long_data(0, $PASS); // posición 0 = primer parámetro ("b")

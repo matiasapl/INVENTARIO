@@ -31,7 +31,7 @@ function VerificarUsuario() {
         }
       })
       .catch((Error) => {
-        //console.error("error al verificar el usuario", Error);
+        console.error("error al verificar el usuario", Error);
       });
   });
 }
@@ -39,17 +39,22 @@ function VerificarUsuario() {
 function RegistrarUsuario() {
   document.getElementById("registerForm").addEventListener("submit", (e) => {
     e.preventDefault();
+
     const formData = new FormData(e.target);
     //console.log("Formulario de registro enviado");
+
     fetch(RegistrarUsuario_PHP, {
       method: "POST",
       body: formData,
     })
-      .then((Response) => {
-        //console.log(Response);
+      .then((response) => response.text()) // Leer el texto enviado por PHP
+      .then((message) => {
+        alert(message); // Mostrar mensaje como alerta (puede ser éxito o error)
+        console.log("Respuesta del servidor:", message);
       })
-      .catch((Error) => {
-        //console.error("error al verificar el usuario", Error);
+      .catch((error) => {
+        console.error("Error al registrar al usuario:", error);
+        alert("Ha ocurrido un error durante el procedimiento.");
       });
   });
 }
