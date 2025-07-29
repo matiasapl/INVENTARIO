@@ -1,29 +1,32 @@
 <?php
+//AQUI SE LLAMAN A OTROS ARCHIVOS Y DEPENDENCIAS
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
 require '../../../../vendor/autoload.php';
 
-$mail = new PHPMailer(true);
+?>
 
+<?php
+//ARCHIVO DE CONFIGURACION PARA ENVIO EMAILS EN ENTORNO LOCAL USANDO LA LIBRERIA PHPMAILER
+
+$mail = new PHPMailer(true); // CREA UN NUEVO OBJETO DE LA CLASE PHPMAILER CON EL PARAMETRO TRUE PARA LANZAR EXEPCIONES EN CASO DE ERROR
 try {
-    // Configuración del servidor 
-    $mail->CharSet = 'UTF-8'; // <-- ESTO es lo más importante
-    $mail->Encoding = 'base64'; // Opcional, pero ayuda a correos largos con caracteres especiales
-    $mail->SMTPDebug = 0;                      //Enable verbose debug output
-    $mail->isSMTP();  
-    $mail->Host = 'smtp.gmail.com';
-    $mail->SMTPAuth = true;
-    $mail->Username = 'correo gmail';
-    $mail->Password = 'app_password';
-    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-    $mail->Port = 587;
+    $mail->CharSet = 'UTF-8'; //CODIFICACION UTF-8 PARA PODER USAR CARACTERES ESPECIALES COMO "Ñ"
+    $mail->Encoding = 'base64';  //ESTABLECE CODIFICACION PARA BASE64
+    $mail->SMTPDebug = 0; //SMTPDebug a 0 para produccion desactiva depuracion SMTPDebug 2 si deseas depurar Errores              
+    $mail->isSMTP();  // SE USARA EL PROTOCOLO SMTP PARA ENVIO DE CORREOS
+    $mail->Host = 'smtp.gmail.com'; //USA EL HOST DE GMAIL PARA QUE PUEDAS PROBAR SISTEMA A NIVEL LOCAL CON UN CORREO GMAIL
+    $mail->SMTPAuth = true; //ACTIVA AUTENTICACION SMTP
+    $mail->Username = 'correo gmail'; //TU CORREO PARA ENVIAR EMAILS DE REESTABLECIMIENTO DE CONTRASEÑAS AQUI (DE SER UN GMAIL)
+    $mail->Password = 'app_password'; //TU CONTRASEÑA PARA DE APLICACION AQUI (DE SER DEL GMAIL, RECUERDA ACTIVAR LA AUTENTICACION EN 2 PASOS Y USAR CONTRASEÑA DE APLICACION)
+    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; //ESPECIFICA EL TIPO DE CIFRADO (STARTTLS)
+    $mail->Port = 587; //PUERTO STANDAR SEGURO CON (STARTTLS)
 
-    // Configuración por defecto del remitente
-    $mail->setFrom('correo gmail', 'INVENTARIOS_TEST_VERSION');
+    $mail->setFrom('correo gmail', 'INVENTARIOS_TEST_VERSION'); //DEFINE EL CORREO Y NOMBRE DEL REMITENTE QUE APARECERA CUANDO SE RESIVA EL CORREO 
 
 } catch (Exception $e) {
-    echo "Error al configurar PHPMailer: {$mail->ErrorInfo}";
+    echo "Error al configurar PHPMailer: {$mail->ErrorInfo}"; //LANZA CUALQUIER EXEPCION DEL ARCHIVO DE CONFIGURACION PARA SU DEPURACION.
 }
 ?>
 

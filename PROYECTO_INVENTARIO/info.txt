@@ -18,3 +18,42 @@ EJECUTAR QUERRY PARA BASE DE DATOS: https://www.mysql.com/products/workbench/
 
 UBICACION DE ARCHIVO .SQL = SRC/MVC/MODELO/DDBB/CREAR_DDBB.sql
 
+
+
+
+VISTA - LISTO
+    /PRINCIPALES
+        INDEX.PHP
+    /LAYOUTS
+    Administracion.php
+    Comun.php
+    favicon.ico
+    Inventario.php
+    Login.css
+    Login.php
+    RecoverPassword.php
+
+MODELO - LISTO
+    /DDBB
+    Cambiar_Contrasena.php // documentado
+    Conexion.php //documentado
+    CREAR_BBDD.sql // archivo para crear la base de datos, exento de documentacion 
+    Crear_ProductoInventario.php //documentado
+    EditarStockInventario.php //documentado
+    EliminarProductoInventario.php //documentado
+    EliminarProductosLote.php //documentado
+    Generar_Tokens_ResetPassword.php // documentado
+    Recargar_Inventario // documentado
+    Registrar_Usuario.php // documentado
+    Validar_Tocken.php // documentado
+    VerificarUsuario.php // documentado
+
+NEGOCIO //LISTO
+    Email_Config.php
+
+CONTROLADOR - LISTO
+    InventarioController.js
+    LoginController.js
+    Recuperar_Contrasena.js
+    Reset_PasswordController.js
+    Verificador_Sesion.js

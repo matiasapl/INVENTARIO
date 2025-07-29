@@ -240,7 +240,6 @@ function EliminarenLote() {
 
 // Main -> Ejecutar funciones al cargar el documento
 document.addEventListener("DOMContentLoaded", () => {
-  //Escuchar eventos de los botones
   RecargarInventario();
   CrearProducto();
   EliminarProducto();

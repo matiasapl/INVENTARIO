@@ -11,9 +11,9 @@ email = params.get("email");
 
 function Validar_Url(tocken, email) {
   if (typeof tocken === "string" && typeof email === "string") {
-    console.log("entro en el if: " + tocken + " " + email);
+    //console.log("entro en el if: " + tocken + " " + email); // mensaje para depuracion
   } else {
-    console.log("Validacion fallida");
+    //console.log("Validacion fallida"); // mensaje para depuracion
     window.location.href = Login_PHP;
   }
 }
@@ -72,7 +72,8 @@ function Reset_Password(email) {
           }
         })
         .catch((error) => {
-          console.error(error);
+          // mensaje para depuracion
+          //console.error(error);
           window.location.href = Login_PHP;
         });
     } else {
@@ -81,7 +82,8 @@ function Reset_Password(email) {
     }
   });
 }
-//invocar metodos
+
+// Main -> Ejecutar funciones al cargar el documento
 document.addEventListener("DOMContentLoaded", () => {
   Validar_Url(token, email);
   Validar_Tocken(token, email);

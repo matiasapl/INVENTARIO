@@ -56,14 +56,14 @@ function cerrarSesion() {
         sessionStorage.removeItem("Email");
         window.location.href = Login_PHP; // redirige a la pagina de login
       } else {
-        console.log("se cancelo el cierre de sesion"); // mensaje para depuracion
+        //console.log("se cancelo el cierre de sesion"); // mensaje para depuracion
       }
     }
   );
 }
 
+// Main -> Ejecutar funciones al cargar el documento
 document.addEventListener("DOMContentLoaded", () => {
-  //verifica si el DOM esta cargado antes de ejecutar el script
   verificarSesion();
   cargarDatosAdministracion();
   cerrarSesion();

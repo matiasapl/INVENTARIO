@@ -31,7 +31,7 @@ function VerificarUsuario() {
         }
       })
       .catch((Error) => {
-        console.error("error al verificar el usuario", Error);
+        //console.error("error al verificar el usuario", Error); mensaje para depuracion
       });
   });
 }
@@ -50,16 +50,16 @@ function RegistrarUsuario() {
       .then((response) => response.text()) // Leer el texto enviado por PHP
       .then((message) => {
         alert(message); // Mostrar mensaje como alerta (puede ser éxito o error)
-        console.log("Respuesta del servidor:", message);
+        //console.log("Respuesta del servidor:", message); //mensaje para depuracion
       })
       .catch((error) => {
-        console.error("Error al registrar al usuario:", error);
+        //console.error("Error al registrar al usuario:", error); //mensaje para deputacion
         alert("Ha ocurrido un error durante el procedimiento.");
       });
   });
 }
 
-// Main -> Ejecutar las funciones de verificación y registro al cargar el documento
+// Main -> Ejecutar funciones al cargar el documento
 document.addEventListener("DOMContentLoaded", () => {
   VerificarUsuario();
   RegistrarUsuario();
