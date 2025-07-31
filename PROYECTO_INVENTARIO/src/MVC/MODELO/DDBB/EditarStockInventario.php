@@ -13,7 +13,7 @@
     // Validar que el stock sea un número entero
     if (is_numeric($STOCK) && is_numeric($ID)){
         // Preparar y ejecuta la consulta para actualizar el stock del producto y la fecha de última actualización
-        $query = "UPDATE productos SET STOCK = ?, ULTIMA_ACTUALIZACION = NOW() WHERE ID = ?";
+        $query = "UPDATE PRODUCTOS SET STOCK = ?, ULTIMA_ACTUALIZACION = NOW() WHERE ID = ?";
         $stmt = $conn->prepare($query);
         $stmt->bind_param("ii", $STOCK, $ID);
         $stmt->execute(); // Ejecuta la consulta

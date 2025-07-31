@@ -1,9 +1,9 @@
 <?php
 //archivo para configurar la conexion a mysql llamar a conexion.php en archivos que requieran interaccion con bbdd
 $server = "localhost";
-$username = "root";
+$username = "app_user";
 $password = "admin";
-$database = "inventario_demo";
+$database = "INVENTARIO_DEMO";
 
 $conn = mysqli_connect($server, $username, $password, $database);
 

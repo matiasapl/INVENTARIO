@@ -4,7 +4,7 @@ $_RUTAS = '/PROYECTO_INVENTARIO/RUTAS.php';
 $_HTACCESS = '/PROYECTO_INVENTARIO/.htaccess';
 
 //RUTAS
-$_MVC = '/PROYECTO_INVENTARIO/src/MVC';
+$_MVC = '/src/MVC';
 $_Principales = '/VISTA/Principales';
 $_Layouts = '/VISTA/Layouts';
 $_Controlador = '/CONTROLADOR';

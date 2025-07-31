@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Valida que el ID sea un número
         if (is_numeric($ID)) { 
             // Prepara y ejecuta la consulta para eliminar el producto
-            $query = "DELETE FROM productos WHERE ID = ?";
+            $query = "DELETE FROM PRODUCTOS WHERE ID = ?";
             $stmt = $conn->prepare($query);
             $stmt->bind_param("i", $ID);
             $stmt->execute(); // Ejecuta la consulta

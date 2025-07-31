@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') { // verifica que sea una solicitud P
 
     $hash = hash('sha256', $password, true); // hashea y convierte la contraseña a un formato binario
 
-    $stmt = $conn->prepare("SELECT ID, Username, Email FROM Usuarios WHERE Username = ? AND PASS = ?"); // prepara la consulta SQL para evitar inyecciones SQL
+    $stmt = $conn->prepare("SELECT ID, USERNAME, EMAIL FROM USUARIOS WHERE USERNAME = ? AND PASS = ?"); // prepara la consulta SQL para evitar inyecciones SQL
     $stmt->bind_param("sb", $username, $null); // vincula los parámetros a la consulta preparada
     $stmt->send_long_data(1, $hash); // agrega el hash de la contraseña como un dato largo reemplazando el segundo parámetro
 

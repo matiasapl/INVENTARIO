@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') { // Verifica si la solicitud es POST
         $ids = json_decode($_POST['IDs'], true); // Decodifica los IDs desde JSON a un array
         if (is_array($ids) && count($ids) > 0) { // Verifica que sea un array y que contenga al menos un ID
             $placeholders = implode(',', array_fill(0, count($ids), '?')); // Crea los placeholders para la consulta SQL
-            $query = "DELETE FROM productos WHERE id IN ($placeholders)"; // Prepara la consulta SQL para eliminar los productos con los IDs especificados
+            $query = "DELETE FROM PRODUCTOS WHERE ID IN ($placeholders)"; // Prepara la consulta SQL para eliminar los productos con los IDs especificados
             $stmt = $conn->prepare($query); // Prepara la declaración SQL
             $tipos = str_repeat('i', count($ids)); // Crea una cadena de tipos para los parámetros (asumiendo que todos los IDs son enteros)
             $stmt->bind_param($tipos, ...$ids); // Asocia los parámetros a la declaración preparada 

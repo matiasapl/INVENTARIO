@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         //Valida que los datos no estén vacíos
         if (!empty($User_ID) && !empty($producto) && is_numeric($stock)) {
             // Prepara y ejecuta la consulta e inserta los datos en la base de datos
-            $stmt = $conn->prepare("INSERT INTO productos (producto, stock, Username) VALUES (?, ?, ?)");
+            $stmt = $conn->prepare("INSERT INTO PRODUCTOS (PRODUCTO, STOCK, USERNAME) VALUES (?, ?, ?)");
             $stmt->bind_param("sii", $producto, $stock, $User_ID);
             $stmt->execute(); // Ejecuta la consulta
             $stmt->close(); // Cierra la declaración preparada

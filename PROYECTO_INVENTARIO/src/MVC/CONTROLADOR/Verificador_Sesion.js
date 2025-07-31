@@ -13,8 +13,8 @@ function verificarSesion() {
   if (
     // Verificar si los datos de sesion estan en sessionStorage
     sessionStorage.getItem("ID") &&
-    sessionStorage.getItem("Username") &&
-    sessionStorage.getItem("Email")
+    sessionStorage.getItem("USERNAME") &&
+    sessionStorage.getItem("EMAIL")
   ) {
     // Si hay una sesión activa, y la pagina es login, redirigir al usuario a la página de inicio
     if (page === "Login.php") {
@@ -31,8 +31,8 @@ function verificarSesion() {
 // Cargar datos en la pagina de Administracion
 function cargarDatosAdministracion() {
   if (page == "Administracion.php") {
-    let Username = sessionStorage.getItem("Username");
-    let Email = sessionStorage.getItem("Email");
+    let Username = sessionStorage.getItem("USERNAME");
+    let Email = sessionStorage.getItem("EMAIL");
 
     if (Username != null && Email != null) {
       let nombre = document.getElementById("Nombre");
@@ -52,8 +52,8 @@ function cerrarSesion() {
       const confirmar = confirm("¿Estás seguro de que deseas cerrar sesión?");
       if (confirmar) {
         sessionStorage.removeItem("ID"); //remueve datos de sessionStorage
-        sessionStorage.removeItem("Username");
-        sessionStorage.removeItem("Email");
+        sessionStorage.removeItem("USERNAME");
+        sessionStorage.removeItem("EMAIL");
         window.location.href = Login_PHP; // redirige a la pagina de login
       } else {
         //console.log("se cancelo el cierre de sesion"); // mensaje para depuracion

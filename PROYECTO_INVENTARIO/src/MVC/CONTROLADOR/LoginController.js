@@ -21,8 +21,8 @@ function VerificarUsuario() {
           // Si la verificación es exitosa
           // inicia la sesión
           sessionStorage.setItem("ID", data.usuario.ID);
-          sessionStorage.setItem("Username", data.usuario.Username);
-          sessionStorage.setItem("Email", data.usuario.Email);
+          sessionStorage.setItem("USERNAME", data.usuario.USERNAME);
+          sessionStorage.setItem("EMAIL", data.usuario.EMAIL);
 
           //Redirigir al usuario a la página de administración
           window.location.href = Administracion_PHP;

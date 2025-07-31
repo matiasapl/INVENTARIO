@@ -16,11 +16,11 @@ $token = $data['token'] ?? '';
 $email = $data['email'] ?? '';
 
 // BUSCA COINCIDENCIAS PARA UN TOKEN VALIDO QUE EXPIRE EN MAXIMO 1 HORA DESDE LA FECHA ACTUAL
-$query = "SELECT email, token FROM password_resets 
-          WHERE email = ? 
-          AND token = ? 
-          AND expiracion BETWEEN NOW() AND DATE_ADD(NOW(), INTERVAL 1 HOUR)
-          AND usado = 0";
+$query = "SELECT EMAIL, TOKEN FROM PASSWORD_RESETS 
+          WHERE EMAIL = ? 
+          AND TOKEN = ? 
+          AND EXPIRACION BETWEEN NOW() AND DATE_ADD(NOW(), INTERVAL 1 HOUR)
+          AND USADO = 0";
 $stmt = $conn->prepare($query); 
 $stmt->bind_param("ss", $email, $token);  
 $stmt->execute(); // Ejecuta la consulta

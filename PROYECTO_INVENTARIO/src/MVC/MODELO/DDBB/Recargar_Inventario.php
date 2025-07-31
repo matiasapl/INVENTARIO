@@ -9,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') { // verifica si la solicitud es POST
     if(isset($_POST['User_ID'])) { // verifica si User_ID está definido
     $usuario = $_POST['User_ID']; // obtiene el ID del usuario
     
-    $query = "SELECT * FROM productos WHERE Username = ?"; // consulta SQL para obtener productos del usuario
+    $query = "SELECT * FROM PRODUCTOS WHERE USERNAME = ?"; // consulta SQL para obtener productos del usuario
     $stmt = $conn->prepare($query); // prepara la consulta
     $stmt->bind_param("i", $usuario); // vincula el parámetro de usuario a la consulta
     $stmt->execute(); // ejecuta la consulta

@@ -14,25 +14,25 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         $value = false;
 
         // Actualizar contraseña
-        $query = "UPDATE usuarios SET pass = ? WHERE Email = ?";
+        $query = "UPDATE USUARIOS SET PASS = ? WHERE EMAIL = ?";
         $stmt = $conn->prepare($query);
         $stmt->bind_param("ss", $contrasena, $email);
         $stmt->execute();
         $stmt->close();
 
         // Verificar si se actualizó correctamente
-        $query = "SELECT pass FROM usuarios WHERE Email = ?";
+        $query = "SELECT PASS FROM USUARIOS WHERE EMAIL = ?";
         $stmt = $conn->prepare($query);
         $stmt->bind_param("s", $email);
         $stmt->execute();
         $resultado = $stmt->get_result();
 
         if ($row = $resultado->fetch_assoc()) {
-            if ($row['pass'] === $contrasena) {
+            if ($row['PASS'] === $contrasena) {
                 $value = true;
 
                 // Marcar token como usado
-                $query = "UPDATE password_resets SET usado = 1 WHERE token = ?";
+                $query = "UPDATE PASSWORD_RESETS SET USADO = 1 WHERE TOKEN = ?";
                 $stmt = $conn->prepare($query);
                 $stmt->bind_param("s", $token);
                 $stmt->execute();
