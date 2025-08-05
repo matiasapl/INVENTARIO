@@ -9,7 +9,7 @@ header('Content-Type: application/json');
 if($_SERVER['REQUEST_METHOD'] === 'POST'){
     if(isset($_POST['email']) && isset($_POST['token']) && isset($_POST['Contrasena'])){
         $email = $_POST['email'] ?? '';
-        $contrasena = hash('sha256', $_POST['Contrasena'] ?? '');
+        $contrasena = hash('sha256', $_POST['Contrasena'] ?? '', true);
         $token = $_POST['token'] ?? '';
         $value = false;
 

@@ -18,7 +18,7 @@
 
     <!-- Header Comun -->
     <header id="header" class="bg-secondary m-3">
-        <button onclick="" class="btn btn-outline-info" data-bs-toggle="offcanvas" data-bs-target="#aside">MENU</button>
+        <button class="btn btn-outline-info" data-bs-toggle="offcanvas" data-bs-target="#aside">MENU</button>
     </header>
 
     <!-- Aside Comun -->

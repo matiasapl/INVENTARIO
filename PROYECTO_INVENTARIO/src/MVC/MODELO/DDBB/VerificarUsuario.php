@@ -1,5 +1,6 @@
 <?php
     require_once 'Conexion.php';
+
 ?>
 
 <?php
@@ -10,10 +11,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') { // verifica que sea una solicitud P
     $username = $_POST['username']; // almacena datos en variables
     $password = $_POST['password'];
 
-    $hash = hash('sha256', $password); // hashea la contraseña
+    $hash = hash('sha256', $password, true); // hashea y convierte la contraseña a un formato binario
 
     $stmt = $conn->prepare("SELECT ID, USERNAME, EMAIL FROM USUARIOS WHERE USERNAME = ? AND PASS = ?"); // prepara la consulta SQL para evitar inyecciones SQL
-    $stmt->bind_param("ss", $username, $hash); // vincula los parámetros a la consulta preparada
+    $stmt->bind_param("sb", $username, $null); // vincula los parámetros a la consulta preparada
+    $stmt->send_long_data(1, $hash); // agrega el hash de la contraseña como un dato largo reemplazando el segundo parámetro
 
     $stmt->execute(); // ejecuta la consulta preparada
     $resultado = $stmt->get_result(); // obtiene el resultado de la consulta
