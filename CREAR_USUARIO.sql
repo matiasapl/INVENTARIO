@@ -1,0 +1,3 @@
+CREATE USER 'app_user'@'localhost' IDENTIFIED BY 'admin';
+GRANT SELECT, INSERT, UPDATE, DELETE ON INVENTARIO_DEMO.* TO 'app_user'@'localhost';
+FLUSH PRIVILEGES;
