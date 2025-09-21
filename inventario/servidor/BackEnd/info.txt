@@ -1,3 +1,0 @@
-migrar bases de datos:
-
-docker compose exec apache bash -c "cd /var/www/html/BackEnd && php artisan migrate"

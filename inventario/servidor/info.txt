@@ -1,0 +1,15 @@
+migrar bases de datos:
+
+docker compose exec apache bash -c "cd /var/www/html/BackEnd && php artisan migrate"
+
+composer require tymon/jwt-auth
+
+
+php artisan vendor:publish --provider="Tymon\JWTAuth\Providers\LaravelServiceProvider"
+php artisan jwt:secret
+
+revisar modelo
+
+revisar controlador 
+
+revisar api .php
