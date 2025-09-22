@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Usuario;
+use App\Models\usuarios;
 use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
@@ -18,7 +18,7 @@ public function register(Request $request)
             'password' => 'required|string|min:6',
         ]);
 
-        $usuario = Usuario::create([
+        $usuario = usuarios::create([
             'nombre' => $request->nombre,
             'email' => $request->email,
             'password' => Hash::make($request->password), // Hasheo de contraseña
