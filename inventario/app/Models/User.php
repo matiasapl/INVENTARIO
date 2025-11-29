@@ -18,6 +18,7 @@ class User extends Authenticatable
      *
      * @var list<string>
      */
+    
     protected $fillable = [
         'name',
         'email',
@@ -49,4 +50,11 @@ class User extends Authenticatable
             'two_factor_confirmed_at' => 'datetime',
         ];
     }
+
+    
+    public function products()
+    {
+        return $this->hasMany(Product::class, 'usuario');
+    }
+
 }

@@ -11,10 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('products', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-        });
+
+    Schema::create('products', function (Blueprint $table) {
+        $table->id();
+        $table->integer('codigo');
+        $table->string('nombre');
+        $table->string('descripcion')->nullable();
+        $table->unsignedInteger('stock')->default(0);
+        $table->unsignedDecimal('precio_unitario', 10, 2)->default(0.00);
+        $table->unsignedDecimal('M3_unitario', 14, 5)->default(0.00000);
+        $table->foreignId('usuario')->constrained('users')->onDelete('cascade');
+        $table->timestamps();
+    });
+
     }
 
     /**
