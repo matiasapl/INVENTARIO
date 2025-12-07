@@ -10,9 +10,11 @@ class Product extends Model
         'codigo', 'nombre', 'descripcion', 'stock', 'precio_unitario', 'M3_unitario', 'usuario'
     ];
 
-    public function user()
-    {
-        return $this->belongsTo(User::class, 'usuario');
-    }
+
+public function user()
+{
+    return $this->belongsTo(User::class, 'usuario');
+}
+
 
 }

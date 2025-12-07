@@ -1,67 +1,36 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
+use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Mostrar todos los productos del usuario autenticado.
      */
-    public function index($id)
+    public function index()
     {
-        $products = Product::where('usuario', $id)->get();
-        return response()->json($products);
+        $products = Product::where('usuario', Auth::id())->get();
+
+        // Si usas Inertia:
+        return inertia('Products/Index', [
+            'products' => $products
+        ]);
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
+     * Guardar un nuevo producto asociado al usuario autenticado.
      */
     public function store(StoreProductRequest $request)
     {
-        //
-    }
+        $data = $request->validated();
+        $data['usuario'] = Auth::id(); // Asigna el usuario autenticado
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Product $product)
-    {
-        //
-    }
+        $product = Product::create($data);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Product $product)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateProductRequest $request, Product $product)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Product $product)
-    {
-        //
+        return redirect()->route('products.index')->with('success', 'Producto creado correctamente');
     }
 }
