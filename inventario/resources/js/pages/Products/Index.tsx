@@ -7,9 +7,10 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
+import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
-import { Head } from '@inertiajs/react';
+import { Head, Link} from '@inertiajs/react';
 import ProductController from '@/actions/App/Http/Controllers/ProductController';
 interface Product {
     codigo: number;
@@ -31,6 +32,9 @@ export default function Index({ products }: { products: Product[] }) {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Ver Productos" />
+            <Link href={ProductController.create().url}>
+                <Button className="m-4 bg-green-500 hover:bg-green-700">Crear Producto</Button>
+            </Link>
             <Table>
                 <TableCaption>Lista de Productos</TableCaption>
                 <TableHeader>

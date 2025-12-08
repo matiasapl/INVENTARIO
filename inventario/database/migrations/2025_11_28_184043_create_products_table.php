@@ -14,13 +14,14 @@ return new class extends Migration
 
     Schema::create('products', function (Blueprint $table) {
         $table->id();
-        $table->integer('codigo');
+        $table->unsignedInteger('codigo');
         $table->string('nombre');
         $table->string('descripcion')->nullable();
         $table->unsignedInteger('stock')->default(0);
         $table->decimal('precio_unitario', 10, 2)->unsigned()->default(0.00);
         $table->decimal('M3_unitario', 14, 5)->unsigned()->default(0.00000);
         $table->foreignId('usuario')->constrained('users')->onDelete('cascade');
+        $table->boolean('habilitado')->default(true);
         $table->timestamps();
     });
 

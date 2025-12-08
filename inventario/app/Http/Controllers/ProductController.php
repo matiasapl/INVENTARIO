@@ -11,15 +11,22 @@ class ProductController extends Controller
     /**
      * Mostrar todos los productos del usuario autenticado.
      */
-    public function index()
-    {
-        $products = Product::where('usuario', Auth::id())->get();
 
-        // Si usas Inertia:
-        return inertia('Products/Index', [
-            'products' => $products
-        ]);
-    }
+public function index()
+{
+    $products = Product::where('usuario', Auth::id())
+                       ->where('habilitado', true)
+                       ->get();
+
+    return inertia('Products/Index', [
+        'products' => $products
+    ]);
+}
+        public function create(){
+            return inertia('Products/Create', [
+                'products' => new Product()
+            ]);    
+        }
 
     /**
      * Guardar un nuevo producto asociado al usuario autenticado.
