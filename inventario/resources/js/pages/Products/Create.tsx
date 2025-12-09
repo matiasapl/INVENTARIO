@@ -43,8 +43,11 @@ export default function Create() {
                             Codigo de Producto:
                         </Label>
                         <Input
+                            type="Number"
                             id="Codigo"
-                            placeholder="001"
+                            max={10000000}
+                            min={0}
+                            maxLength={8}
                             onChange={(e) =>
                                 setData('codigo', Number(e.target.value))
                             }
@@ -57,6 +60,8 @@ export default function Create() {
                         <Input
                             id="Nombre"
                             placeholder="Nombre de tu producto"
+                            minLength={3}
+                            maxLength={30}
                             onChange={(e) => setData('nombre', e.target.value)}
                         ></Input>
                     </div>
@@ -66,8 +71,11 @@ export default function Create() {
                             Stock Inicial:
                         </Label>
                         <Input
+                            type="Number"
                             id="Stock"
                             placeholder="0"
+                            min={0}
+                            max={10000000}
                             onChange={(e) =>
                                 setData('stock', Number(e.target.value))
                             }
@@ -82,8 +90,11 @@ export default function Create() {
                             Precio Unitario:
                         </Label>
                         <Input
+                            type="Number"
                             id="precio_unitario"
                             placeholder="0"
+                            min={0}
+                            max={10000000}
                             onChange={(e) =>
                                 setData(
                                     'precio_unitario',
@@ -98,8 +109,11 @@ export default function Create() {
                             M3_unitario:
                         </Label>
                         <Input
+                            type="Number"
                             id="M3_unitario"
                             placeholder="0"
+                            min={0}
+                            max={10000000}
                             onChange={(e) =>
                                 setData('M3_unitario', Number(e.target.value))
                             }
@@ -113,12 +127,14 @@ export default function Create() {
                         <Textarea
                             id="descripcion"
                             placeholder="0"
+                            minLength={0}
+                            maxLength={255}
                             onChange={(e) =>
                                 setData('descripcion', e.target.value)
                             }
                         ></Textarea>
                     </div>
-                    <div className='flex-row space-x-2'>
+                    <div className="flex-row space-x-2">
                         <Button
                             className="mb-4 bg-green-500 hover:bg-green-700"
                             type="submit"

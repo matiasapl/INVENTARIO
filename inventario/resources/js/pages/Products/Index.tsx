@@ -56,8 +56,28 @@ export default function Index({ products }: { products: Product[] }) {
                         {products.map((product) => (
                             <TableRow key={product.codigo}>
                                 <TableCell>{product.codigo}</TableCell>
-                                <TableCell>{product.nombre}</TableCell>
-                                <TableCell>{product.descripcion}</TableCell>
+                                <TableCell>
+                                    {product.nombre
+                                        ? product.nombre.length > 30
+                                            ? product.nombre.substring(
+                                                  0,
+                                                  30,
+                                              ) + '...'
+                                            : product.nombre
+                                        : ''}
+                                </TableCell>
+
+                                <TableCell>
+                                    {product.descripcion
+                                        ? product.descripcion.length > 50
+                                            ? product.descripcion.substring(
+                                                  0,
+                                                  50,
+                                              ) + '...'
+                                            : product.descripcion
+                                        : ''}
+                                </TableCell>
+
                                 <TableCell>{product.stock}</TableCell>
                                 <TableCell>{product.precio_unitario}</TableCell>
                                 <TableCell>{product.M3_unitario}</TableCell>
