@@ -48,6 +48,7 @@ export default function Create() {
                             max={10000000}
                             min={0}
                             maxLength={8}
+                            placeholder='0'
                             onChange={(e) =>
                                 setData('codigo', Number(e.target.value))
                             }
@@ -92,7 +93,7 @@ export default function Create() {
                         <Input
                             type="Number"
                             id="precio_unitario"
-                            placeholder="0"
+                            placeholder="0.00"
                             min={0}
                             max={10000000}
                             onChange={(e) =>
@@ -111,7 +112,7 @@ export default function Create() {
                         <Input
                             type="Number"
                             id="M3_unitario"
-                            placeholder="0"
+                            placeholder="0.00000"
                             min={0}
                             max={10000000}
                             onChange={(e) =>
@@ -126,7 +127,7 @@ export default function Create() {
                         </Label>
                         <Textarea
                             id="descripcion"
-                            placeholder="0"
+                            placeholder="Una brebe descricion sobre tu producto"
                             minLength={0}
                             maxLength={255}
                             onChange={(e) =>
