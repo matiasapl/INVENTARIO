@@ -1,12 +1,13 @@
 import ProductController from '@/actions/App/Http/Controllers/ProductController';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
-import { Head } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { useForm }  from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
+import { CircleX, CircleCheck } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -44,7 +45,6 @@ export default function Create() {
                         <Input
                             id="Codigo"
                             placeholder="001"
-                            value={data.codigo}
                             onChange={(e) =>
                                 setData('codigo', Number(e.target.value))
                             }
@@ -57,7 +57,6 @@ export default function Create() {
                         <Input
                             id="Nombre"
                             placeholder="Nombre de tu producto"
-                            value={data.nombre}
                             onChange={(e) => setData('nombre', e.target.value)}
                         ></Input>
                     </div>
@@ -69,7 +68,6 @@ export default function Create() {
                         <Input
                             id="Stock"
                             placeholder="0"
-                            value={data.stock}
                             onChange={(e) =>
                                 setData('stock', Number(e.target.value))
                             }
@@ -86,7 +84,6 @@ export default function Create() {
                         <Input
                             id="precio_unitario"
                             placeholder="0"
-                            value={data.precio_unitario}
                             onChange={(e) =>
                                 setData(
                                     'precio_unitario',
@@ -103,7 +100,6 @@ export default function Create() {
                         <Input
                             id="M3_unitario"
                             placeholder="0"
-                            value={data.M3_unitario}
                             onChange={(e) =>
                                 setData('M3_unitario', Number(e.target.value))
                             }
@@ -117,17 +113,28 @@ export default function Create() {
                         <Textarea
                             id="descripcion"
                             placeholder="0"
-                            value={data.descripcion}
                             onChange={(e) =>
                                 setData('descripcion', e.target.value)
                             }
                         ></Textarea>
                     </div>
+                    <div className='flex-row space-x-2'>
+                        <Button
+                            className="mb-4 bg-green-500 hover:bg-green-700"
+                            type="submit"
+                        >
+                            <CircleCheck /> Registrar Producto
+                        </Button>
 
-                    <Button className="mb-4 bg-green-500 hover:bg-green-700"
-                    type="submit">
-                        Registrar Producto
-                    </Button>
+                        <Link href={ProductController.index().url}>
+                            <Button
+                                className="mb-4 bg-red-500 hover:bg-red-700"
+                                type="button"
+                            >
+                                <CircleX /> Cancelar
+                            </Button>
+                        </Link>
+                    </div>
                 </form>
             </div>
         </AppLayout>

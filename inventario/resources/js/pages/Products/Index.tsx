@@ -10,7 +10,8 @@ import {
 import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
-import { Head, Link} from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
+import { Trash2, PencilLine, Eye, PackagePlus } from 'lucide-react';
 import ProductController from '@/actions/App/Http/Controllers/ProductController';
 interface Product {
     codigo: number;
@@ -33,7 +34,9 @@ export default function Index({ products }: { products: Product[] }) {
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Ver Productos" />
             <Link href={ProductController.create().url}>
-                <Button className="m-4 bg-green-500 hover:bg-green-700">Crear Producto</Button>
+                <Button className="m-4 bg-green-500 hover:bg-green-700">
+                    <PackagePlus /> Crear Producto
+                </Button>
             </Link>
             <Table>
                 <TableCaption>Lista de Productos</TableCaption>
@@ -58,13 +61,16 @@ export default function Index({ products }: { products: Product[] }) {
                                 <TableCell>{product.stock}</TableCell>
                                 <TableCell>{product.precio_unitario}</TableCell>
                                 <TableCell>{product.M3_unitario}</TableCell>
-                                <TableCell>
-                                    <button className="btn btn-primary">
-                                        Editar
-                                    </button>
-                                    <button className="btn btn-danger">
-                                        Eliminar
-                                    </button>
+                                <TableCell className="flex-row space-x-2">
+                                    <Button className="bg-yellow-500 hover:bg-yellow-700">
+                                        <Eye />
+                                    </Button>
+                                    <Button className="bg-orange-500 hover:bg-orange-700">
+                                        <PencilLine />
+                                    </Button>
+                                    <Button className="bg-red-500 hover:bg-red-700">
+                                        <Trash2 />
+                                    </Button>
                                 </TableCell>
                             </TableRow>
                         ))}
