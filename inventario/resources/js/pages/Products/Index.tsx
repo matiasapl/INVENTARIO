@@ -14,6 +14,7 @@ import { Head, Link } from '@inertiajs/react';
 import { Trash2, PencilLine, Eye, PackagePlus } from 'lucide-react';
 import ProductController from '@/actions/App/Http/Controllers/ProductController';
 interface Product {
+    id: number;
     codigo: number;
     nombre: string;
     descripcion: string;
@@ -59,10 +60,8 @@ export default function Index({ products }: { products: Product[] }) {
                                 <TableCell>
                                     {product.nombre
                                         ? product.nombre.length > 30
-                                            ? product.nombre.substring(
-                                                  0,
-                                                  30,
-                                              ) + '...'
+                                            ? product.nombre.substring(0, 30) +
+                                              '...'
                                             : product.nombre
                                         : ''}
                                 </TableCell>
@@ -85,9 +84,12 @@ export default function Index({ products }: { products: Product[] }) {
                                     <Button className="bg-yellow-500 hover:bg-yellow-700">
                                         <Eye />
                                     </Button>
-                                    <Button className="bg-orange-500 hover:bg-orange-700">
-                                        <PencilLine />
-                                    </Button>
+                                    <Link href={ProductController.edit(product.id).url}>
+                                        <Button className="bg-orange-500 hover:bg-orange-700">
+                                            <PencilLine />
+                                        </Button>
+                                    </Link>
+
                                     <Button className="bg-red-500 hover:bg-red-700">
                                         <Trash2 />
                                     </Button>

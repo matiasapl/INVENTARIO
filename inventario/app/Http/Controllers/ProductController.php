@@ -40,4 +40,22 @@ public function index()
 
         return redirect()->route('products.index')->with('success', 'Producto creado correctamente');
     }
+
+    public function edit(Product $product){
+        return inertia('Products/Edit', [
+            'product' => $product]);
+    }
+
+        public function View(Product $product){
+        return inertia('Products/View', [
+            'product' => $product]);
+    }
+
+    public function update(UpdateProductRequest $request, Product $product){
+        $validated = $request->validated();
+
+        $product->update($validated);
+
+        return redirect()->route('products.index')->with('success', 'Producto Editado correctamente');
+    }
 }
