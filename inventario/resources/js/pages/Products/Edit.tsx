@@ -120,10 +120,11 @@ export default function Edit({ product }: {product: Product}) {
                             Precio Unitario:
                         </Label>
                         <Input
-                            type="Number"
+                            type="number"
                             id="precio_unitario"
                             placeholder="0.00"
                             min={0}
+                            step={0.01}
                             max={10000000}
                             value={data.precio_unitario}
                             onChange={(e) =>
@@ -145,9 +146,10 @@ export default function Edit({ product }: {product: Product}) {
                             M3_unitario:
                         </Label>
                         <Input
-                            type="Number"
+                            type="number"
                             id="M3_unitario"
                             placeholder="0.00000"
+                            step={0.00001}
                             min={0}
                             max={10000000}
                             value={data.M3_unitario}
@@ -183,11 +185,10 @@ export default function Edit({ product }: {product: Product}) {
                         )}
                     </div>
                     <div className="flex-row space-x-2">
-                        
                         <Button
                             className="mb-4 bg-yellow-500 hover:bg-yellow-700"
                             type="submit"
-                            disabled={ processing }
+                            disabled={processing}
                         >
                             <CircleCheck /> Editar Producto
                         </Button>

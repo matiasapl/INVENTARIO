@@ -22,6 +22,7 @@ return new class extends Migration
         $table->decimal('M3_unitario', 14, 5)->unsigned()->default(0.00000);
         $table->foreignId('usuario')->constrained('users')->onDelete('cascade');
         $table->boolean('habilitado')->default(true);
+        $table->boolean('eliminado')->default(false);
         $table->timestamps();
     });
 

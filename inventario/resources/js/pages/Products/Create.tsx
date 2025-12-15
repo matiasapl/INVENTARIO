@@ -83,7 +83,7 @@ export default function Create() {
                             Stock Inicial:
                         </Label>
                         <Input
-                            type="Number"
+                            type="number"
                             id="Stock"
                             placeholder="0"
                             min={0}
@@ -107,9 +107,10 @@ export default function Create() {
                             Precio Unitario:
                         </Label>
                         <Input
-                            type="Number"
+                            type="number"
                             id="precio_unitario"
                             placeholder="0.00"
+                            step={0.01}
                             min={0}
                             max={10000000}
                             onChange={(e) =>
@@ -131,9 +132,10 @@ export default function Create() {
                             M3_unitario:
                         </Label>
                         <Input
-                            type="Number"
+                            type="number"
                             id="M3_unitario"
                             placeholder="0.00000"
+                            step={0.00001}
                             min={0}
                             max={10000000}
                             onChange={(e) =>

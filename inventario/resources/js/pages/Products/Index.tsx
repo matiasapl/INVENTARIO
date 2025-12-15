@@ -34,11 +34,17 @@ export default function Index({ products }: { products: Product[] }) {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Ver Productos" />
-            <Link href={ProductController.create().url}>
-                <Button className="m-4 bg-green-500 hover:bg-green-700">
-                    <PackagePlus /> Crear Producto
+            <nav className='flex-row'>
+                <Link href={ProductController.create().url}>
+                    <Button className="m-4 bg-green-500 hover:bg-green-700">
+                        <PackagePlus /> Crear Producto
+                    </Button>
+                </Link>
+                <Button className="m-4 bg-red-500 hover:bg-red-700">
+                    <Trash2 /> Papelera
                 </Button>
-            </Link>
+            </nav>
+
             <Table>
                 <TableCaption>Lista de Productos</TableCaption>
                 <TableHeader>
@@ -81,10 +87,22 @@ export default function Index({ products }: { products: Product[] }) {
                                 <TableCell>{product.precio_unitario}</TableCell>
                                 <TableCell>{product.M3_unitario}</TableCell>
                                 <TableCell className="flex-row space-x-2">
-                                    <Button className="bg-yellow-500 hover:bg-yellow-700">
-                                        <Eye />
-                                    </Button>
-                                    <Link href={ProductController.edit(product.id).url}>
+                                    <Link
+                                        href={
+                                            ProductController.view(product.id)
+                                                .url
+                                        }
+                                    >
+                                        <Button className="bg-yellow-500 hover:bg-yellow-700">
+                                            <Eye />
+                                        </Button>
+                                    </Link>
+                                    <Link
+                                        href={
+                                            ProductController.edit(product.id)
+                                                .url
+                                        }
+                                    >
                                         <Button className="bg-orange-500 hover:bg-orange-700">
                                             <PencilLine />
                                         </Button>

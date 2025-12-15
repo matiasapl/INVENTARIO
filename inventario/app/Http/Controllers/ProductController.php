@@ -16,6 +16,7 @@ public function index()
 {
     $products = Product::where('usuario', Auth::id())
                        ->where('habilitado', true)
+                       ->where('eliminado', false)
                        ->get();
 
     return inertia('Products/Index', [
