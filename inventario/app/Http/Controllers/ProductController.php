@@ -23,6 +23,20 @@ public function index()
         'products' => $products
     ]);
 }
+
+public function Papelera()
+{
+    $products = Product::where('usuario', Auth::id())
+                       ->where('habilitado', false)
+                       ->where('eliminado', false)
+                       ->get();
+
+    return inertia('Products/Papelera', [
+        'products' => $products
+    ]);
+}
+
+
         public function create(){
             return inertia('Products/Create', [
                 'products' => new Product()

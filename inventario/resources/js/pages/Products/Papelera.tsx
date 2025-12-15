@@ -11,7 +11,7 @@ import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link } from '@inertiajs/react';
-import { Trash2, PencilLine, Eye, PackagePlus } from 'lucide-react';
+import { Trash2, PencilLine, Eye, ArrowBigLeft, RotateCcw } from 'lucide-react';
 import ProductController from '@/actions/App/Http/Controllers/ProductController';
 interface Product {
     id: number;
@@ -25,30 +25,25 @@ interface Product {
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Ver Productos',
-        href: ProductController.index().url
+        title: 'Papelera de Productos',
+        href: ProductController.papelera().url
     },
 ];
 
 export default function Index({ products }: { products: Product[] }) {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Ver Productos" />
+            <Head title="Papelera de Productos" />
             <nav className="flex-row">
-                <Link href={ProductController.create().url}>
+                <Link href={ProductController.index().url}>
                     <Button className="m-4 bg-green-500 hover:bg-green-700">
-                        <PackagePlus /> Crear Producto
-                    </Button>
-                </Link>
-                <Link href={ProductController.papelera().url}>
-                    <Button className="m-4 bg-red-500 hover:bg-red-700">
-                        <Trash2 /> Papelera
+                        <ArrowBigLeft /> Volver
                     </Button>
                 </Link>
             </nav>
 
             <Table>
-                <TableCaption>Lista de Productos</TableCaption>
+                <TableCaption>Papelera de Productos</TableCaption>
                 <TableHeader>
                     <TableRow>
                         <TableHead>Código</TableHead>
@@ -99,17 +94,12 @@ export default function Index({ products }: { products: Product[] }) {
                                             <Eye />
                                         </Button>
                                     </Link>
-                                    <Link
-                                        href={
-                                            ProductController.edit(product.id)
-                                                .url
-                                        }
-                                    >
-                                        <Button className="bg-orange-500 hover:bg-orange-700">
-                                            <PencilLine />
-                                        </Button>
-                                    </Link>
 
+                                    <Button className="bg-green-500 hover:bg-green-700">
+                                        <RotateCcw />
+                                    </Button>
+
+                                    
                                     <Button className="bg-red-500 hover:bg-red-700">
                                         <Trash2 />
                                     </Button>
