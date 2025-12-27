@@ -11,7 +11,7 @@ import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link } from '@inertiajs/react';
-import { Trash2, PencilLine, Eye, ArrowBigLeft, RotateCcw } from 'lucide-react';
+import { CircleX, ArrowBigLeft, RotateCcw } from 'lucide-react';
 import ProductController from '@/actions/App/Http/Controllers/ProductController';
 interface Product {
     id: number;
@@ -86,23 +86,27 @@ export default function Index({ products }: { products: Product[] }) {
                                 <TableCell className="flex-row space-x-2">
                                     <Link
                                         href={
-                                            ProductController.view(product.id)
-                                                .url
+                                            ProductController.habilitar(
+                                                product.id,
+                                            ).url
                                         }
                                     >
-                                        <Button className="bg-yellow-500 hover:bg-yellow-700">
-                                            <Eye />
+                                        <Button className="bg-green-500 hover:bg-green-700">
+                                            <RotateCcw />
                                         </Button>
                                     </Link>
 
-                                    <Button className="bg-green-500 hover:bg-green-700">
-                                        <RotateCcw />
-                                    </Button>
-
-                                    
-                                    <Button className="bg-red-500 hover:bg-red-700">
-                                        <Trash2 />
-                                    </Button>
+                                    <Link
+                                        href={
+                                            ProductController.eliminar(
+                                                product.id,
+                                            ).url
+                                        }
+                                    >
+                                        <Button className="bg-red-500 hover:bg-red-700">
+                                            <CircleX />
+                                        </Button>
+                                    </Link>
                                 </TableCell>
                             </TableRow>
                         ))}

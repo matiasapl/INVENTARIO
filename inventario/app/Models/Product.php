@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Product extends Model
 {
     protected $fillable = [
-        'codigo', 'nombre', 'descripcion', 'stock', 'precio_unitario', 'M3_unitario', 'usuario', 'habilitado'
+        'codigo', 'nombre', 'descripcion', 'stock', 'precio_unitario', 'M3_unitario', 'usuario', 'habilitado', 'eliminado'
     ];
 
 
@@ -29,5 +29,10 @@ public function habilitar()
     return $this->save();
 }
 
+public function eliminar()
+{
+    $this->eliminado = true;
+    return $this->save();
+}
 
 }

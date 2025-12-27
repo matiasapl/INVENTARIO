@@ -29,9 +29,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/products/delete/{product}', [ProductController::class, 'delete'])->name('products.delete');
 
     
-    Route::put('/products/{product}/deshabilitar', [ProductController::class, 'deshabilitar'])->name('products.deshabilitar');
-    Route::put('/products/{product}/habilitar', [ProductController::class, 'habilitar'])->name('products.habilitar');
-
+    Route::get('/products/{product}/deshabilitar', [ProductController::class, 'deshabilitar'])->name('products.deshabilitar');
+    Route::get('/products/{product}/habilitar', [ProductController::class, 'habilitar'])->name('products.habilitar');
+    Route::get('/products/{product}/eliminar', [ProductController::class, 'eliminar'])->name('products.eliminar');
 });
 
 

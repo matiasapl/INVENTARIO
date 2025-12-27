@@ -9,9 +9,11 @@ use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
-    /**
-     * Mostrar productos activos del usuario autenticado.
-     */
+
+    // INICIO LISTAS DE PRODUCTOS
+    /*
+    * Mostrar productos activos del usuario autenticado.
+    */
     public function index()
     {
         $products = Product::where('usuario', Auth::id())
@@ -22,9 +24,11 @@ class ProductController extends Controller
         return inertia('Products/Index', compact('products'));
     }
 
-    /**
-     * Mostrar productos inactivos (papelera) del usuario autenticado.
-     */
+    /*
+    * Mostrar productos inactivos (papelera) del usuario autenticado.
+    */
+
+
     public function papelera()
     {
         $products = Product::where('usuario', Auth::id())
@@ -54,6 +58,17 @@ class ProductController extends Controller
         return redirect()->route('products.papelera')->with('success', 'Producto habilitado correctamente');
     }
 
+            /**
+     * Eliminar un producto
+     */
+    public function eliminar(Product $product)
+    {
+        $this->authorizeProduct($product);
+        $product->eliminar();
+        return redirect()->route('products.papelera')->with('success', 'Producto eliminado correctamente');
+    }
+
+    
     /**
      * Formulario para crear productos.
      */

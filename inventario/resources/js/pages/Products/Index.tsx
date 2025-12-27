@@ -110,9 +110,17 @@ export default function Index({ products }: { products: Product[] }) {
                                         </Button>
                                     </Link>
 
-                                    <Button className="bg-red-500 hover:bg-red-700">
-                                        <Trash2 />
-                                    </Button>
+                                    <Link
+                                        href={
+                                            ProductController.deshabilitar(
+                                                product.id,
+                                            ).url
+                                        }
+                                    >
+                                        <Button className="bg-red-500 hover:bg-red-700">
+                                            <Trash2 />
+                                        </Button>
+                                    </Link>
                                 </TableCell>
                             </TableRow>
                         ))}
