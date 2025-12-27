@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\Product;
@@ -9,39 +10,57 @@ use Illuminate\Support\Facades\Auth;
 class ProductController extends Controller
 {
     /**
-     * Mostrar todos los productos del usuario autenticado.
+     * Mostrar productos activos del usuario autenticado.
      */
+    public function index()
+    {
+        $products = Product::where('usuario', Auth::id())
+            ->where('habilitado', true)
+            ->where('eliminado', false)
+            ->get();
 
-public function index()
-{
-    $products = Product::where('usuario', Auth::id())
-                       ->where('habilitado', true)
-                       ->where('eliminado', false)
-                       ->get();
+        return inertia('Products/Index', compact('products'));
+    }
 
-    return inertia('Products/Index', [
-        'products' => $products
-    ]);
-}
+    /**
+     * Mostrar productos inactivos (papelera) del usuario autenticado.
+     */
+    public function papelera()
+    {
+        $products = Product::where('usuario', Auth::id())
+            ->where('habilitado', false)
+            ->where('eliminado', false)
+            ->get();
 
-public function Papelera()
-{
-    $products = Product::where('usuario', Auth::id())
-                       ->where('habilitado', false)
-                       ->where('eliminado', false)
-                       ->get();
+        return inertia('Products/Papelera', compact('products'));
+    }
 
-    return inertia('Products/Papelera', [
-        'products' => $products
-    ]);
-}
+        /**
+     * Deshabilitar un producto
+     */
+    public function deshabilitar(Product $product)
+    {
+        $this->authorizeProduct($product);
+        $product->deshabilitar();
+        return redirect()->route('products.index')->with('success', 'Producto deshabilitado correctamente');
+    }
+        /**
+     * Habilitar un producto
+     */
+        public function habilitar(Product $product)
+    {
+        $this->authorizeProduct($product);
+        $product->habilitar();
+        return redirect()->route('products.papelera')->with('success', 'Producto habilitado correctamente');
+    }
 
-
-        public function create(){
-            return inertia('Products/Create', [
-                'products' => new Product()
-            ]);    
-        }
+    /**
+     * Formulario para crear productos.
+     */
+    public function create()
+    {
+        return inertia('Products/Create');
+    }
 
     /**
      * Guardar un nuevo producto asociado al usuario autenticado.
@@ -49,28 +68,53 @@ public function Papelera()
     public function store(StoreProductRequest $request)
     {
         $data = $request->validated();
-        $data['usuario'] = Auth::id(); // Asigna el usuario autenticado
+        $data['usuario'] = Auth::id();
 
-        $product = Product::create($data);
+        Product::create($data);
 
         return redirect()->route('products.index')->with('success', 'Producto creado correctamente');
     }
 
-    public function edit(Product $product){
-        return inertia('Products/Edit', [
-            'product' => $product]);
+    /**
+     * Formulario para editar productos.
+     */
+    public function edit(Product $product)
+    {
+        $this->authorizeProduct($product);
+
+        return inertia('Products/Edit', compact('product'));
     }
 
-        public function View(Product $product){
-        return inertia('Products/View', [
-            'product' => $product]);
+    /**
+     * Ver producto creado por el usuario autenticado.
+     */
+    public function view(Product $product)
+    {
+        $this->authorizeProduct($product);
+
+        return inertia('Products/View', compact('product'));
     }
 
-    public function update(UpdateProductRequest $request, Product $product){
-        $validated = $request->validated();
+    /**
+     * Actualizar producto creado por el usuario autenticado.
+     */
+    public function update(UpdateProductRequest $request, Product $product)
+    {
+        $this->authorizeProduct($product);
 
-        $product->update($validated);
+        $product->update($request->validated());
 
-        return redirect()->route('products.index')->with('success', 'Producto Editado correctamente');
+        return redirect()->route('products.index')->with('success', 'Producto editado correctamente');
+    }
+
+    /**
+     * Verifica que el producto pertenece al usuario autenticado.
+     */
+    private function authorizeProduct(Product $product)
+    {
+        if ($product->usuario !== Auth::id()) {
+            abort(403, 'No tienes permiso para acceder a este producto.');
+        }
     }
 }
+
