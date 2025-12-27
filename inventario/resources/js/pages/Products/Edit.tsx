@@ -1,14 +1,13 @@
+import { useState } from 'react';
 import ProductController from '@/actions/App/Http/Controllers/ProductController';
-import AppLayout from '@/layouts/app-layout';
-import { type BreadcrumbItem } from '@/types';
-import { Head, Link } from '@inertiajs/react';
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { useForm }  from '@inertiajs/react';
-import { Button } from '@/components/ui/button';
-import { CircleX, CircleCheck } from 'lucide-react';
-
+import AppLayout from '@/layouts/app-layout';
+import { type BreadcrumbItem } from '@/types';
+import { Head, Link, useForm } from '@inertiajs/react';
+import { CircleCheck, CircleX } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -26,29 +25,34 @@ interface Product {
     descripcion: string;
 }
 
-export default function Edit({ product }: {product: Product}) {
+export default function Edit({ product }: { product: Product }) {
+    const [showModal, setShowModal] = useState(false);
 
     const { data, setData, put, processing, errors } = useForm({
-    id: product.id,
-    codigo: product.codigo,
-    nombre: product.nombre,
-    stock: product.stock,
-    precio_unitario: product.precio_unitario,
-    M3_unitario: product.M3_unitario,
-    descripcion: product.descripcion,
+        id: product.id,
+        codigo: product.codigo,
+        nombre: product.nombre,
+        stock: product.stock,
+        precio_unitario: product.precio_unitario,
+        M3_unitario: product.M3_unitario,
+        descripcion: product.descripcion,
     });
 
-
-    const handleUpdate = (e: React.FormEvent<HTMLFormElement>) => { 
+    const preUpdate = (e: React.FormEvent) => {
         e.preventDefault();
-        put(ProductController.update(product.id).url)
-    }
+        setShowModal(true);
+    };
+
+    const confirmUpdate = () => {
+        setShowModal(false);
+        put(ProductController.update(product.id).url);
+    };
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Crear Producto" />
             <div className="w-8/12 p-4">
-                <form method="post" onSubmit={handleUpdate}>
+                <form method="post" onSubmit={preUpdate}>
                     <div className="mb-4 gap-1.5">
                         <Label htmlFor="Codigo" className="mb-1.5 block">
                             Codigo de Producto:
@@ -204,6 +208,42 @@ export default function Edit({ product }: {product: Product}) {
                     </div>
                 </form>
             </div>
+
+            {showModal && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+                    <div className="relative w-full max-w-sm rounded-lg bg-white p-6 shadow-lg dark:bg-slate-900">
+                        {/* Botón X de cierre */}
+                        <button
+                            onClick={() => setShowModal(false)}
+                            className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
+                        >
+                            <CircleX />
+                        </button>
+
+                        <div className="text-center">
+                            <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+                                ¿Seguro que quieres editar este producto?
+                            </h3>
+                            <div className="flex justify-center gap-4">
+                                <Button
+                                    variant="outline"
+                                    onClick={() => setShowModal(false)}
+                                >
+                                    <CircleX /> Cancelar
+                                </Button>
+                                <Button
+                                    className="bg-green-600 hover:bg-green-700"
+                                    onClick={confirmUpdate}
+                                >
+                                    <CircleCheck />
+                                    Sí, confirmo
+                                </Button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </AppLayout>
     );
 }
+

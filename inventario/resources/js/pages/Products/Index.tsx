@@ -1,3 +1,5 @@
+import ProductController from '@/actions/App/Http/Controllers/ProductController';
+import { Button } from '@/components/ui/button';
 import {
     Table,
     TableBody,
@@ -7,12 +9,12 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
-import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
-import { Head, Link } from '@inertiajs/react';
-import { Trash2, PencilLine, Eye, PackagePlus } from 'lucide-react';
-import ProductController from '@/actions/App/Http/Controllers/ProductController';
+import { Head, Link, router } from '@inertiajs/react';
+import { CircleX, Eye, PackagePlus, PencilLine, Trash2 } from 'lucide-react';
+import { useState } from 'react';
+
 interface Product {
     id: number;
     codigo: number;
@@ -26,11 +28,32 @@ interface Product {
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Ver Productos',
-        href: ProductController.index().url
+        href: ProductController.index().url,
     },
 ];
 
 export default function Index({ products }: { products: Product[] }) {
+    const [showModal, setShowModal] = useState(false);
+    const [selectedProduct, setSelectedProduct] = useState<Product | null>(
+        null,
+    );
+
+    const openModal = (product: Product) => {
+        setSelectedProduct(product);
+        setShowModal(true);
+    };
+
+    const closeModal = () => {
+        setSelectedProduct(null);
+        setShowModal(false);
+    };
+
+    const confirmDisable = () => {
+        if (selectedProduct) {
+            router.get(ProductController.deshabilitar(selectedProduct).url);
+        }
+    };
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Ver Productos" />
@@ -66,25 +89,22 @@ export default function Index({ products }: { products: Product[] }) {
                             <TableRow key={product.codigo}>
                                 <TableCell>{product.codigo}</TableCell>
                                 <TableCell>
-                                    {product.nombre
-                                        ? product.nombre.length > 30
-                                            ? product.nombre.substring(0, 30) +
-                                              '...'
-                                            : product.nombre
-                                        : ''}
+                                    {product.nombre.length > 30
+                                        ? product.nombre.substring(0, 30) +
+                                          '...'
+                                        : product.nombre}
                                 </TableCell>
-
                                 <TableCell>
-                                    {product.descripcion
-                                        ? product.descripcion.length > 50
+                                    <TableCell>
+                                        {product.descripcion?.length > 50
                                             ? product.descripcion.substring(
                                                   0,
                                                   50,
                                               ) + '...'
-                                            : product.descripcion
-                                        : ''}
+                                            : (product.descripcion ??
+                                              'Sin Descripcion')}
+                                    </TableCell>
                                 </TableCell>
-
                                 <TableCell>{product.stock}</TableCell>
                                 <TableCell>{product.precio_unitario}</TableCell>
                                 <TableCell>{product.M3_unitario}</TableCell>
@@ -109,24 +129,51 @@ export default function Index({ products }: { products: Product[] }) {
                                             <PencilLine />
                                         </Button>
                                     </Link>
-
-                                    <Link
-                                        href={
-                                            ProductController.deshabilitar(
-                                                product.id,
-                                            ).url
-                                        }
+                                    <Button
+                                        className="bg-red-500 hover:bg-red-700"
+                                        onClick={() => openModal(product)}
                                     >
-                                        <Button className="bg-red-500 hover:bg-red-700">
-                                            <Trash2 />
-                                        </Button>
-                                    </Link>
+                                        <Trash2 />
+                                    </Button>
                                 </TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
                 )}
             </Table>
+
+            {/* Modal de confirmación */}
+            {showModal && selectedProduct && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+                    <div className="relative w-full max-w-sm rounded-lg bg-white p-6 shadow-lg dark:bg-slate-900">
+                        <button
+                            onClick={closeModal}
+                            className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
+                        >
+                            <CircleX />
+                        </button>
+
+                        <div className="text-center">
+                            <h3 className="mb-5 text-lg text-gray-500">
+                                ¿Seguro que quieres enviar{' '}
+                                <strong>{selectedProduct.nombre}</strong> a la
+                                papelera?
+                            </h3>
+                            <div className="flex justify-center gap-4">
+                                <Button variant="outline" onClick={closeModal}>
+                                    Cancelar
+                                </Button>
+                                <Button
+                                    className="bg-red-600 hover:bg-red-700"
+                                    onClick={confirmDisable}
+                                >
+                                    Sí, eliminar
+                                </Button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </AppLayout>
     );
 }

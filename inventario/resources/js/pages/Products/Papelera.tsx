@@ -1,3 +1,5 @@
+import { useState } from 'react'; // 1. Importar useState
+import { router, Head, Link } from '@inertiajs/react';
 import {
     Table,
     TableBody,
@@ -10,7 +12,6 @@ import {
 import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
-import { Head, Link } from '@inertiajs/react';
 import { CircleX, ArrowBigLeft, RotateCcw } from 'lucide-react';
 import ProductController from '@/actions/App/Http/Controllers/ProductController';
 interface Product {
@@ -31,6 +32,30 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function Index({ products }: { products: Product[] }) {
+    // 2. Definir estados para el modal
+    const [showModal, setShowModal] = useState(false);
+    const [selectedProduct, setSelectedProduct] = useState<Product | null>(
+        null,
+    );
+
+    const openModal = (product: Product) => {
+        setSelectedProduct(product);
+        setShowModal(true);
+    };
+
+    const closeModal = () => {
+        setSelectedProduct(null);
+        setShowModal(false);
+    };
+
+    // 3. Función de eliminación definitiva
+    const confirmDelete = () => {
+        if (selectedProduct) {
+            router.delete(ProductController.eliminar(selectedProduct.id).url, {
+                onSuccess: () => closeModal(),
+            });
+        }
+    };
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Papelera de Productos" />
@@ -70,14 +95,11 @@ export default function Index({ products }: { products: Product[] }) {
                                 </TableCell>
 
                                 <TableCell>
-                                    {product.descripcion
-                                        ? product.descripcion.length > 50
-                                            ? product.descripcion.substring(
-                                                  0,
-                                                  50,
-                                              ) + '...'
-                                            : product.descripcion
-                                        : ''}
+                                    {product.descripcion?.length > 50
+                                        ? product.descripcion.substring(0, 50) +
+                                          '...'
+                                        : (product.descripcion ??
+                                          'Sin Descripcion')}
                                 </TableCell>
 
                                 <TableCell>{product.stock}</TableCell>
@@ -96,23 +118,48 @@ export default function Index({ products }: { products: Product[] }) {
                                         </Button>
                                     </Link>
 
-                                    <Link
-                                        href={
-                                            ProductController.eliminar(
-                                                product.id,
-                                            ).url
-                                        }
+                                    <Button
+                                        className="bg-red-500 hover:bg-red-700"
+                                        onClick={() => openModal(product)}
                                     >
-                                        <Button className="bg-red-500 hover:bg-red-700">
-                                            <CircleX />
-                                        </Button>
-                                    </Link>
+                                        <CircleX />
+                                    </Button>
                                 </TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
                 )}
             </Table>
+
+            {/* 5. El Modal de Confirmación */}
+            {showModal && selectedProduct && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+                    <div className="relative w-full max-w-sm rounded-lg bg-white p-6 shadow-lg dark:bg-slate-900">
+                        <div className="text-center">
+                            <h3 className="mb-5 text-lg font-normal text-gray-500">
+                                ¿Estás seguro de eliminar{' '}
+                                <strong>definitivamente</strong> el producto{' '}
+                                {selectedProduct.nombre}?
+                                <br />
+                                <span className="text-sm text-red-400">
+                                    Esta acción no se puede deshacer.
+                                </span>
+                            </h3>
+                            <div className="flex justify-center gap-4">
+                                <Button variant="outline" onClick={closeModal}>
+                                    Cancelar
+                                </Button>
+                                <Button
+                                    className="bg-red-600 hover:bg-red-800"
+                                    onClick={confirmDelete}
+                                >
+                                    Eliminar para siempre
+                                </Button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </AppLayout>
     );
 }
