@@ -12,7 +12,7 @@ import {
 import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
-import { CircleX, ArrowBigLeft, RotateCcw } from 'lucide-react';
+import { CircleX, ArrowBigLeft, RotateCcw, CircleCheck } from 'lucide-react';
 import ProductController from '@/actions/App/Http/Controllers/ProductController';
 interface Product {
     id: number;
@@ -147,13 +147,14 @@ export default function Index({ products }: { products: Product[] }) {
                             </h3>
                             <div className="flex justify-center gap-4">
                                 <Button variant="outline" onClick={closeModal}>
+                                    <CircleX />
                                     Cancelar
                                 </Button>
                                 <Button
                                     className="bg-red-600 hover:bg-red-800"
                                     onClick={confirmDelete}
                                 >
-                                    Eliminar para siempre
+                                    <CircleCheck /> Eliminar para siempre
                                 </Button>
                             </div>
                         </div>

@@ -12,7 +12,7 @@ import {
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link, router } from '@inertiajs/react';
-import { CircleX, Eye, PackagePlus, PencilLine, Trash2 } from 'lucide-react';
+import { CircleCheck, CircleX, Eye, PackagePlus, PencilLine, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 
 interface Product {
@@ -154,20 +154,20 @@ export default function Index({ products }: { products: Product[] }) {
                         </button>
 
                         <div className="text-center">
-                            <h3 className="mb-5 text-lg text-gray-500">
+                            <h3 className="my-5 text-lg font-normal text-gray-500 dark:text-gray-400">
                                 ¿Seguro que quieres enviar{' '}
                                 <strong>{selectedProduct.nombre}</strong> a la
                                 papelera?
                             </h3>
                             <div className="flex justify-center gap-4">
                                 <Button variant="outline" onClick={closeModal}>
-                                    Cancelar
+                                    <CircleX /> Cancelar
                                 </Button>
                                 <Button
                                     className="bg-red-600 hover:bg-red-700"
                                     onClick={confirmDisable}
                                 >
-                                    Sí, eliminar
+                                    <CircleCheck /> Sí, eliminar
                                 </Button>
                             </div>
                         </div>

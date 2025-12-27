@@ -7,7 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { useForm }  from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
-import { CircleX, CircleCheck } from 'lucide-react';
+import { CircleCheck } from 'lucide-react';
 
 
 const breadcrumbs: BreadcrumbItem[] = [
