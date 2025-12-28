@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\control_stock;
 use App\Http\Requests\Storecontrol_stockRequest;
 use App\Http\Requests\Updatecontrol_stockRequest;
+use Illuminate\Support\Facades\Auth;
 
 class ControlStockController extends Controller
 {
@@ -13,7 +14,9 @@ class ControlStockController extends Controller
      */
     public function index()
     {
-        //
+        $Historial = control_stock::where('usuario', Auth::id())->get();
+
+        return inertia('ControlStock/Index', compact('Historial'));
     }
 
     /**
@@ -21,7 +24,7 @@ class ControlStockController extends Controller
      */
     public function create()
     {
-        //
+        return inertia('ControlStock/Create');
     }
 
     /**

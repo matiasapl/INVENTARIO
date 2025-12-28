@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
 use App\Http\Controllers\ProductController;
-
+use App\Http\Controllers\ControlStockController;
 Route::get('/', function () {
     return Inertia::render('welcome', [
         'canRegister' => Features::enabled(Features::registration()),
@@ -32,6 +32,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/products/{product}/deshabilitar', [ProductController::class, 'deshabilitar'])->name('products.deshabilitar');
     Route::get('/products/{product}/habilitar', [ProductController::class, 'habilitar'])->name('products.habilitar');
     Route::delete('/products/{product}/eliminar', [ProductController::class, 'eliminar'])->name('products.eliminar');
+
+    Route::get('/controlstock', [ControlStockController::class, 'index'])->name('controlstock.index');
+    Route::get('/controlstock/create', [ControlStockController::class, 'create'])->name('controlstock.create');
 });
 
 

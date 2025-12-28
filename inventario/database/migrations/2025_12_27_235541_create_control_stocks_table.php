@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('control_stocks', function (Blueprint $table) {
             $table->id();
+            $table->unsignedInteger('codigo');
+            $table->string('nombre');
+            $table->unsignedInteger('stock_previo');
+            $table->unsignedInteger('stock_actual');
+            $table->foreignId('usuario')->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

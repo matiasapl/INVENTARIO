@@ -10,7 +10,8 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import { index } from '@/actions/App/Http/Controllers/ProductController';
+import ControlStockController from '@/actions/App/Http/Controllers/ControlStockController';
+import ProductController from '@/actions/App/Http/Controllers/ProductController';
 import { dashboard } from '@/routes';
 
 import { type NavItem } from '@/types';
@@ -21,7 +22,12 @@ import AppLogo from './app-logo';
 const mainNavItems: NavItem[] = [
     {
         title: 'Productos',
-        href: index().url,
+        href: ProductController.index().url,
+        icon: Package,
+    },
+    {
+        title: 'Control Stock',
+        href: ControlStockController.index().url,
         icon: Package,
     },
 ];
