@@ -35,6 +35,12 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/controlstock', [ControlStockController::class, 'index'])->name('controlstock.index');
     Route::get('/controlstock/create', [ControlStockController::class, 'create'])->name('controlstock.create');
+
+    
+    // Acciones para sumar y restar stock
+    Route::post('/controlstock/{id}/sumar', [ControlStockController::class, 'sumar'])->name('controlstock.sumar');
+    Route::post('/controlstock/{id}/restar', [ControlStockController::class, 'restar'])->name('controlstock.restar');
+
 });
 
 

@@ -37,38 +37,63 @@ class ControlStockController extends Controller
      */
     public function store(Storecontrol_stockRequest $request)
     {
-        //
+
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(control_stock $control_stock)
-    {
-        //
+
+
+public function sumar(Request $request, $id)
+{
+    $request->validate([
+        'cantidad' => 'required|integer|min:1'
+    ]);
+
+    // Buscar el producto y validar que esté habilitado y no eliminado
+    $producto = Product::where('id', $id)
+        ->where('habilitado', true)
+        ->where('eliminado', false)
+        ->firstOrFail();
+
+    $this->authorizeProduct($producto);
+
+    $producto->sumar($request->cantidad);
+
+    return redirect()->route('controlstock.index')
+        ->with('success', 'Stock aumentado correctamente.');
+}
+
+
+
+public function restar(Request $request, $id)
+{
+    $request->validate([
+        'cantidad' => 'required|integer|min:1'
+    ]);
+
+    $producto = Product::where('id', $id)
+        ->where('habilitado', true)
+        ->where('eliminado', false)
+        ->firstOrFail();
+
+    $this->authorizeProduct($producto);
+
+    if ($producto->stock < $request->cantidad) {
+        return redirect()->route('controlstock.index')
+            ->with('error', 'No hay suficiente stock para restar.');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(control_stock $control_stock)
-    {
-        //
-    }
+    $producto->restar($request->cantidad);
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Updatecontrol_stockRequest $request, control_stock $control_stock)
-    {
-        //
-    }
+    return redirect()->route('controlstock.index')
+        ->with('success', 'Stock restado correctamente.');
+}
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(control_stock $control_stock)
+
+
+    private function authorizeProduct(Product $product)
     {
-        //
+        if ($product->usuario !== Auth::id()) {
+            abort(403, 'No tienes permiso para acceder a este producto.');
+        }
     }
 }

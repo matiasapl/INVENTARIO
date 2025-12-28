@@ -35,4 +35,15 @@ public function eliminar()
     return $this->save();
 }
 
+public function sumar($cantidad)
+{
+    $this->stock += $cantidad;
+    return $this->save();
+}
+
+public function restar($cantida)
+{
+    $this->stock -= $cantidad;
+    return $this->save();
+}
 }

@@ -2,7 +2,7 @@ import ControlStockController from '@/actions/App/Http/Controllers/ControlStockC
 import { useState } from 'react';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, router } from '@inertiajs/react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { DropdownMenu, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuContent,DropdownMenuLabel, DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
@@ -36,11 +36,33 @@ export default function Create({ DropDown }: { DropDown: DropDown[] }) {
     const [accion, setAccion] = useState('');
     const [codigo, setCodigo] = useState('');
     const [nombre, setNombre] = useState('');
+    const [cantidad, setCantidad] = useState(0);
+    const [ID, setID] = useState(0);
+
+
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        // post(ControlStockController.store().url);
-    };
+
+        if (!accion) {
+            alert('Selecciona una acción');
+            return;
+        }
+
+        if (!data.codigo) {
+            alert('Selecciona un producto');
+            return;
+        }
+
+        const url =
+            accion === 'Sumar'
+            ? ControlStockController.sumar(cantidad).url
+            : ControlStockController.restar(cantidad).url;
+
+    post(url); // Inertia seguirá el redirect del controlador automáticamente
+};
+
+
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -74,6 +96,7 @@ export default function Create({ DropDown }: { DropDown: DropDown[] }) {
                                             setNombre(item.nombre);
                                             setData('codigo', item.codigo);
                                             setData('stock_previo', item.stock);
+                                            setID(item.id);
                                         }}
                                     >
                                         {item.codigo}
@@ -147,8 +170,22 @@ export default function Create({ DropDown }: { DropDown: DropDown[] }) {
                             placeholder="0"
                             min={0}
                             max={10000000}
-                            onChange={(e) =>
-                                setData('stock_actual', Number(e.target.value))
+                            onChange={(e) => {
+                                                               (setData(
+                                                                   'stock_actual',
+                                                                   Number(
+                                                                       e.target
+                                                                           .value,
+                                                                   ),
+                                                               ),
+                                                                   setCantidad(
+                                                                       Number(
+                                                                           e
+                                                                               .target
+                                                                               .value,
+                                                                       ),
+                                                                   )); 
+                            }
                             }
                         ></Input>
                         {errors.stock_actual && (
@@ -158,6 +195,7 @@ export default function Create({ DropDown }: { DropDown: DropDown[] }) {
                         )}
                     </div>
                     <div className="flex-row space-x-2">
+                        
                         <Button
                             className="mb-4 bg-green-500 hover:bg-green-700"
                             type="submit"
