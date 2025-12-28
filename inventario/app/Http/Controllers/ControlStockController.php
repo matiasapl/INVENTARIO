@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\Product;
 use App\Models\control_stock;
 use App\Http\Requests\Storecontrol_stockRequest;
 use App\Http\Requests\Updatecontrol_stockRequest;
@@ -24,7 +24,12 @@ class ControlStockController extends Controller
      */
     public function create()
     {
-        return inertia('ControlStock/Create');
+        $DropDown = Product::where('usuario', Auth::id())
+            ->where('habilitado', true)
+            ->where('eliminado', false)
+            ->select('id', 'codigo', 'nombre', 'stock')
+            ->get();
+        return inertia('ControlStock/Create', compact('DropDown'));
     }
 
     /**

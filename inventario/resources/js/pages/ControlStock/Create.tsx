@@ -1,10 +1,11 @@
 import ControlStockController from '@/actions/App/Http/Controllers/ControlStockController';
+import { useState } from 'react';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link } from '@inertiajs/react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
+import { DropdownMenu, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuContent,DropdownMenuLabel, DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
 import { useForm }  from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
 import { CircleX, CircleCheck } from 'lucide-react';
@@ -17,8 +18,14 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-export default function Create() {
+interface DropDown {
+    id: number
+    codigo: number;
+    nombre: string;
+    stock: number;
+}
 
+export default function Create({ DropDown }: { DropDown: DropDown[] }) {
     const { data, setData, post, processing, errors } = useForm({
         codigo: 0,
         nombre: '',
@@ -26,38 +33,57 @@ export default function Create() {
         stock_actual: 0,
     });
 
+    const [accion, setAccion] = useState('');
+    const [codigo, setCodigo] = useState('');
+    const [nombre, setNombre] = useState('');
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => { 
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        //post(ControlStockController.store().url);
-    }
+        // post(ControlStockController.store().url);
+    };
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Crear Producto" />
             <div className="w-8/12 p-4">
                 <form method="post" onSubmit={handleSubmit}>
+                    {/* Dropdown para Código */}
                     <div className="mb-4 gap-1.5">
                         <Label htmlFor="Codigo" className="mb-1.5 block">
-                            Codigo de Producto:
+                            Código
                         </Label>
-                        <Input
-                            type="Number"
-                            id="Codigo"
-                            max={10000000}
-                            min={0}
-                            maxLength={8}
-                            placeholder="0"
-                            onChange={(e) =>
-                                setData('codigo', Number(e.target.value))
-                            }
-                        ></Input>
-                        {errors.codigo && (
-                            <div className="mt-1 flex items-center text-sm text-red-500">
-                                {errors.codigo}
-                            </div>
-                        )}
+                        <DropdownMenu>
+                            <DropdownMenuTrigger>
+                                <Input
+                                    id="Codigo"
+                                    placeholder="CLICK AQUI !!!"
+                                    value={codigo}
+                                    disabled={true}
+                                />
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent>
+                                <DropdownMenuLabel>
+                                    Selecciona Código de Producto a Actualizar
+                                </DropdownMenuLabel>
+                                <DropdownMenuSeparator />
+                                {DropDown.map((item) => (
+                                    <DropdownMenuItem
+                                        key={item.codigo}
+                                        onClick={() => {
+                                            setCodigo(item.codigo.toString());
+                                            setNombre(item.nombre);
+                                            setData('codigo', item.codigo);
+                                            setData('stock_previo', item.stock);
+                                        }}
+                                    >
+                                        {item.codigo}
+                                    </DropdownMenuItem>
+                                ))}
+                            </DropdownMenuContent>
+                        </DropdownMenu>
                     </div>
+
+                    {/* Input para Nombre */}
                     <div className="mb-4 gap-1.5">
                         <Label htmlFor="Nombre" className="mb-1.5 block">
                             Nombre de Producto:
@@ -65,10 +91,9 @@ export default function Create() {
                         <Input
                             id="Nombre"
                             placeholder="Nombre de tu producto"
-                            minLength={3}
-                            maxLength={30}
-                            onChange={(e) => setData('nombre', e.target.value)}
-                        ></Input>
+                            value={nombre}
+                            disabled={true}
+                        />
                         {errors.nombre && (
                             <div className="mt-1 flex items-center text-sm text-red-500">
                                 {errors.nombre}
@@ -77,24 +102,39 @@ export default function Create() {
                     </div>
 
                     <div className="mb-4 gap-1.5">
-                        <Label htmlFor="Stock_Previo" className="mb-1.5 block">
+                        <Label htmlFor="Accion" className="mb-1.5 block">
                             Accion:
                         </Label>
-                        <Input
-                            type="number"
-                            id="Stock_Previo"
-                            placeholder="0"
-                            min={0}
-                            max={10000000}
-                            onChange={(e) =>
-                                setData('stock_previo', Number(e.target.value))
-                            }
-                        ></Input>
-                        {errors.stock_previo && (
-                            <div className="mt-1 flex items-center text-sm text-red-500">
-                                {errors.stock_previo}
-                            </div>
-                        )}
+                        <DropdownMenu>
+                            <DropdownMenuTrigger>
+                                <Input
+                                    id="Accion"
+                                    placeholder="CLICK AQUI !!!"
+                                    value={accion}
+                                    disabled={true}
+                                ></Input>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent>
+                                <DropdownMenuLabel>
+                                    QUE QUIERES HACER?
+                                </DropdownMenuLabel>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem
+                                    onClick={() => {
+                                        setAccion('Sumar');
+                                    }}
+                                >
+                                    Sumar
+                                </DropdownMenuItem>
+                                <DropdownMenuItem
+                                    onClick={() => {
+                                        setAccion('Restar');
+                                    }}
+                                >
+                                    Restar
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
                     </div>
 
                     <div className="mb-4 gap-1.5">
