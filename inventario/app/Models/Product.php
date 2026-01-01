@@ -41,7 +41,7 @@ public function sumar($cantidad)
     return $this->save();
 }
 
-public function restar($cantida)
+public function restar($cantidad)
 {
     $this->stock -= $cantidad;
     return $this->save();

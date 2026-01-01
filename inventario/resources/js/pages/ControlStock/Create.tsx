@@ -31,6 +31,7 @@ export default function Create({ DropDown }: { DropDown: DropDown[] }) {
         nombre: '',
         stock_previo: 0,
         stock_actual: 0,
+        cantidad: 0,
     });
 
     const [accion, setAccion] = useState('');
@@ -41,26 +42,51 @@ export default function Create({ DropDown }: { DropDown: DropDown[] }) {
 
 
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
 
-        if (!accion) {
-            alert('Selecciona una acción');
-            return;
-        }
 
-        if (!data.codigo) {
-            alert('Selecciona un producto');
-            return;
-        }
 
-        const url =
-            accion === 'Sumar'
-            ? ControlStockController.sumar(cantidad).url
-            : ControlStockController.restar(cantidad).url;
+const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
-    post(url); // Inertia seguirá el redirect del controlador automáticamente
+    if (!accion) {
+        alert('Selecciona una acción (Sumar o Restar)');
+        return;
+    }
+
+    if (!ID) {
+        alert('Selecciona un producto');
+        return;
+    }
+
+    if (cantidad <= 0) {
+        alert('Ingresa una cantidad válida');
+        return;
+    }
+
+    const rutaDestino =
+        accion === 'Sumar'
+            ? ControlStockController.sumar(ID).url
+            : ControlStockController.restar(ID).url;
+
+    // Actualizamos el formulario con la cantidad
+    setData('cantidad', cantidad);
+
+    // Enviamos el formulario
+    post(rutaDestino, {
+        preserveScroll: true,
+        onSuccess: () => {
+            alert('Stock actualizado con éxito');
+            setAccion('');
+            setCodigo('');
+            setNombre('');
+            setCantidad(0);
+            setID(0);
+        },
+    });
 };
+``;
+
+
 
 
 
