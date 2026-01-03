@@ -1,4 +1,4 @@
-import ControlStockController from '@/actions/App/Http/Controllers/ControlStockController';
+import RegistroController from '@/actions/App/Http/Controllers/RegistroController';
 import { Button } from '@/components/ui/button';
 import {
     Table,
@@ -27,28 +27,20 @@ interface ControlStock {
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Control Stock',
-        href: ControlStockController.index().url,
+        title: 'Registros',
+        href: RegistroController.index().url,
     },
 ];
 
-export default function Index({ Historial }: { Historial: ControlStock[] }) {
+export default function Index({ Registros }: { Registros: ControlStock[] }) {
 
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Control Stock" />
-            <nav className="flex-row">
-                <Link href={ControlStockController.create().url}>
-                    <Button className="m-4 bg-green-500 hover:bg-green-700">
-                        <CirclePlus />
-                        Actualizar Stock
-                    </Button>
-                </Link>
-            </nav>
+            <Head title="Registros" />
 
             <Table>
-                <TableCaption>Historial Stock</TableCaption>
+                <TableCaption>Registros</TableCaption>
                 <TableHeader>
                     <TableRow>
                         <TableHead>Código</TableHead>
@@ -60,22 +52,22 @@ export default function Index({ Historial }: { Historial: ControlStock[] }) {
                         <TableHead>Responsable</TableHead>
                     </TableRow>
                 </TableHeader>
-                {Historial.length > 0 && (
+                {Registros.length > 0 && (
                     <TableBody>
-                        {Historial.map((historial) => (
-                            <TableRow key={historial.codigo}>
-                                <TableCell>{historial.codigo}</TableCell>
+                        {Registros.map((Registros) => (
+                            <TableRow key={Registros.codigo}>
+                                <TableCell>{Registros.codigo}</TableCell>
                                 <TableCell>
-                                    {historial.nombre.length > 30
-                                        ? historial.nombre.substring(0, 30) +
+                                    {Registros.nombre.length > 30
+                                        ? Registros.nombre.substring(0, 30) +
                                           '...'
-                                        : historial.nombre}
+                                        : Registros.nombre}
                                 </TableCell>
-                                <TableCell>{historial.stock_previo}</TableCell>
-                                <TableCell>{historial.stock_actual}</TableCell>
-                                <TableCell>{historial.accion}</TableCell>
-                                <TableCell>{historial.tipo}</TableCell>
-                                <TableCell>{historial.responsable}</TableCell>
+                                <TableCell>{Registros.stock_previo}</TableCell>
+                                <TableCell>{Registros.stock_actual}</TableCell>
+                                <TableCell>{Registros.accion}</TableCell>
+                                <TableCell>{Registros.tipo}</TableCell>
+                                <TableCell>{Registros.responsable}</TableCell>
                             </TableRow>
                         ))}
                     </TableBody>

@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/sidebar';
 import ControlStockController from '@/actions/App/Http/Controllers/ControlStockController';
 import ProductController from '@/actions/App/Http/Controllers/ProductController';
+import RegistroController from '@/actions/App/Http/Controllers/RegistroController';
 import { dashboard } from '@/routes';
 
 import { type NavItem } from '@/types';
@@ -28,6 +29,11 @@ const mainNavItems: NavItem[] = [
     {
         title: 'Control Stock',
         href: ControlStockController.index().url,
+        icon: Package,
+    },
+    {
+        title: 'Registros',
+        href: RegistroController.index().url,
         icon: Package,
     },
 ];
