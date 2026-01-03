@@ -47,41 +47,28 @@ export default function Create({ DropDown }: { DropDown: DropDown[] }) {
 const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!accion) {
-        alert('Selecciona una acción (Sumar o Restar)');
-        return;
-    }
-
-    if (!ID) {
-        alert('Selecciona un producto');
-        return;
-    }
-
-    if (cantidad <= 0) {
-        alert('Ingresa una cantidad válida');
-        return;
-    }
-
     const rutaDestino =
         accion === 'Sumar'
             ? ControlStockController.sumar(ID).url
             : ControlStockController.restar(ID).url;
 
     // Actualizamos el formulario con la cantidad
-    setData('cantidad', cantidad);
-    
 
-    // Enviamos el formulario
-    post(rutaDestino, {
-        preserveScroll: true,
-        onSuccess: () => {
-            setAccion('');
-            setCodigo('');
-            setNombre('');
-            setCantidad(0);
-            setID(0);
-        },
-    });
+setData((prev) => ({
+    ...prev,
+    cantidad,
+}));
+
+post(rutaDestino, {
+    preserveScroll: true,
+    onSuccess: () => {
+        setAccion('');
+        setCodigo('');
+        setNombre('');
+        setCantidad(0);
+        setID(0);
+    },
+});
 };
 
     return (
@@ -191,7 +178,7 @@ const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
                             placeholder="0"
                             min={0}
                             max={10000000}
-                            onChange={(e) => { (setCantidad(Number(e.target.value))); }}
+                            onChange={(e) => {setData('cantidad', Number(e.target.value));}}
                         ></Input>
                         {errors.cantidad && (
                             <div className="mt-1 flex items-center text-sm text-red-500">
