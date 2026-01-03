@@ -1,5 +1,4 @@
 import RegistroController from '@/actions/App/Http/Controllers/RegistroController';
-import { Button } from '@/components/ui/button';
 import {
     Table,
     TableBody,
@@ -11,15 +10,11 @@ import {
 } from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
-import { Head, Link, router } from '@inertiajs/react';
-import { CirclePlus } from 'lucide-react';
+import { Head } from '@inertiajs/react';
 
 interface ControlStock {
-    id: number;
     codigo: number;
     nombre: string;
-    stock_previo: number;
-    stock_actual: number;
     accion: string;
     tipo: string;
     responsable: string;
@@ -45,8 +40,6 @@ export default function Index({ Registros }: { Registros: ControlStock[] }) {
                     <TableRow>
                         <TableHead>Código</TableHead>
                         <TableHead>Nombre</TableHead>
-                        <TableHead>Stock Previo</TableHead>
-                        <TableHead>Stock Actual</TableHead>
                         <TableHead>Accion</TableHead>
                         <TableHead>Tipo</TableHead>
                         <TableHead>Responsable</TableHead>
@@ -63,8 +56,6 @@ export default function Index({ Registros }: { Registros: ControlStock[] }) {
                                           '...'
                                         : Registros.nombre}
                                 </TableCell>
-                                <TableCell>{Registros.stock_previo}</TableCell>
-                                <TableCell>{Registros.stock_actual}</TableCell>
                                 <TableCell>{Registros.accion}</TableCell>
                                 <TableCell>{Registros.tipo}</TableCell>
                                 <TableCell>{Registros.responsable}</TableCell>

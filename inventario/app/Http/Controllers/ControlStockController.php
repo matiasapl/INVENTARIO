@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\control_stock;
+use App\Models\Registro;
 use App\Http\Requests\Storecontrol_stockRequest;
 use App\Http\Requests\Updatecontrol_stockRequest;
 use Illuminate\Support\Facades\Auth;
@@ -76,6 +77,14 @@ public function sumar(Request $request, $id)
         'usuario' => Auth::id()
     ]);
 
+    Registro::create([
+        'codigo' => $request->codigo,
+        'nombre' => $request->nombre,
+        'accion' => 'suma',
+        'tipo' => 'manual',
+        'usuario' => Auth::id()
+    ]);
+
     return redirect()->route('controlstock.index')
         ->with('success', 'Stock aumentado correctamente.');
 }
@@ -111,6 +120,14 @@ public function restar(Request $request, $id)
         'nombre' => $request->nombre,
         'stock_previo' => $request->stock_previo,
         'stock_actual' => $request->stock_previo - $request->cantidad,
+        'accion' => 'resta',
+        'tipo' => 'manual',
+        'usuario' => Auth::id()
+    ]);
+
+    Registro::create([
+        'codigo' => $request->codigo,
+        'nombre' => $request->nombre,
         'accion' => 'resta',
         'tipo' => 'manual',
         'usuario' => Auth::id()

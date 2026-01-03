@@ -9,4 +9,13 @@ class Registro extends Model
 {
     /** @use HasFactory<\Database\Factories\RegistroFactory> */
     use HasFactory;
+
+    protected $fillable = [
+        'codigo', 'nombre', 'accion', 'tipo','usuario'
+    ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'usuario');
+    }
 }

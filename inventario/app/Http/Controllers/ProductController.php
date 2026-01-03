@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Registro;
 
 class ProductController extends Controller
 {
@@ -46,6 +47,15 @@ class ProductController extends Controller
     {
         $this->authorizeProduct($product);
         $product->deshabilitar();
+
+    Registro::create([
+        'codigo' => $product->codigo,
+        'nombre' => $product->nombre,
+        'accion' => 'Deshabilitar Producto',
+        'tipo' => 'manual',
+        'usuario' => Auth::id()
+    ]);
+
         return redirect()->route('products.index')->with('success', 'Producto deshabilitado correctamente');
     }
         /**
@@ -55,6 +65,14 @@ class ProductController extends Controller
     {
         $this->authorizeProduct($product);
         $product->habilitar();
+
+        Registro::create([
+        'codigo' => $product->codigo,
+        'nombre' => $product->nombre,
+        'accion' => 'Habilitar Producto',
+        'tipo' => 'manual',
+        'usuario' => Auth::id()
+        ]);
         return redirect()->route('products.papelera')->with('success', 'Producto habilitado correctamente');
     }
 
@@ -65,6 +83,14 @@ class ProductController extends Controller
     {
         $this->authorizeProduct($product);
         $product->eliminar();
+
+    Registro::create([
+        'codigo' => $product->codigo,
+        'nombre' => $product->nombre,
+        'accion' => 'Eliminar Producto',
+        'tipo' => 'manual',
+        'usuario' => Auth::id()
+    ]);
         return redirect()->route('products.papelera')->with('success', 'Producto eliminado correctamente');
     }
 
@@ -87,6 +113,14 @@ class ProductController extends Controller
 
         Product::create($data);
 
+
+    Registro::create([
+        'codigo' => $request->codigo,
+        'nombre' => $request->nombre,
+        'accion' => 'Crear Producto',
+        'tipo' => 'manual',
+        'usuario' => Auth::id()
+    ]);
         return redirect()->route('products.index')->with('success', 'Producto creado correctamente');
     }
 
@@ -106,7 +140,13 @@ class ProductController extends Controller
     public function view(Product $product)
     {
         $this->authorizeProduct($product);
-
+    Registro::create([
+        'codigo' => $product->codigo,
+        'nombre' => $product->nombre,
+        'accion' => 'Ver Producto',
+        'tipo' => 'manual',
+        'usuario' => Auth::id()
+    ]);
         return inertia('Products/View', compact('product'));
     }
 
@@ -119,6 +159,14 @@ class ProductController extends Controller
 
         $product->update($request->validated());
 
+
+    Registro::create([
+        'codigo' => $request->codigo,
+        'nombre' => $request->nombre,
+        'accion' => 'Editar Producto',
+        'tipo' => 'manual',
+        'usuario' => Auth::id()
+    ]);
         return redirect()->route('products.index')->with('success', 'Producto editado correctamente');
     }
 
