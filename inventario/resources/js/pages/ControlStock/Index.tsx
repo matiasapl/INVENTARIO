@@ -20,6 +20,9 @@ interface ControlStock {
     nombre: string;
     stock_previo: number;
     stock_actual: number;
+    accion: string;
+    tipo: string;
+    responsable: string;
 }
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -52,6 +55,9 @@ export default function Index({ Historial }: { Historial: ControlStock[] }) {
                         <TableHead>Nombre</TableHead>
                         <TableHead>Stock Previo</TableHead>
                         <TableHead>Stock Actual</TableHead>
+                        <TableHead>Accion</TableHead>
+                        <TableHead>Tipo</TableHead>
+                        <TableHead>Responsable</TableHead>
                     </TableRow>
                 </TableHeader>
                 {Historial.length > 0 && (
@@ -67,6 +73,9 @@ export default function Index({ Historial }: { Historial: ControlStock[] }) {
                                 </TableCell>
                                 <TableCell>{historial.stock_previo}</TableCell>
                                 <TableCell>{historial.stock_actual}</TableCell>
+                                <TableCell>{historial.accion}</TableCell>
+                                <TableCell>{historial.tipo}</TableCell>
+                                <TableCell>{historial.responsable}</TableCell>
                             </TableRow>
                         ))}
                     </TableBody>

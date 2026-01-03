@@ -30,7 +30,6 @@ export default function Create({ DropDown }: { DropDown: DropDown[] }) {
         codigo: 0,
         nombre: '',
         stock_previo: 0,
-        stock_actual: 0,
         cantidad: 0,
     });
 
@@ -70,12 +69,12 @@ const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 
     // Actualizamos el formulario con la cantidad
     setData('cantidad', cantidad);
+    
 
     // Enviamos el formulario
     post(rutaDestino, {
         preserveScroll: true,
         onSuccess: () => {
-            alert('Stock actualizado con éxito');
             setAccion('');
             setCodigo('');
             setNombre('');
@@ -84,11 +83,6 @@ const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         },
     });
 };
-``;
-
-
-
-
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -121,6 +115,7 @@ const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
                                             setCodigo(item.codigo.toString());
                                             setNombre(item.nombre);
                                             setData('codigo', item.codigo);
+                                            setData('nombre', item.nombre);
                                             setData('stock_previo', item.stock);
                                             setID(item.id);
                                         }}
@@ -196,27 +191,11 @@ const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
                             placeholder="0"
                             min={0}
                             max={10000000}
-                            onChange={(e) => {
-                                                               (setData(
-                                                                   'stock_actual',
-                                                                   Number(
-                                                                       e.target
-                                                                           .value,
-                                                                   ),
-                                                               ),
-                                                                   setCantidad(
-                                                                       Number(
-                                                                           e
-                                                                               .target
-                                                                               .value,
-                                                                       ),
-                                                                   )); 
-                            }
-                            }
+                            onChange={(e) => { (setCantidad(Number(e.target.value))); }}
                         ></Input>
-                        {errors.stock_actual && (
+                        {errors.cantidad && (
                             <div className="mt-1 flex items-center text-sm text-red-500">
-                                {errors.stock_actual}
+                                {errors.cantidad}
                             </div>
                         )}
                     </div>

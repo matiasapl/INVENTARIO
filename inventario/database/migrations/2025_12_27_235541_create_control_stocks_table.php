@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('nombre');
             $table->unsignedInteger('stock_previo');
             $table->unsignedInteger('stock_actual');
+            $table->string('accion');
+            $table->string('tipo');
             $table->foreignId('usuario')->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });

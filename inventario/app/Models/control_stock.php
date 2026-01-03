@@ -9,7 +9,7 @@ class control_stock extends Model
 {
 
     protected $fillable = [
-        'codigo', 'nombre', 'stock_previo', 'stock_actual', 'usuario'
+        'codigo', 'nombre', 'stock_previo', 'stock_actual', 'accion', 'tipo','usuario'
     ];
 
     public function user()

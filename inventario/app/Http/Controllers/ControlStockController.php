@@ -12,12 +12,18 @@ class ControlStockController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        $Historial = control_stock::where('usuario', Auth::id())->get();
+ 
+public function index()
+{
+    $Historial = \DB::table('control_stocks as stock')
+        ->join('users', 'stock.usuario', '=', 'users.id')
+        ->where('stock.usuario', Auth::id())
+        ->select('stock.codigo', 'stock.nombre', 'stock.stock_previo', 'stock.stock_actual', 'stock.accion', 'stock.tipo','users.name as responsable')
+        ->get();
 
-        return inertia('ControlStock/Index', compact('Historial'));
-    }
+    return inertia('ControlStock/Index', compact('Historial'));
+}
+
 
     /**
      * Show the form for creating a new resource.
@@ -42,21 +48,33 @@ class ControlStockController extends Controller
 
 
 
+
 public function sumar(Request $request, $id)
 {
     $request->validate([
+        'codigo' => 'required|integer',
+        'nombre' => 'required|string',
+        'stock_previo' => 'required|integer|min:0',
         'cantidad' => 'required|integer|min:1'
     ]);
 
-    // Buscar el producto y validar que esté habilitado y no eliminado
     $producto = Product::where('id', $id)
         ->where('habilitado', true)
         ->where('eliminado', false)
         ->firstOrFail();
 
     $this->authorizeProduct($producto);
-
     $producto->sumar($request->cantidad);
+
+    control_stock::create([
+        'codigo' => $request->codigo,
+        'nombre' => $request->nombre,
+        'stock_previo' => $request->stock_previo,
+        'stock_actual' => $request->stock_previo + $request->cantidad,
+        'accion' => 'suma',
+        'tipo' => 'manual',
+        'usuario' => Auth::id()
+    ]);
 
     return redirect()->route('controlstock.index')
         ->with('success', 'Stock aumentado correctamente.');
@@ -64,9 +82,13 @@ public function sumar(Request $request, $id)
 
 
 
+
 public function restar(Request $request, $id)
 {
     $request->validate([
+        'codigo' => 'required|integer',
+        'nombre' => 'required|string',
+        'stock_previo' => 'required|integer|min:0',
         'cantidad' => 'required|integer|min:1'
     ]);
 
@@ -83,6 +105,16 @@ public function restar(Request $request, $id)
     }
 
     $producto->restar($request->cantidad);
+
+        control_stock::create([
+        'codigo' => $request->codigo,
+        'nombre' => $request->nombre,
+        'stock_previo' => $request->stock_previo,
+        'stock_actual' => $request->stock_previo - $request->cantidad,
+        'accion' => 'resta',
+        'tipo' => 'manual',
+        'usuario' => Auth::id()
+    ]);
 
     return redirect()->route('controlstock.index')
         ->with('success', 'Stock restado correctamente.');
