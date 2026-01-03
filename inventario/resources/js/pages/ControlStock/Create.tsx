@@ -36,7 +36,6 @@ export default function Create({ DropDown }: { DropDown: DropDown[] }) {
     const [accion, setAccion] = useState('');
     const [codigo, setCodigo] = useState('');
     const [nombre, setNombre] = useState('');
-    const [cantidad, setCantidad] = useState(0);
     const [ID, setID] = useState(0);
 
 
@@ -54,18 +53,12 @@ const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 
     // Actualizamos el formulario con la cantidad
 
-setData((prev) => ({
-    ...prev,
-    cantidad,
-}));
-
 post(rutaDestino, {
     preserveScroll: true,
     onSuccess: () => {
         setAccion('');
         setCodigo('');
         setNombre('');
-        setCantidad(0);
         setID(0);
     },
 });

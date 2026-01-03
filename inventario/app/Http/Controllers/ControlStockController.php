@@ -50,6 +50,7 @@ public function index()
 
 
 
+
 public function sumar(Request $request, $id)
 {
     $request->validate([
@@ -65,6 +66,13 @@ public function sumar(Request $request, $id)
         ->firstOrFail();
 
     $this->authorizeProduct($producto);
+
+    $limiteMaximo = 10000000;
+
+    if (($producto->stock + $request->cantidad) > $limiteMaximo) {
+        return back()->withErrors(['cantidad' => 'No se puede superar el stock máximo permitido.']);
+    }
+
     $producto->sumar($request->cantidad);
 
     control_stock::create([
@@ -72,22 +80,23 @@ public function sumar(Request $request, $id)
         'nombre' => $request->nombre,
         'stock_previo' => $request->stock_previo,
         'stock_actual' => $request->stock_previo + $request->cantidad,
-        'accion' => 'suma',
-        'tipo' => 'manual',
+        'accion' => 'Suma',
+        'tipo' => 'Manual',
         'usuario' => Auth::id()
     ]);
 
     Registro::create([
         'codigo' => $request->codigo,
         'nombre' => $request->nombre,
-        'accion' => 'suma',
-        'tipo' => 'manual',
+        'accion' => 'Suma',
+        'tipo' => 'Manual',
         'usuario' => Auth::id()
     ]);
 
     return redirect()->route('controlstock.index')
         ->with('success', 'Stock aumentado correctamente.');
 }
+
 
 
 
@@ -109,8 +118,7 @@ public function restar(Request $request, $id)
     $this->authorizeProduct($producto);
 
     if ($producto->stock < $request->cantidad) {
-        return redirect()->route('controlstock.index')
-            ->with('error', 'No hay suficiente stock para restar.');
+        return back()->withErrors(['cantidad' => 'No hay suficiente stock para restar.']);
     }
 
     $producto->restar($request->cantidad);
@@ -120,16 +128,16 @@ public function restar(Request $request, $id)
         'nombre' => $request->nombre,
         'stock_previo' => $request->stock_previo,
         'stock_actual' => $request->stock_previo - $request->cantidad,
-        'accion' => 'resta',
-        'tipo' => 'manual',
+        'accion' => 'Resta',
+        'tipo' => 'Manual',
         'usuario' => Auth::id()
     ]);
 
     Registro::create([
         'codigo' => $request->codigo,
         'nombre' => $request->nombre,
-        'accion' => 'resta',
-        'tipo' => 'manual',
+        'accion' => 'Resta',
+        'tipo' => 'Manual',
         'usuario' => Auth::id()
     ]);
 
