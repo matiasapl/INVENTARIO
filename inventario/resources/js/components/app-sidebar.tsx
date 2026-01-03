@@ -17,14 +17,14 @@ import { dashboard } from '@/routes';
 
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import { Package } from 'lucide-react';
+import { Package, Blocks, Logs, LayoutDashboard } from 'lucide-react';
 import AppLogo from './app-logo';
 
 const mainNavItems: NavItem[] = [
     {
         title: 'Dashboard',
         href: dashboard(),
-        icon: Package,
+        icon: LayoutDashboard,
     },
     {
         title: 'Productos',
@@ -34,12 +34,12 @@ const mainNavItems: NavItem[] = [
     {
         title: 'Control Stock',
         href: ControlStockController.index().url,
-        icon: Package,
+        icon: Blocks,
     },
     {
         title: 'Registros',
         href: RegistroController.index().url,
-        icon: Package,
+        icon: Logs,
     },
 ];
 
