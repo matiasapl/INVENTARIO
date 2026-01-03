@@ -51,12 +51,13 @@ export default function TwoFactor({
                     />
                     {twoFactorEnabled ? (
                         <div className="flex flex-col items-start justify-start space-y-4">
-                            <Badge variant="default">Enabled</Badge>
+                            <Badge variant="default">Habilitado</Badge>
                             <p className="text-muted-foreground">
-                                With two-factor authentication enabled, you will
-                                be prompted for a secure, random pin during
-                                login, which you can retrieve from the
-                                TOTP-supported application on your phone.
+                                Con la autenticación de dos factores habilitada,
+                                se le solicitará un PIN seguro y aleatorio
+                                durante el inicio de sesión, que podrá recuperar
+                                de la aplicación compatible con TOTP en su
+                                teléfono.
                             </p>
 
                             <TwoFactorRecoveryCodes
@@ -73,7 +74,7 @@ export default function TwoFactor({
                                             type="submit"
                                             disabled={processing}
                                         >
-                                            <ShieldBan /> Disable 2FA
+                                            <ShieldBan /> Deshabilitar 2FA
                                         </Button>
                                     )}
                                 </Form>
@@ -83,10 +84,11 @@ export default function TwoFactor({
                         <div className="flex flex-col items-start justify-start space-y-4">
                             <Badge variant="destructive">Disabled</Badge>
                             <p className="text-muted-foreground">
-                                When you enable two-factor authentication, you
-                                will be prompted for a secure pin during login.
-                                This pin can be retrieved from a TOTP-supported
-                                application on your phone.
+                                Cuando habilite la autenticación de dos
+                                factores, se le pedirá un PIN seguro durante el
+                                inicio de sesión. Este PIN se puede recuperar
+                                desde una aplicación compatible con TOTP en su
+                                teléfono.
                             </p>
 
                             <div>
@@ -95,7 +97,7 @@ export default function TwoFactor({
                                         onClick={() => setShowSetupModal(true)}
                                     >
                                         <ShieldCheck />
-                                        Continue Setup
+                                        Continuar con la configuración
                                     </Button>
                                 ) : (
                                     <Form
@@ -110,7 +112,7 @@ export default function TwoFactor({
                                                 disabled={processing}
                                             >
                                                 <ShieldCheck />
-                                                Enable 2FA
+                                                Activar 2FA
                                             </Button>
                                         )}
                                     </Form>
