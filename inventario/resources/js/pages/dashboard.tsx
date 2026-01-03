@@ -1,8 +1,29 @@
-import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
+import ProductController from '@/actions/App/Http/Controllers/ProductController';
+import {
+    Table,
+    TableBody,
+    TableCaption,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout';
 import { dashboard } from '@/routes';
 import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
+
+interface Product {
+    id: number;
+    codigo: number;
+    nombre: string;
+    descripcion: string;
+    stock: number;
+    valor_total: number;
+    m3_total: number;
+    created_at: Date;
+    updated_at: Date;
+}
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -11,26 +32,60 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-export default function Dashboard() {
+export default function Dashboard({ products }: { products: Product[] }) {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Dashboard" />
-            <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
-                <div className="grid auto-rows-min gap-4 md:grid-cols-3">
-                    <div className="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                        <PlaceholderPattern className="absolute inset-0 size-full stroke-neutral-900/20 dark:stroke-neutral-100/20" />
-                    </div>
-                    <div className="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                        <PlaceholderPattern className="absolute inset-0 size-full stroke-neutral-900/20 dark:stroke-neutral-100/20" />
-                    </div>
-                    <div className="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                        <PlaceholderPattern className="absolute inset-0 size-full stroke-neutral-900/20 dark:stroke-neutral-100/20" />
-                    </div>
-                </div>
-                <div className="relative min-h-[100vh] flex-1 overflow-hidden rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
-                    <PlaceholderPattern className="absolute inset-0 size-full stroke-neutral-900/20 dark:stroke-neutral-100/20" />
-                </div>
-            </div>
+            <Table>
+                <TableCaption>Dashboard</TableCaption>
+                <TableHeader>
+                    <TableRow>
+                        <TableHead>Código</TableHead>
+                        <TableHead>Nombre</TableHead>
+                        <TableHead>Descripción</TableHead>
+                        <TableHead>Stock</TableHead>
+                        <TableHead>Valor Total</TableHead>
+                        <TableHead>M3 Total</TableHead>
+                        <TableHead>Creacion</TableHead>
+                        <TableHead>Ultima Actualizacion</TableHead>
+                    </TableRow>
+                </TableHeader>
+                {products.length > 0 && (
+                    <TableBody>
+                        {products.map((product) => (
+                            <TableRow key={product.codigo}>
+                                <TableCell>{product.codigo}</TableCell>
+                                <TableCell>
+                                    {product.nombre.length > 30
+                                        ? product.nombre.substring(0, 30) +
+                                          '...'
+                                        : product.nombre}
+                                </TableCell>
+                                <TableCell>
+                                    {product.descripcion?.length > 50
+                                        ? product.descripcion.substring(0, 50) +
+                                          '...'
+                                        : (product.descripcion ??
+                                          'Sin Descripcion')}
+                                </TableCell>
+                                <TableCell>{product.stock}</TableCell>
+                                <TableCell>{product.valor_total}</TableCell>
+                                <TableCell>{product.m3_total}</TableCell>
+                                <TableCell>
+                                    {new Date(
+                                        product.created_at,
+                                    ).toLocaleString('es-MX')}
+                                </TableCell>
+                                <TableCell>
+                                    {new Date(
+                                        product.updated_at,
+                                    ).toLocaleString('es-MX')}
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                )}
+            </Table>
         </AppLayout>
     );
 }

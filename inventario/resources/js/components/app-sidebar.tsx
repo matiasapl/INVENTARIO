@@ -22,6 +22,11 @@ import AppLogo from './app-logo';
 
 const mainNavItems: NavItem[] = [
     {
+        title: 'Dashboard',
+        href: dashboard(),
+        icon: Package,
+    },
+    {
         title: 'Productos',
         href: ProductController.index().url,
         icon: Package,

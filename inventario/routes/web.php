@@ -13,13 +13,12 @@ Route::get('/', function () {
 })->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('dashboard', function () {
-        return Inertia::render('dashboard');
-    })->name('dashboard');
+    Route::get('dashboard',  [ProductController::class, 'dashboard'])->name('dashboard');
 });
 
 
 Route::middleware(['auth'])->group(function () {
+    Route::get('/products', [ProductController::class, 'index'])->name('products.index');
     Route::get('/products', [ProductController::class, 'index'])->name('products.index');
     Route::get('/products/papelera', [ProductController::class, 'papelera'])->name('products.papelera');
     Route::get('/registros', [RegistroController::class, 'index'])->name('registros.index');
