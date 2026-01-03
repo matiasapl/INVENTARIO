@@ -16,10 +16,10 @@ interface ResetPasswordProps {
 export default function ResetPassword({ token, email }: ResetPasswordProps) {
     return (
         <AuthLayout
-            title="Reset password"
-            description="Please enter your new password below"
+            title="Restablecer contraseña"
+            description="Introduzca su nueva contraseña a continuación."
         >
-            <Head title="Reset password" />
+            <Head title="Restablecer contraseña" />
 
             <Form
                 {...update.form()}
@@ -46,7 +46,7 @@ export default function ResetPassword({ token, email }: ResetPasswordProps) {
                         </div>
 
                         <div className="grid gap-2">
-                            <Label htmlFor="password">Password</Label>
+                            <Label htmlFor="password">Contraseña</Label>
                             <Input
                                 id="password"
                                 type="password"
@@ -61,7 +61,7 @@ export default function ResetPassword({ token, email }: ResetPasswordProps) {
 
                         <div className="grid gap-2">
                             <Label htmlFor="password_confirmation">
-                                Confirm password
+                                Confirmar Contraseña
                             </Label>
                             <Input
                                 id="password_confirmation"
@@ -84,7 +84,7 @@ export default function ResetPassword({ token, email }: ResetPasswordProps) {
                             data-test="reset-password-button"
                         >
                             {processing && <Spinner />}
-                            Reset password
+                            Reestablecer Contraseña
                         </Button>
                     </div>
                 )}
