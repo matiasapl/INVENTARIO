@@ -32,7 +32,7 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-export default function Index({ products }: { products: Product[] }) {
+export default function Index({ products }: { products: any }) {
     const [showModal, setShowModal] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState<Product | null>(
         null,
@@ -70,6 +70,16 @@ export default function Index({ products }: { products: Product[] }) {
                 </Link>
             </nav>
 
+            <div className="pagination mx-4 flex justify-center gap-2">
+                {products.links.map((link: any, index: number) => (
+                    <a
+                        key={index}
+                        href={link.url || '#'}
+                        className={`rounded border px-3 py-1 ${link.active ? 'bg-blue-500 text-white' : ''}`}
+                        dangerouslySetInnerHTML={{ __html: link.label }}
+                    />
+                ))}
+            </div>
             <Table>
                 <TableCaption>Lista de Productos</TableCaption>
                 <TableHeader>
@@ -83,9 +93,9 @@ export default function Index({ products }: { products: Product[] }) {
                         <TableHead>Acciones</TableHead>
                     </TableRow>
                 </TableHeader>
-                {products.length > 0 && (
+                {products.data.length > 0 && (
                     <TableBody>
-                        {products.map((product) => (
+                        {products.data.map((product: any) => (
                             <TableRow key={product.codigo}>
                                 <TableCell>{product.codigo}</TableCell>
                                 <TableCell>
@@ -141,7 +151,16 @@ export default function Index({ products }: { products: Product[] }) {
                     </TableBody>
                 )}
             </Table>
-
+            <div className="pagination mx-4 flex justify-center gap-2">
+                {products.links.map((link: any, index: number) => (
+                    <a
+                        key={index}
+                        href={link.url || '#'}
+                        className={`rounded border px-3 py-1 ${link.active ? 'bg-blue-500 text-white' : ''}`}
+                        dangerouslySetInnerHTML={{ __html: link.label }}
+                    />
+                ))}
+            </div>
             {/* Modal de confirmación */}
             {showModal && selectedProduct && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">

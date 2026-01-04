@@ -32,12 +32,13 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-export default function Index({ Historial }: { Historial: ControlStock[] }) {
+export default function Index({ Historial }: { Historial: any }) {
 
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Control Stock" />
+
             <nav className="flex-row">
                 <Link href={ControlStockController.create().url}>
                     <Button className="m-4 bg-green-500 hover:bg-green-700">
@@ -46,7 +47,17 @@ export default function Index({ Historial }: { Historial: ControlStock[] }) {
                     </Button>
                 </Link>
             </nav>
-
+            {/* Paginación */}
+            <div className="pagination mt-4 flex justify-center gap-2">
+                {Historial.links.map((link: any, index: number) => (
+                    <a
+                        key={index}
+                        href={link.url || '#'}
+                        className={`rounded border px-3 py-1 ${link.active ? 'bg-blue-500 text-white' : ''}`}
+                        dangerouslySetInnerHTML={{ __html: link.label }}
+                    />
+                ))}
+            </div>
             <Table>
                 <TableCaption>Historial Stock</TableCaption>
                 <TableHeader>
@@ -60,9 +71,9 @@ export default function Index({ Historial }: { Historial: ControlStock[] }) {
                         <TableHead>Responsable</TableHead>
                     </TableRow>
                 </TableHeader>
-                {Historial.length > 0 && (
+                {Historial.data.length > 0 && (
                     <TableBody>
-                        {Historial.map((historial) => (
+                        {Historial.data.map((historial: any) => (
                             <TableRow key={historial.codigo}>
                                 <TableCell>{historial.codigo}</TableCell>
                                 <TableCell>
@@ -81,6 +92,17 @@ export default function Index({ Historial }: { Historial: ControlStock[] }) {
                     </TableBody>
                 )}
             </Table>
+            {/* Paginación */}
+            <div className="pagination mt-4 flex justify-center gap-2">
+                {Historial.links.map((link: any, index: number) => (
+                    <a
+                        key={index}
+                        href={link.url || '#'}
+                        className={`rounded border px-3 py-1 ${link.active ? 'bg-blue-500 text-white' : ''}`}
+                        dangerouslySetInnerHTML={{ __html: link.label }}
+                    />
+                ))}
+            </div>
         </AppLayout>
     );
 }

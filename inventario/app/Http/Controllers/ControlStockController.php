@@ -20,9 +20,11 @@ public function index()
         ->join('users', 'stock.usuario', '=', 'users.id')
         ->where('stock.usuario', Auth::id())
         ->select('stock.codigo', 'stock.nombre', 'stock.stock_previo', 'stock.stock_actual', 'stock.accion', 'stock.tipo','users.name as responsable')
-        ->get();
+        ->paginate(25);
 
-    return inertia('ControlStock/Index', compact('Historial'));
+            return inertia('ControlStock/Index', [
+            'Historial' => $Historial
+        ]);
 }
 
 

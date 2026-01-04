@@ -32,10 +32,20 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-export default function Dashboard({ products }: { products: Product[] }) {
+export default function Dashboard({ products }: { products: any }) {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Dashboard" />
+            <div className="pagination mx-4 flex justify-center gap-2">
+                {products.links.map((link: any, index: number) => (
+                    <a
+                        key={index}
+                        href={link.url || '#'}
+                        className={`rounded border px-3 py-1 ${link.active ? 'bg-blue-500 text-white' : ''}`}
+                        dangerouslySetInnerHTML={{ __html: link.label }}
+                    />
+                ))}
+            </div>
             <Table>
                 <TableCaption>Dashboard</TableCaption>
                 <TableHeader>
@@ -50,9 +60,9 @@ export default function Dashboard({ products }: { products: Product[] }) {
                         <TableHead>Ultima Actualizacion</TableHead>
                     </TableRow>
                 </TableHeader>
-                {products.length > 0 && (
+                {products.data.length > 0 && (
                     <TableBody>
-                        {products.map((product) => (
+                        {products.data.map((product: any) => (
                             <TableRow key={product.codigo}>
                                 <TableCell>{product.codigo}</TableCell>
                                 <TableCell>
@@ -86,6 +96,16 @@ export default function Dashboard({ products }: { products: Product[] }) {
                     </TableBody>
                 )}
             </Table>
+            <div className="pagination mx-4 flex justify-center gap-2">
+                {products.links.map((link: any, index: number) => (
+                    <a
+                        key={index}
+                        href={link.url || '#'}
+                        className={`rounded border px-3 py-1 ${link.active ? 'bg-blue-500 text-white' : ''}`}
+                        dangerouslySetInnerHTML={{ __html: link.label }}
+                    />
+                ))}
+            </div>
         </AppLayout>
     );
 }

@@ -20,26 +20,33 @@ class ProductController extends Controller
         $products = Product::where('usuario', Auth::id())
             ->where('habilitado', true)
             ->where('eliminado', false)
-            ->get();
+            ->paginate(25);
 
-        return inertia('Products/Index', compact('products'));
+        return inertia('Products/Index', [
+            'products' => $products
+        ]);
     }
 
 
     public function Dashboard()
     {
 
+
     $products = Product::where('usuario', Auth::id())
         ->where('habilitado', true)
         ->where('eliminado', false)
-        ->get()
-        ->map(function ($product) {
-            $product->valor_total = $product->precio_unitario * $product->stock;
-            $product->m3_total = $product->M3_unitario * $product->stock;
-            return $product;
-        });
+        ->paginate(25);
 
-        return inertia('dashboard', compact('products'));
+    $products->getCollection()->transform(function ($product) {
+        $product->valor_total = $product->precio_unitario * $product->stock;
+        $product->m3_total = $product->M3_unitario * $product->stock;
+        return $product;
+    });
+
+
+        return inertia('dashboard', [
+            'products' => $products
+        ]);
     }
 
     /*

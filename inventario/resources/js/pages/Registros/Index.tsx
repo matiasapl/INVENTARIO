@@ -12,14 +12,6 @@ import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
 
-interface ControlStock {
-    codigo: number;
-    nombre: string;
-    accion: string;
-    tipo: string;
-    responsable: string;
-}
-
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Registros',
