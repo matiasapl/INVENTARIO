@@ -26,6 +26,7 @@ interface DropDown {
 }
 
 export default function Create({ DropDown }: { DropDown: DropDown[] }) {
+    const [showModal, setShowModal] = useState(false);
     const { data, setData, post, processing, errors } = useForm({
         codigo: 0,
         nombre: '',
@@ -39,11 +40,14 @@ export default function Create({ DropDown }: { DropDown: DropDown[] }) {
     const [ID, setID] = useState(0);
 
 
+    const preUpdate = (e: React.FormEvent) => {
+        e.preventDefault();
+        setShowModal(true);
+    };
 
 
 
-
-const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+const confirmUpdate = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
     const rutaDestino =
@@ -51,24 +55,22 @@ const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
             ? ControlStockController.sumar(ID).url
             : ControlStockController.restar(ID).url;
 
-    // Actualizamos el formulario con la cantidad
-
-post(rutaDestino, {
-    preserveScroll: true,
-    onSuccess: () => {
-        setAccion('');
-        setCodigo('');
-        setNombre('');
-        setID(0);
-    },
-});
+    post(rutaDestino, {
+        preserveScroll: true,
+        onSuccess: () => {
+            setAccion('');
+            setCodigo('');
+            setNombre('');
+            setID(0);
+        },
+    });
 };
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Crear Producto" />
             <div className="w-8/12 p-4">
-                <form method="post" onSubmit={handleSubmit}>
+                <form onSubmit={preUpdate}>
                     {/* Dropdown para Código */}
                     <div className="mb-4 gap-1.5">
                         <Label htmlFor="Codigo" className="mb-1.5 block">
@@ -171,7 +173,9 @@ post(rutaDestino, {
                             placeholder="0"
                             min={0}
                             max={10000000}
-                            onChange={(e) => {setData('cantidad', Number(e.target.value));}}
+                            onChange={(e) => {
+                                setData('cantidad', Number(e.target.value));
+                            }}
                         ></Input>
                         {errors.cantidad && (
                             <div className="mt-1 flex items-center text-sm text-red-500">
@@ -180,7 +184,6 @@ post(rutaDestino, {
                         )}
                     </div>
                     <div className="flex-row space-x-2">
-                        
                         <Button
                             className="mb-4 bg-green-500 hover:bg-green-700"
                             type="submit"
@@ -200,6 +203,42 @@ post(rutaDestino, {
                     </div>
                 </form>
             </div>
+
+            {showModal && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+                    <div className="relative w-full max-w-sm rounded-lg bg-white p-6 shadow-lg dark:bg-slate-900">
+                        {/* Botón X de cierre */}
+                        <button
+                            onClick={() => setShowModal(false)}
+                            className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
+                        >
+                            <CircleX />
+                        </button>
+
+                        <div className="text-center">
+                            <h3 className="mb-5 mr-2 mt-2 text-lg font-normal text-gray-500 dark:text-gray-400">
+                                ¿Seguro que quieres actualizar el sotock de este
+                                producto?
+                            </h3>
+                            <div className="flex justify-center gap-4">
+                                <Button
+                                    variant="outline"
+                                    onClick={() => setShowModal(false)}
+                                >
+                                    <CircleX /> Cancelar
+                                </Button>
+                                <Button
+                                    className="bg-green-600 hover:bg-green-700"
+                                    onClick={confirmUpdate}
+                                >
+                                    <CircleCheck />
+                                    Sí, confirmo
+                                </Button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </AppLayout>
     );
 }
