@@ -18,9 +18,13 @@ class RegistroController extends Controller
             ->join('users', 'registros.usuario', '=', 'users.id')
             ->where('registros.usuario', Auth::id())
             ->select('registros.codigo', 'registros.nombre', 'registros.accion', 'registros.tipo','users.name as responsable')
-            ->get();
+            ->paginate(25);
 
-        return inertia('Registros/Index', compact('Registros'));
+        
+        return inertia('Registros/Index', [
+            'Registros' => $Registros
+        ]);
+
     }
 
     /**

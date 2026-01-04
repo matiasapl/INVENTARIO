@@ -27,43 +27,65 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-export default function Index({ Registros }: { Registros: ControlStock[] }) {
 
-
+export default function Index({ Registros }: { Registros: any }) {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Registros" />
 
+            <div className="pagination mx-4 flex justify-center gap-2">
+                {Registros.links.map((link: any, index: number) => (
+                    <a
+                        key={index}
+                        href={link.url || '#'}
+                        className={`rounded border px-3 py-1 ${link.active ? 'bg-blue-500 text-white' : ''}`}
+                        dangerouslySetInnerHTML={{ __html: link.label }}
+                    />
+                ))}
+            </div>
             <Table>
                 <TableCaption>Registros</TableCaption>
                 <TableHeader>
                     <TableRow>
                         <TableHead>Código</TableHead>
                         <TableHead>Nombre</TableHead>
-                        <TableHead>Accion</TableHead>
+                        <TableHead>Acción</TableHead>
                         <TableHead>Tipo</TableHead>
                         <TableHead>Responsable</TableHead>
                     </TableRow>
                 </TableHeader>
-                {Registros.length > 0 && (
+                {Registros.data.length > 0 && (
                     <TableBody>
-                        {Registros.map((Registros) => (
-                            <TableRow key={Registros.codigo}>
-                                <TableCell>{Registros.codigo}</TableCell>
+                        {Registros.data.map((registro: any) => (
+                            <TableRow key={registro.codigo}>
+                                <TableCell>{registro.codigo}</TableCell>
                                 <TableCell>
-                                    {Registros.nombre.length > 30
-                                        ? Registros.nombre.substring(0, 30) +
+                                    {registro.nombre.length > 30
+                                        ? registro.nombre.substring(0, 30) +
                                           '...'
-                                        : Registros.nombre}
+                                        : registro.nombre}
                                 </TableCell>
-                                <TableCell>{Registros.accion}</TableCell>
-                                <TableCell>{Registros.tipo}</TableCell>
-                                <TableCell>{Registros.responsable}</TableCell>
+                                <TableCell>{registro.accion}</TableCell>
+                                <TableCell>{registro.tipo}</TableCell>
+                                <TableCell>{registro.responsable}</TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
                 )}
             </Table>
+
+            {/* Paginación */}
+            <div className="pagination mt-4 flex justify-center gap-2">
+                {Registros.links.map((link: any, index: number) => (
+                    <a
+                        key={index}
+                        href={link.url || '#'}
+                        className={`rounded border px-3 py-1 ${link.active ? 'bg-blue-500 text-white' : ''}`}
+                        dangerouslySetInnerHTML={{ __html: link.label }}
+                    />
+                ))}
+            </div>
         </AppLayout>
     );
 }
+
