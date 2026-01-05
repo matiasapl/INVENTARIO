@@ -62,6 +62,7 @@ export default function Index({ Historial }: { Historial: any }) {
                 <TableCaption>Historial Stock</TableCaption>
                 <TableHeader>
                     <TableRow>
+                        <TableHead>Fecha</TableHead>
                         <TableHead>Código</TableHead>
                         <TableHead>Nombre</TableHead>
                         <TableHead>Stock Previo</TableHead>
@@ -75,6 +76,7 @@ export default function Index({ Historial }: { Historial: any }) {
                     <TableBody>
                         {Historial.data.map((historial: any) => (
                             <TableRow key={historial.codigo}>
+                                <TableCell>{historial.fecha}</TableCell>
                                 <TableCell>{historial.codigo}</TableCell>
                                 <TableCell>
                                     {historial.nombre.length > 30

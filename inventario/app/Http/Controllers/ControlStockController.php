@@ -19,7 +19,8 @@ public function index()
     $Historial = \DB::table('control_stocks as stock')
         ->join('users', 'stock.usuario', '=', 'users.id')
         ->where('stock.usuario', Auth::id())
-        ->select('stock.codigo', 'stock.nombre', 'stock.stock_previo', 'stock.stock_actual', 'stock.accion', 'stock.tipo','users.name as responsable')
+        ->select('stock.codigo', 'stock.nombre', 'stock.stock_previo', 'stock.stock_actual', 'stock.accion', 'stock.tipo','users.name as responsable', 'stock.created_at as fecha')
+        ->latest('fecha')
         ->paginate(25);
 
             return inertia('ControlStock/Index', [

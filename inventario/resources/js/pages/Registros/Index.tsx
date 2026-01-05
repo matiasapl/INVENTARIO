@@ -39,6 +39,7 @@ export default function Index({ Registros }: { Registros: any }) {
                 <TableCaption>Registros</TableCaption>
                 <TableHeader>
                     <TableRow>
+                        <TableHead>Fecha</TableHead>
                         <TableHead>Código</TableHead>
                         <TableHead>Nombre</TableHead>
                         <TableHead>Acción</TableHead>
@@ -50,6 +51,7 @@ export default function Index({ Registros }: { Registros: any }) {
                     <TableBody>
                         {Registros.data.map((registro: any) => (
                             <TableRow key={registro.codigo}>
+                                <TableCell>{registro.fecha}</TableCell>
                                 <TableCell>{registro.codigo}</TableCell>
                                 <TableCell>
                                     {registro.nombre.length > 30

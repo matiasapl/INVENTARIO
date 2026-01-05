@@ -81,16 +81,8 @@ export default function Dashboard({ products }: { products: any }) {
                                 <TableCell>{product.stock}</TableCell>
                                 <TableCell>{product.valor_total}</TableCell>
                                 <TableCell>{product.m3_total}</TableCell>
-                                <TableCell>
-                                    {new Date(
-                                        product.created_at,
-                                    ).toLocaleString('es-MX')}
-                                </TableCell>
-                                <TableCell>
-                                    {new Date(
-                                        product.updated_at,
-                                    ).toLocaleString('es-MX')}
-                                </TableCell>
+                                <TableCell>{product.creacion}</TableCell>
+                                <TableCell>{product.ultima_actualizacion}</TableCell>
                             </TableRow>
                         ))}
                     </TableBody>

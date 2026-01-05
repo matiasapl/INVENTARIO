@@ -17,7 +17,8 @@ class RegistroController extends Controller
         $Registros = \DB::table('registros')
             ->join('users', 'registros.usuario', '=', 'users.id')
             ->where('registros.usuario', Auth::id())
-            ->select('registros.codigo', 'registros.nombre', 'registros.accion', 'registros.tipo','users.name as responsable')
+            ->select('registros.codigo', 'registros.nombre', 'registros.accion', 'registros.tipo','users.name as responsable', 'registros.created_at as fecha')
+            ->latest('fecha')
             ->paginate(25);
 
         

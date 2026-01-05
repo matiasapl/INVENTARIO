@@ -35,6 +35,7 @@ class ProductController extends Controller
     $products = Product::where('usuario', Auth::id())
         ->where('habilitado', true)
         ->where('eliminado', false)
+        ->select('codigo', 'nombre', 'descripcion', 'stock', 'precio_unitario', 'M3_unitario', 'created_at as creacion', 'updated_at as ultima_actualizacion')
         ->paginate(25);
 
     $products->getCollection()->transform(function ($product) {
