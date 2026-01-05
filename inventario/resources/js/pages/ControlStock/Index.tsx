@@ -92,17 +92,6 @@ export default function Index({ Historial }: { Historial: any }) {
                     </TableBody>
                 )}
             </Table>
-            {/* Paginación */}
-            <div className="pagination mt-4 flex justify-center gap-2">
-                {Historial.links.map((link: any, index: number) => (
-                    <a
-                        key={index}
-                        href={link.url || '#'}
-                        className={`rounded border px-3 py-1 ${link.active ? 'bg-blue-500 text-white' : ''}`}
-                        dangerouslySetInnerHTML={{ __html: link.label }}
-                    />
-                ))}
-            </div>
         </AppLayout>
     );
 }

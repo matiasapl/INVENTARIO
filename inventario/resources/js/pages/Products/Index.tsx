@@ -151,16 +151,6 @@ export default function Index({ products }: { products: any }) {
                     </TableBody>
                 )}
             </Table>
-            <div className="pagination mx-4 flex justify-center gap-2">
-                {products.links.map((link: any, index: number) => (
-                    <a
-                        key={index}
-                        href={link.url || '#'}
-                        className={`rounded border px-3 py-1 ${link.active ? 'bg-blue-500 text-white' : ''}`}
-                        dangerouslySetInnerHTML={{ __html: link.label }}
-                    />
-                ))}
-            </div>
             {/* Modal de confirmación */}
             {showModal && selectedProduct && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">

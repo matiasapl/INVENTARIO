@@ -96,16 +96,6 @@ export default function Dashboard({ products }: { products: any }) {
                     </TableBody>
                 )}
             </Table>
-            <div className="pagination mx-4 flex justify-center gap-2">
-                {products.links.map((link: any, index: number) => (
-                    <a
-                        key={index}
-                        href={link.url || '#'}
-                        className={`rounded border px-3 py-1 ${link.active ? 'bg-blue-500 text-white' : ''}`}
-                        dangerouslySetInnerHTML={{ __html: link.label }}
-                    />
-                ))}
-            </div>
         </AppLayout>
     );
 }
