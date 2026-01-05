@@ -13,7 +13,7 @@ export default function Welcome({
 
     return (
         <>
-            <Head title="En Desarrollo">
+            <Head title="Inventarios">
                 <link rel="preconnect" href="https://fonts.bunny.net" />
                 <link
                     href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600"
