@@ -28,27 +28,12 @@ interface Product {
 
 export default function View({ product }: {product: Product}) {
 
-    const { data, setData, put, processing, errors } = useForm({
-    id: product.id,
-    codigo: product.codigo,
-    nombre: product.nombre,
-    stock: product.stock,
-    precio_unitario: product.precio_unitario,
-    M3_unitario: product.M3_unitario,
-    descripcion: product.descripcion,
-    });
-
-
-    const handleUpdate = (e: React.FormEvent<HTMLFormElement>) => { 
-        e.preventDefault();
-        put(ProductController.update(product.id).url)
-    }
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Crear Producto" />
             <div className="w-8/12 p-4">
-                <form method="post" onSubmit={handleUpdate}>
+                <form method="post">
                     <div className="mb-4 gap-1.5">
                         <Label htmlFor="Codigo" className="mb-1.5 block">
                             Codigo de Producto:
