@@ -20,7 +20,7 @@ export default function Welcome({
                     rel="stylesheet"
                 />
             </Head>
-            <div className="flex min-h-screen flex-col items-end bg-[#FDFDFC] text-[#1b1b18] lg:justify-center lg:p-8 dark:bg-[#0a0a0a]">
+            <div className="flex min-h-screen flex-col items-end bg-[#FDFDFC] text-[#1b1b18] dark:bg-[#0a0a0a] dark:text-[#FDFDFC] mx-8">
                 <header className="static top-0 right-0 m-6 w-full max-w-[335px] text-sm not-has-[nav]:hidden lg:max-w-4xl">
                     <nav className="items-top flex justify-end">
                         {auth.user ? (
@@ -34,7 +34,7 @@ export default function Welcome({
                             <>
                                 <Link
                                     href={login()}
-                                    className="inline-block rounded-sm border border-transparent px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#19140035] dark:text-[#EDEDEC] dark:hover:border-[#3E3E3A]"
+                                    className="inline-block mx-2 rounded-sm border border-transparent px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#19140035] dark:text-[#EDEDEC] dark:hover:border-[#3E3E3A]"
                                 >
                                     Iniciar Sesion
                                 </Link>
@@ -50,8 +50,8 @@ export default function Welcome({
                         )}
                     </nav>
                 </header>
-                <div className="m-4 flex min-w-full flex-col border-4 p-4 font-bold text-white">
-                    <h2>Esto es un MVP usalo bajo tu propio riesgo</h2> <br />{' '}
+                <div className="m-4 flex min-w-full flex-col border-4 p-4 font-bold">
+                    <h2>Esto es un MVP usalo bajo tu propio riesgo</h2> <br />
                     <br />
                     <h1>Web App - Inventarios</h1>
                     <span>Autor: Matias APL</span>
@@ -72,83 +72,6 @@ export default function Welcome({
                     >
                         Imagenes del proyecto
                     </a>
-                </div>
-                <div className="m-4 flex min-w-full flex-col border-4 p-4 font-bold text-white">
-                    <h1>Mensaje del Desarrollador: </h1>
-                    <p>
-                        Este es un proyecto personal que pretende convertirse en
-                        un Saas de gestion de Inventarios.
-                        <br />
-                        Si quieres pruebalo por ahora es gratis, si quieres dar
-                        feedback envia un correo a Polhwein.matias@gmail.com{' '}
-                        <br />
-                        <br />
-                        Que tiene?
-                        <br />
-                        Creacion de productos [Registra productos con codigo,
-                        nombre, descripcion, precio unitario y m3_unitario +
-                        stock]. <br />
-                        Registra aumentos y resta de stock de forma unitaria.{' '}
-                        <br />
-                        Trazabilidad - cada vez que hagas un cambio de stock un
-                        registro o una eliminacion quedara registrada y visible
-                        para ti <br />
-                        Dashboard - visualiza facilmente tus productos y su
-                        stock + precio y volumen <br />
-                        Que quiero lograr con este proyecto?: <br />
-                        Quiero que el control de inventarios no sea algo en un
-                        excel que se gaste mas tiempo en mantener que en crecer{' '}
-                        <br />
-                        por un precio accesible tanto para pequeños negocios
-                        como para grandes empresas de la agro industria chilena{' '}
-                        <br />
-                        <br />
-                        Este proyecto esta terminado?: <br />
-                        No Tendra actualizaciones periodicas, Mi idea es
-                        permanecer en un desarrollo continuo asta ser el mejor
-                        en este nicho <br />
-                        <br />
-                        que sigue? <br />
-                        Como veras todo es demaciado manual si debes registrar
-                        stock desde web es lo mismo que un excel <br />
-                        por esto mismo el siguiente paso es crear una app
-                        android y una seccion que te permita <br />
-                        imprimir Codigos QR y colocar en tus productos para que
-                        con un solo escaneo puedas controlar el stock <br />
-                        y esto te permita tener mejor trazabilidad y centrarte
-                        en crecer en vez de mantener <br />
-                        <br />
-                        sugerencias?: <br />
-                        eres el encargado del inventarios de un negocio y este
-                        te parece un buen proyecto que podria ayudarte pero
-                        crees que ahy cosas que estorban sobran o faltan?:{' '}
-                        <br />
-                        enviame un mail a Polhweinmatias@gmail.com con el asunto
-                        Sugerencia Inventario <br />
-                        <br />
-                        porque no tienes un formulario de sugerencias?: <br />
-                        aun no esta completa la base del proyecto y el foco esta
-                        en la base pero eventualmente lo habra <br />
-                        <br />
-                        puedo usarlo?: <br />
-                        adelante sin problemas aunque esta en desarrollo desde
-                        esta version no habra perdida de datos y es
-                        suficientemente seguro <br />
-                        <br />
-                        bugs, exploits?: <br />
-                        no tengo dinero para pagar por auditorias pero si
-                        encuentras uno enviame un mail a
-                        Polhweinmatias@gmail.com con el asunto [ BUGS INVENTARIO
-                        ] <br />y con gusto lo corrigo (comprueba que sea
-                        replicable) <br />
-                        <br />
-                        que pasara cuando sea de pago?: <br />
-                        resiviras un mail con 1 mes de anticipacion avisandote
-                        de los cambios para que decidas si pagaras por el
-                        servicio o te retiraras y tambien habra un banner en
-                        esta web con una cuenta regresiva <br />
-                    </p>
-                    <br />
                 </div>
                 <div className="hidden h-14.5 lg:block"></div>
             </div>
