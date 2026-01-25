@@ -51,7 +51,7 @@ export default function Welcome({
                     </nav>
                 </header>
                 <div className="m-4 flex min-w-full flex-col border-4 p-4 font-bold">
-                    <h2>Esto es un MVP usalo bajo tu propio riesgo</h2> <br />
+                    <h2>Esto es un Proyecto de aprendizaje en desarrollo continuo usalo bajo tu propio riesgo</h2> <br />
                     <br />
                     <h1>Web App - Inventarios</h1>
                     <span>Autor: Matias APL</span>
