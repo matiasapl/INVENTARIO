@@ -29,21 +29,21 @@ Route::middleware(['auth'])->group(function () {
     
     
     //Productos Crear
-    Route::post('/products/store', [ProductController::class, 'store'])->name('products.store');
+    Route::post('/productos/store', [ProductController::class, 'store'])->name('products.store');
 
     //Productos Editar
-    Route::put('/products/update/{product}', [ProductController::class, 'update'])->name('products.update');
+    Route::put('/productos/update/{product}', [ProductController::class, 'update'])->name('products.update');
 
     //Productos Index
-    Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
-    Route::get('/products/papelera', [ProductController::class, 'papelera'])->name('products.papelera');
-    Route::get('/products/edit/{product}', [ProductController::class, 'edit'])->name('products.edit');
-    Route::get('/products/view/{product}', [ProductController::class, 'view'])->name('products.view');
-    Route::get('/products/{product}/deshabilitar', [ProductController::class, 'deshabilitar'])->name('products.deshabilitar');
+    Route::get('/productos/create', [ProductController::class, 'create'])->name('products.create');
+    Route::get('/productos/papelera', [ProductController::class, 'papelera'])->name('products.papelera');
+    Route::get('/productos/edit/{product}', [ProductController::class, 'edit'])->name('products.edit');
+    Route::get('/productos/view/{product}', [ProductController::class, 'view'])->name('products.view');
+    Route::get('/productos/{product}/deshabilitar', [ProductController::class, 'deshabilitar'])->name('products.deshabilitar');
 
     //Papelera Productos
-    Route::get('/products/{product}/habilitar', [ProductController::class, 'habilitar'])->name('products.habilitar');
-    Route::delete('/products/{product}/eliminar', [ProductController::class, 'eliminar'])->name('products.eliminar');
+    Route::get('/productos/{product}/habilitar', [ProductController::class, 'habilitar'])->name('products.habilitar');
+    Route::delete('/productos/{product}/eliminar', [ProductController::class, 'eliminar'])->name('products.eliminar');
 
     //control de stock
     Route::get('/controlstock/create', [ControlStockController::class, 'create'])->name('controlstock.create');

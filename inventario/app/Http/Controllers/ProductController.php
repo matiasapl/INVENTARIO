@@ -22,7 +22,7 @@ class ProductController extends Controller
             ->where('eliminado', false)
             ->paginate(25);
 
-        return inertia('Products/Index', [
+        return inertia('Productos/Index', [
             'products' => $products
         ]);
     }
@@ -62,7 +62,7 @@ class ProductController extends Controller
             ->where('eliminado', false)
             ->get();
 
-        return inertia('Products/Papelera', compact('products'));
+        return inertia('Productos/Papelera', compact('products'));
     }
 
         /**
@@ -125,7 +125,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return inertia('Products/Create');
+        return inertia('Productos/Create');
     }
 
     /**
@@ -156,7 +156,7 @@ class ProductController extends Controller
     {
         $this->authorizeProduct($product);
 
-        return inertia('Products/Edit', compact('product'));
+        return inertia('Productos/Edit', compact('product'));
     }
 
     /**
@@ -172,7 +172,7 @@ class ProductController extends Controller
         'tipo' => 'manual',
         'usuario' => Auth::id()
     ]);
-        return inertia('Products/View', compact('product'));
+        return inertia('Productos/View', compact('product'));
     }
 
     /**
