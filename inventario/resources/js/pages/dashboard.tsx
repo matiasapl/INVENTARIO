@@ -1,4 +1,3 @@
-import ProductController from '@/actions/App/Http/Controllers/ProductController';
 import {
     Table,
     TableBody,
@@ -15,10 +14,8 @@ import { Head } from '@inertiajs/react';
 
 interface Product {
     id: number;
-    codigo: number;
     nombre: string;
     descripcion: string;
-    stock: number;
     valor_total: number;
     m3_total: number;
     created_at: Date;
@@ -50,10 +47,8 @@ export default function Dashboard({ products }: { products: any }) {
                 <TableCaption>Dashboard</TableCaption>
                 <TableHeader>
                     <TableRow>
-                        <TableHead>Código</TableHead>
                         <TableHead>Nombre</TableHead>
                         <TableHead>Descripción</TableHead>
-                        <TableHead>Stock</TableHead>
                         <TableHead>Valor Total</TableHead>
                         <TableHead>M3 Total</TableHead>
                         <TableHead>Creacion</TableHead>
@@ -64,7 +59,6 @@ export default function Dashboard({ products }: { products: any }) {
                     <TableBody>
                         {products.data.map((product: any) => (
                             <TableRow key={product.codigo}>
-                                <TableCell>{product.codigo}</TableCell>
                                 <TableCell>
                                     {product.nombre.length > 30
                                         ? product.nombre.substring(0, 30) +
@@ -78,11 +72,12 @@ export default function Dashboard({ products }: { products: any }) {
                                         : (product.descripcion ??
                                           'Sin Descripcion')}
                                 </TableCell>
-                                <TableCell>{product.stock}</TableCell>
                                 <TableCell>{product.valor_total}</TableCell>
                                 <TableCell>{product.m3_total}</TableCell>
                                 <TableCell>{product.creacion}</TableCell>
-                                <TableCell>{product.ultima_actualizacion}</TableCell>
+                                <TableCell>
+                                    {product.ultima_actualizacion}
+                                </TableCell>
                             </TableRow>
                         ))}
                     </TableBody>

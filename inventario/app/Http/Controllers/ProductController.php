@@ -35,12 +35,12 @@ class ProductController extends Controller
     $products = Product::where('usuario', Auth::id())
         ->where('habilitado', true)
         ->where('eliminado', false)
-        ->select('codigo', 'nombre', 'descripcion', 'stock', 'precio_unitario', 'M3_unitario', 'created_at as creacion', 'updated_at as ultima_actualizacion')
+        ->select('nombre', 'descripcion', 'precio_unitario', 'M3_unitario', 'created_at as creacion', 'updated_at as ultima_actualizacion')
         ->paginate(25);
 
     $products->getCollection()->transform(function ($product) {
-        $product->valor_total = $product->precio_unitario * $product->stock;
-        $product->m3_total = $product->M3_unitario * $product->stock;
+        $product->valor_total = $product->precio_unitario * 1;
+        $product->m3_total = $product->M3_unitario * 1;
         return $product;
     });
 
@@ -77,7 +77,7 @@ class ProductController extends Controller
         'codigo' => $product->codigo,
         'nombre' => $product->nombre,
         'accion' => 'Deshabilitar Producto',
-        'tipo' => 'manual',
+        'tipo' => 'Manual',
         'usuario' => Auth::id()
     ]);
 
@@ -95,7 +95,7 @@ class ProductController extends Controller
         'codigo' => $product->codigo,
         'nombre' => $product->nombre,
         'accion' => 'Habilitar Producto',
-        'tipo' => 'manual',
+        'tipo' => 'Manual',
         'usuario' => Auth::id()
         ]);
         return redirect()->route('products.papelera')->with('success', 'Producto habilitado correctamente');
@@ -113,7 +113,7 @@ class ProductController extends Controller
         'codigo' => $product->codigo,
         'nombre' => $product->nombre,
         'accion' => 'Eliminar Producto',
-        'tipo' => 'manual',
+        'tipo' => 'Manual',
         'usuario' => Auth::id()
     ]);
         return redirect()->route('products.papelera')->with('success', 'Producto eliminado correctamente');
@@ -136,14 +136,13 @@ class ProductController extends Controller
         $data = $request->validated();
         $data['usuario'] = Auth::id();
 
-        Product::create($data);
-
-
+        $product = Product::create($data);
+        $product->refresh();
     Registro::create([
-        'codigo' => $request->codigo,
-        'nombre' => $request->nombre,
+        'codigo' => $product->codigo,
+        'nombre' => $product->nombre,
         'accion' => 'Crear Producto',
-        'tipo' => 'manual',
+        'tipo' => 'Manual',
         'usuario' => Auth::id()
     ]);
         return redirect()->route('products.index')->with('success', 'Producto creado correctamente');
@@ -169,7 +168,7 @@ class ProductController extends Controller
         'codigo' => $product->codigo,
         'nombre' => $product->nombre,
         'accion' => 'Ver Producto',
-        'tipo' => 'manual',
+        'tipo' => 'Manual',
         'usuario' => Auth::id()
     ]);
         return inertia('Productos/View', compact('product'));
@@ -186,10 +185,10 @@ class ProductController extends Controller
 
 
     Registro::create([
-        'codigo' => $request->codigo,
+        'codigo' => $product->codigo,
         'nombre' => $request->nombre,
         'accion' => 'Editar Producto',
-        'tipo' => 'manual',
+        'tipo' => 'Manual',
         'usuario' => Auth::id()
     ]);
         return redirect()->route('products.index')->with('success', 'Producto editado correctamente');

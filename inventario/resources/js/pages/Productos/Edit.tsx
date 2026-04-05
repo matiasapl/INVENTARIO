@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import ProductController from '@/actions/App/Http/Controllers/ProductController';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -8,6 +7,7 @@ import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link, useForm } from '@inertiajs/react';
 import { CircleCheck, CircleX } from 'lucide-react';
+import { useState } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -17,9 +17,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 interface Product {
     id: number;
-    codigo: number;
     nombre: string;
-    stock: number;
     precio_unitario: number;
     M3_unitario: number;
     descripcion: string;
@@ -30,9 +28,7 @@ export default function Edit({ product }: { product: Product }) {
 
     const { data, setData, put, processing, errors } = useForm({
         id: product.id,
-        codigo: product.codigo,
         nombre: product.nombre,
-        stock: product.stock,
         precio_unitario: product.precio_unitario,
         M3_unitario: product.M3_unitario,
         descripcion: product.descripcion,
@@ -54,28 +50,6 @@ export default function Edit({ product }: { product: Product }) {
             <div className="w-8/12 p-4">
                 <form method="post" onSubmit={preUpdate}>
                     <div className="mb-4 gap-1.5">
-                        <Label htmlFor="Codigo" className="mb-1.5 block">
-                            Codigo de Producto:
-                        </Label>
-                        <Input
-                            type="Number"
-                            id="Codigo"
-                            max={10000000}
-                            min={0}
-                            maxLength={8}
-                            placeholder="0"
-                            value={data.codigo}
-                            onChange={(e) =>
-                                setData('codigo', Number(e.target.value))
-                            }
-                        ></Input>
-                        {errors.codigo && (
-                            <div className="mt-1 flex items-center text-sm text-red-500">
-                                {errors.codigo}
-                            </div>
-                        )}
-                    </div>
-                    <div className="mb-4 gap-1.5">
                         <Label htmlFor="Nombre" className="mb-1.5 block">
                             Nombre de Producto:
                         </Label>
@@ -90,28 +64,6 @@ export default function Edit({ product }: { product: Product }) {
                         {errors.nombre && (
                             <div className="mt-1 flex items-center text-sm text-red-500">
                                 {errors.nombre}
-                            </div>
-                        )}
-                    </div>
-
-                    <div className="mb-4 gap-1.5">
-                        <Label htmlFor="Stock" className="mb-1.5 block">
-                            Stock Inicial:
-                        </Label>
-                        <Input
-                            type="Number"
-                            id="Stock"
-                            placeholder="0"
-                            min={0}
-                            max={10000000}
-                            value={data.stock}
-                            onChange={(e) =>
-                                setData('stock', Number(e.target.value))
-                            }
-                        ></Input>
-                        {errors.stock && (
-                            <div className="mt-1 flex items-center text-sm text-red-500">
-                                {errors.stock}
                             </div>
                         )}
                     </div>
@@ -246,4 +198,3 @@ export default function Edit({ product }: { product: Product }) {
         </AppLayout>
     );
 }
-

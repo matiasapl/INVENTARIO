@@ -6,6 +6,8 @@ use Laravel\Fortify\Features;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ControlStockController;
 use App\Http\Controllers\RegistroController;
+use App\Http\Controllers\Lotes;
+use App\Http\Controllers\Almacenes;
 
 //Punto de entrada de la Web
 Route::get('/', function () {
@@ -23,9 +25,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 Route::middleware(['auth'])->group(function () {
     // Secciones
-    Route::get('/products', [ProductController::class, 'index'])->name('products.index');
+    Route::get('/productos', [ProductController::class, 'index'])->name('products.index');
     Route::get('/registros', [RegistroController::class, 'index'])->name('registros.index');
     Route::get('/controlstock', [ControlStockController::class, 'index'])->name('controlstock.index');
+
+    Route::get('/almacenes', [AlmacenesController::class, 'index'])->name('almacenes.index');
+    Route::get('/lotes', [LotesController::class, 'index'])->name('lotes.index');
     
     
     //Productos Crear

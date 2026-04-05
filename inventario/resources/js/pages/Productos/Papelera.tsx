@@ -1,5 +1,5 @@
-import { useState } from 'react'; // 1. Importar useState
-import { router, Head, Link } from '@inertiajs/react';
+import ProductController from '@/actions/App/Http/Controllers/ProductController';
+import { Button } from '@/components/ui/button';
 import {
     Table,
     TableBody,
@@ -9,17 +9,16 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
-import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
-import { CircleX, ArrowBigLeft, RotateCcw, CircleCheck } from 'lucide-react';
-import ProductController from '@/actions/App/Http/Controllers/ProductController';
+import { Head, Link, router } from '@inertiajs/react';
+import { ArrowBigLeft, CircleCheck, CircleX, RotateCcw } from 'lucide-react';
+import { useState } from 'react'; // 1. Importar useState
 interface Product {
     id: number;
     codigo: number;
     nombre: string;
     descripcion: string;
-    stock: number;
     precio_unitario: number;
     M3_unitario: number;
 }
@@ -27,7 +26,7 @@ interface Product {
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Papelera de Productos',
-        href: ProductController.papelera().url
+        href: ProductController.papelera().url,
     },
 ];
 
@@ -71,10 +70,9 @@ export default function Index({ products }: { products: Product[] }) {
                 <TableCaption>Papelera de Productos</TableCaption>
                 <TableHeader>
                     <TableRow>
-                        <TableHead>Código</TableHead>
+                        <TableHead>Codigo</TableHead>
                         <TableHead>Nombre</TableHead>
                         <TableHead>Descripción</TableHead>
-                        <TableHead>Stock</TableHead>
                         <TableHead>Precio Unitario</TableHead>
                         <TableHead>M3 Unitario</TableHead>
                         <TableHead>Acciones</TableHead>
@@ -101,8 +99,6 @@ export default function Index({ products }: { products: Product[] }) {
                                         : (product.descripcion ??
                                           'Sin Descripcion')}
                                 </TableCell>
-
-                                <TableCell>{product.stock}</TableCell>
                                 <TableCell>{product.precio_unitario}</TableCell>
                                 <TableCell>{product.M3_unitario}</TableCell>
                                 <TableCell className="flex-row space-x-2">

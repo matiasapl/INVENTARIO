@@ -1,0 +1,75 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+
+class Almacenes extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+        $Registros = \DB::table('registros')
+            ->join('users', 'registros.usuario', '=', 'users.id')
+            ->where('registros.usuario', Auth::id())
+            ->select('registros.codigo', 'registros.nombre', 'registros.accion', 'registros.tipo','users.name as responsable', 'registros.created_at as fecha')
+            ->latest('fecha')
+            ->paginate(25);
+
+        
+        return inertia('Almacenes/Index', [
+            'Registros' => $Registros
+        ]);
+
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(StoreRegistroRequest $request)
+    {
+        //
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(Registro $registro)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Registro $registro)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(UpdateRegistroRequest $request, Registro $registro)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Registro $registro)
+    {
+        //
+    }
+}

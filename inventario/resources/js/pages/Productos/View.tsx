@@ -1,14 +1,12 @@
 import ProductController from '@/actions/App/Http/Controllers/ProductController';
-import AppLayout from '@/layouts/app-layout';
-import { type BreadcrumbItem } from '@/types';
-import { Head, Link } from '@inertiajs/react';
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { useForm }  from '@inertiajs/react';
-import { Button } from '@/components/ui/button';
+import AppLayout from '@/layouts/app-layout';
+import { type BreadcrumbItem } from '@/types';
+import { Head, Link } from '@inertiajs/react';
 import { CircleCheck } from 'lucide-react';
-
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -20,15 +18,12 @@ interface Product {
     id: number;
     codigo: number;
     nombre: string;
-    stock: number;
     precio_unitario: number;
     M3_unitario: number;
     descripcion: string;
 }
 
-export default function View({ product }: {product: Product}) {
-
-
+export default function View({ product }: { product: Product }) {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Crear Producto" />
@@ -39,12 +34,9 @@ export default function View({ product }: {product: Product}) {
                             Codigo de Producto:
                         </Label>
                         <Input
-                            type="Number"
+                            type="text"
                             id="Codigo"
-                            max={10000000}
-                            min={0}
-                            maxLength={8}
-                            placeholder="0"
+                            placeholder="UUID"
                             value={product.codigo}
                             disabled
                         ></Input>
@@ -59,21 +51,6 @@ export default function View({ product }: {product: Product}) {
                             minLength={3}
                             maxLength={30}
                             value={product.nombre}
-                            disabled
-                        ></Input>
-                    </div>
-
-                    <div className="mb-4 gap-1.5">
-                        <Label htmlFor="Stock" className="mb-1.5 block">
-                            Stock Inicial:
-                        </Label>
-                        <Input
-                            type="Number"
-                            id="Stock"
-                            placeholder="0"
-                            min={0}
-                            max={10000000}
-                            value={product.stock}
                             disabled
                         ></Input>
                     </div>

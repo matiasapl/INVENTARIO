@@ -1,3 +1,6 @@
+import ControlStockController from '@/actions/App/Http/Controllers/ControlStockController';
+import ProductController from '@/actions/App/Http/Controllers/ProductController';
+import RegistroController from '@/actions/App/Http/Controllers/RegistroController';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
@@ -10,14 +13,18 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import ControlStockController from '@/actions/App/Http/Controllers/ControlStockController';
-import ProductController from '@/actions/App/Http/Controllers/ProductController';
-import RegistroController from '@/actions/App/Http/Controllers/RegistroController';
 import { dashboard } from '@/routes';
 
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import { Package, Blocks, Logs, LayoutDashboard } from 'lucide-react';
+import {
+    Blocks,
+    Boxes,
+    LayoutDashboard,
+    Logs,
+    Package,
+    Warehouse,
+} from 'lucide-react';
 import AppLogo from './app-logo';
 
 const mainNavItems: NavItem[] = [
@@ -32,6 +39,16 @@ const mainNavItems: NavItem[] = [
         icon: Package,
     },
     {
+        title: 'Almacenes',
+        href: ControlStockController.index().url,
+        icon: Warehouse,
+    },
+    {
+        title: 'Lotes',
+        href: ControlStockController.index().url,
+        icon: Boxes,
+    },
+    {
         title: 'Control Stock',
         href: ControlStockController.index().url,
         icon: Blocks,
@@ -43,9 +60,7 @@ const mainNavItems: NavItem[] = [
     },
 ];
 
-const footerNavItems: NavItem[] = [
-
-];
+const footerNavItems: NavItem[] = [];
 
 export function AppSidebar() {
     return (

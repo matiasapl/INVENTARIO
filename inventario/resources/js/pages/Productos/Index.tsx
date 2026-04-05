@@ -12,7 +12,14 @@ import {
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link, router } from '@inertiajs/react';
-import { CircleCheck, CircleX, Eye, PackagePlus, PencilLine, Trash2 } from 'lucide-react';
+import {
+    CircleCheck,
+    CircleX,
+    Eye,
+    PackagePlus,
+    PencilLine,
+    Trash2,
+} from 'lucide-react';
 import { useState } from 'react';
 
 interface Product {
@@ -20,7 +27,6 @@ interface Product {
     codigo: number;
     nombre: string;
     descripcion: string;
-    stock: number;
     precio_unitario: number;
     M3_unitario: number;
 }
@@ -87,7 +93,6 @@ export default function Index({ products }: { products: any }) {
                         <TableHead>Código</TableHead>
                         <TableHead>Nombre</TableHead>
                         <TableHead>Descripción</TableHead>
-                        <TableHead>Stock</TableHead>
                         <TableHead>Precio Unitario</TableHead>
                         <TableHead>M3 Unitario</TableHead>
                         <TableHead>Acciones</TableHead>
@@ -115,7 +120,6 @@ export default function Index({ products }: { products: any }) {
                                               'Sin Descripcion')}
                                     </TableCell>
                                 </TableCell>
-                                <TableCell>{product.stock}</TableCell>
                                 <TableCell>{product.precio_unitario}</TableCell>
                                 <TableCell>{product.M3_unitario}</TableCell>
                                 <TableCell className="flex-row space-x-2">

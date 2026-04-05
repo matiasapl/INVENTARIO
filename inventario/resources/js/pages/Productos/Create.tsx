@@ -1,14 +1,12 @@
 import ProductController from '@/actions/App/Http/Controllers/ProductController';
-import AppLayout from '@/layouts/app-layout';
-import { type BreadcrumbItem } from '@/types';
-import { Head, Link } from '@inertiajs/react';
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { useForm }  from '@inertiajs/react';
-import { Button } from '@/components/ui/button';
-import { CircleX, CircleCheck } from 'lucide-react';
-
+import AppLayout from '@/layouts/app-layout';
+import { type BreadcrumbItem } from '@/types';
+import { Head, Link, useForm } from '@inertiajs/react';
+import { CircleCheck, CircleX } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -18,48 +16,23 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function Create() {
-
     const { data, setData, post, processing, errors } = useForm({
-        codigo: 0,
         nombre: '',
-        stock: 0,
         precio_unitario: 0,
         M3_unitario: 0,
         descripcion: '',
     });
 
-
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => { 
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         post(ProductController.store().url);
-    }
+    };
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Crear Producto" />
             <div className="w-8/12 p-4">
                 <form method="post" onSubmit={handleSubmit}>
-                    <div className="mb-4 gap-1.5">
-                        <Label htmlFor="Codigo" className="mb-1.5 block">
-                            Codigo de Producto:
-                        </Label>
-                        <Input
-                            type="Number"
-                            id="Codigo"
-                            max={10000000}
-                            min={0}
-                            maxLength={8}
-                            placeholder="0"
-                            onChange={(e) =>
-                                setData('codigo', Number(e.target.value))
-                            }
-                        ></Input>
-                        {errors.codigo && (
-                            <div className="mt-1 flex items-center text-sm text-red-500">
-                                {errors.codigo}
-                            </div>
-                        )}
-                    </div>
                     <div className="mb-4 gap-1.5">
                         <Label htmlFor="Nombre" className="mb-1.5 block">
                             Nombre de Producto:
@@ -74,27 +47,6 @@ export default function Create() {
                         {errors.nombre && (
                             <div className="mt-1 flex items-center text-sm text-red-500">
                                 {errors.nombre}
-                            </div>
-                        )}
-                    </div>
-
-                    <div className="mb-4 gap-1.5">
-                        <Label htmlFor="Stock" className="mb-1.5 block">
-                            Stock Inicial:
-                        </Label>
-                        <Input
-                            type="number"
-                            id="Stock"
-                            placeholder="0"
-                            min={0}
-                            max={10000000}
-                            onChange={(e) =>
-                                setData('stock', Number(e.target.value))
-                            }
-                        ></Input>
-                        {errors.stock && (
-                            <div className="mt-1 flex items-center text-sm text-red-500">
-                                {errors.stock}
                             </div>
                         )}
                     </div>
