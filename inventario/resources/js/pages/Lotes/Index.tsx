@@ -1,9 +1,7 @@
-import RegistroController from '@/actions/App/Http/Controllers/RegistroController';
+import LotesController from '@/actions/App/Http/Controllers/LotesController';
 import {
     Table,
-    TableBody,
     TableCaption,
-    TableCell,
     TableHead,
     TableHeader,
     TableRow,
@@ -15,56 +13,28 @@ import { Head } from '@inertiajs/react';
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Lotes',
-        href: RegistroController.index().url,
+        href: LotesController.index().url,
     },
 ];
 
-export default function Index({ Registros }: { Registros: any }) {
+export default function Index() {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Lotes" />
 
-            <div className="pagination mx-4 flex justify-center gap-2">
-                {Registros.links.map((link: any, index: number) => (
-                    <a
-                        key={index}
-                        href={link.url || '#'}
-                        className={`rounded border px-3 py-1 ${link.active ? 'bg-blue-500 text-white' : ''}`}
-                        dangerouslySetInnerHTML={{ __html: link.label }}
-                    />
-                ))}
-            </div>
             <Table>
                 <TableCaption>Lotes</TableCaption>
                 <TableHeader>
                     <TableRow>
-                        <TableHead>Fecha</TableHead>
                         <TableHead>Código</TableHead>
-                        <TableHead>Nombre</TableHead>
-                        <TableHead>Acción</TableHead>
-                        <TableHead>Tipo</TableHead>
-                        <TableHead>Responsable</TableHead>
+                        <TableHead>Descripción</TableHead>
+                        <TableHead>Producto</TableHead>
+                        <TableHead>Cantidad</TableHead>
+                        <TableHead>Almacen</TableHead>
+                        <TableHead>Estado</TableHead>
+                        <TableHead>Acciones</TableHead>
                     </TableRow>
                 </TableHeader>
-                {Registros.data.length > 0 && (
-                    <TableBody>
-                        {Registros.data.map((registro: any) => (
-                            <TableRow key={registro.codigo}>
-                                <TableCell>{registro.fecha}</TableCell>
-                                <TableCell>{registro.codigo}</TableCell>
-                                <TableCell>
-                                    {registro.nombre.length > 30
-                                        ? registro.nombre.substring(0, 30) +
-                                          '...'
-                                        : registro.nombre}
-                                </TableCell>
-                                <TableCell>{registro.accion}</TableCell>
-                                <TableCell>{registro.tipo}</TableCell>
-                                <TableCell>{registro.responsable}</TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                )}
             </Table>
         </AppLayout>
     );

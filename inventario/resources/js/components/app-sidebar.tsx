@@ -1,4 +1,4 @@
-import ControlStockController from '@/actions/App/Http/Controllers/ControlStockController';
+import AlmacenController from '@/actions/App/Http/Controllers/AlmacenController';
 import ProductController from '@/actions/App/Http/Controllers/ProductController';
 import RegistroController from '@/actions/App/Http/Controllers/RegistroController';
 import { NavFooter } from '@/components/nav-footer';
@@ -15,16 +15,10 @@ import {
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
 
+import LotesController from '@/actions/App/Http/Controllers/LotesController';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import {
-    Blocks,
-    Boxes,
-    LayoutDashboard,
-    Logs,
-    Package,
-    Warehouse,
-} from 'lucide-react';
+import { Boxes, LayoutDashboard, Logs, Package, Warehouse } from 'lucide-react';
 import AppLogo from './app-logo';
 
 const mainNavItems: NavItem[] = [
@@ -40,18 +34,13 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Almacenes',
-        href: ControlStockController.index().url,
+        href: AlmacenController.index().url,
         icon: Warehouse,
     },
     {
         title: 'Lotes',
-        href: ControlStockController.index().url,
+        href: LotesController.index().url,
         icon: Boxes,
-    },
-    {
-        title: 'Control Stock',
-        href: ControlStockController.index().url,
-        icon: Blocks,
     },
     {
         title: 'Registros',

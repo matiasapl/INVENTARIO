@@ -4,10 +4,9 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
 use App\Http\Controllers\ProductController;
-use App\Http\Controllers\ControlStockController;
 use App\Http\Controllers\RegistroController;
-use App\Http\Controllers\Lotes;
-use App\Http\Controllers\Almacenes;
+use App\Http\Controllers\LotesController;
+use App\Http\Controllers\AlmacenController;
 
 //Punto de entrada de la Web
 Route::get('/', function () {
@@ -27,9 +26,8 @@ Route::middleware(['auth'])->group(function () {
     // Secciones
     Route::get('/productos', [ProductController::class, 'index'])->name('products.index');
     Route::get('/registros', [RegistroController::class, 'index'])->name('registros.index');
-    Route::get('/controlstock', [ControlStockController::class, 'index'])->name('controlstock.index');
 
-    Route::get('/almacenes', [AlmacenesController::class, 'index'])->name('almacenes.index');
+    Route::get('/almacenes', [AlmacenController::class, 'index'])->name('almacenes.index');
     Route::get('/lotes', [LotesController::class, 'index'])->name('lotes.index');
     
     
@@ -49,12 +47,6 @@ Route::middleware(['auth'])->group(function () {
     //Papelera Productos
     Route::get('/productos/{product}/habilitar', [ProductController::class, 'habilitar'])->name('products.habilitar');
     Route::delete('/productos/{product}/eliminar', [ProductController::class, 'eliminar'])->name('products.eliminar');
-
-    //control de stock
-    Route::get('/controlstock/create', [ControlStockController::class, 'create'])->name('controlstock.create');
-    Route::post('/controlstock/{id}/sumar', [ControlStockController::class, 'sumar'])->name('controlstock.sumar');
-    Route::post('/controlstock/{id}/restar', [ControlStockController::class, 'restar'])->name('controlstock.restar');
-
 });
 
 

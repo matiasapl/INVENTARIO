@@ -2,27 +2,26 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\Lotes;
+use App\Http\Requests\StoreLotesRequest;
+use App\Http\Requests\UpdateLotesRequest;
+use Illuminate\Support\Facades\Auth;
 
-class Lotes extends Controller
+class LotesController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $Registros = \DB::table('registros')
-            ->join('users', 'registros.usuario', '=', 'users.id')
-            ->where('registros.usuario', Auth::id())
-            ->select('registros.codigo', 'registros.nombre', 'registros.accion', 'registros.tipo','users.name as responsable', 'registros.created_at as fecha')
-            ->latest('fecha')
+        $Lotes = Lotes::where('usuario', Auth::id())
+            ->where('habilitado', true)
+            ->where('eliminado', false)
             ->paginate(25);
 
-        
         return inertia('Lotes/Index', [
-            'Registros' => $Registros
+            'Lotes' => $Lotes
         ]);
-
     }
 
     /**
@@ -36,7 +35,7 @@ class Lotes extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreRegistroRequest $request)
+    public function store(StoreLotesRequest $request)
     {
         //
     }
@@ -44,7 +43,7 @@ class Lotes extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Registro $registro)
+    public function show(Lotes $lotes)
     {
         //
     }
@@ -52,7 +51,7 @@ class Lotes extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Registro $registro)
+    public function edit(Lotes $lotes)
     {
         //
     }
@@ -60,7 +59,7 @@ class Lotes extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateRegistroRequest $request, Registro $registro)
+    public function update(UpdateLotesRequest $request, Lotes $lotes)
     {
         //
     }
@@ -68,9 +67,8 @@ class Lotes extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Registro $registro)
+    public function destroy(Lotes $lotes)
     {
         //
     }
 }
-

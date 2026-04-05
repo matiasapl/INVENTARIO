@@ -11,15 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('control_stocks', function (Blueprint $table) {
+        Schema::create('almacens', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('codigo');
+            $table->uuid('codigo')->default(DB::raw('UUID()'))->unique();
             $table->string('nombre');
-            $table->unsignedInteger('stock_previo');
-            $table->unsignedInteger('stock_actual');
-            $table->string('accion');
-            $table->string('tipo');
+            $table->string('descripcion')->nullable();
+            $table->string('ubicacion')->nullable();
+            $table->boolean('estado')->default(true);
             $table->foreignId('usuario')->constrained('users')->onDelete('cascade');
+            $table->boolean('habilitado')->default(true);
+            $table->boolean('eliminado')->default(false);
             $table->timestamps();
         });
     }
@@ -29,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('control_stocks');
+        Schema::dropIfExists('almacens');
     }
 };

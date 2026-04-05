@@ -29,6 +29,7 @@ interface Product {
     descripcion: string;
     precio_unitario: number;
     M3_unitario: number;
+    estado: boolean;
 }
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -95,6 +96,7 @@ export default function Index({ products }: { products: any }) {
                         <TableHead>Descripción</TableHead>
                         <TableHead>Precio Unitario</TableHead>
                         <TableHead>M3 Unitario</TableHead>
+                        <TableHead>Estado</TableHead>
                         <TableHead>Acciones</TableHead>
                     </TableRow>
                 </TableHeader>
@@ -122,6 +124,11 @@ export default function Index({ products }: { products: any }) {
                                 </TableCell>
                                 <TableCell>{product.precio_unitario}</TableCell>
                                 <TableCell>{product.M3_unitario}</TableCell>
+                                <TableCell>
+                                    {product.estado == true
+                                        ? 'Activo'
+                                        : 'Inactivo'}
+                                </TableCell>
                                 <TableCell className="flex-row space-x-2">
                                     <Link
                                         href={

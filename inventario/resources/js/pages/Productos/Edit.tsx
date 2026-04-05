@@ -1,5 +1,12 @@
 import ProductController from '@/actions/App/Http/Controllers/ProductController';
 import { Button } from '@/components/ui/button';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
@@ -21,6 +28,7 @@ interface Product {
     precio_unitario: number;
     M3_unitario: number;
     descripcion: string;
+    estado: boolean;
 }
 
 export default function Edit({ product }: { product: Product }) {
@@ -32,6 +40,7 @@ export default function Edit({ product }: { product: Product }) {
         precio_unitario: product.precio_unitario,
         M3_unitario: product.M3_unitario,
         descripcion: product.descripcion,
+        estado: product.estado,
     });
 
     const preUpdate = (e: React.FormEvent) => {
@@ -46,7 +55,7 @@ export default function Edit({ product }: { product: Product }) {
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Crear Producto" />
+            <Head title="Editar Producto" />
             <div className="w-8/12 p-4">
                 <form method="post" onSubmit={preUpdate}>
                     <div className="mb-4 gap-1.5">
@@ -116,6 +125,50 @@ export default function Edit({ product }: { product: Product }) {
                         {errors.M3_unitario && (
                             <div className="mt-1 flex items-center text-sm text-red-500">
                                 {errors.M3_unitario}
+                            </div>
+                        )}
+                    </div>
+
+                    <div className="mb-4 gap-1.5">
+                        <Label htmlFor="Estado" className="mb-1.5 block">
+                            Estado:
+                        </Label>
+                        <DropdownMenu>
+                            <DropdownMenuTrigger>
+                                <Input
+                                    id="Estado"
+                                    placeholder="CLICK AQUI !!!"
+                                    value={
+                                        data.estado == true
+                                            ? 'Activo'
+                                            : 'Inactivo'
+                                    }
+                                    disabled={true}
+                                />
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent>
+                                <DropdownMenuLabel>
+                                    Seleccion Estado
+                                </DropdownMenuLabel>
+                                <DropdownMenuItem
+                                    onClick={() => {
+                                        setData('estado', true);
+                                    }}
+                                >
+                                    Activo
+                                </DropdownMenuItem>
+                                <DropdownMenuItem
+                                    onClick={() => {
+                                        setData('estado', false);
+                                    }}
+                                >
+                                    Inactivo
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                        {errors.estado && (
+                            <div className="mt-1 flex items-center text-sm text-red-500">
+                                {errors.estado}
                             </div>
                         )}
                     </div>

@@ -2,11 +2,11 @@
 
 namespace App\Policies;
 
+use App\Models\Almacen;
 use App\Models\User;
-use App\Models\control_stock;
 use Illuminate\Auth\Access\Response;
 
-class ControlStockPolicy
+class AlmacenPolicy
 {
     /**
      * Determine whether the user can view any models.
@@ -19,7 +19,7 @@ class ControlStockPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, control_stock $controlStock): bool
+    public function view(User $user, Almacen $almacen): bool
     {
         return false;
     }
@@ -35,7 +35,7 @@ class ControlStockPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, control_stock $controlStock): bool
+    public function update(User $user, Almacen $almacen): bool
     {
         return false;
     }
@@ -43,7 +43,7 @@ class ControlStockPolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, control_stock $controlStock): bool
+    public function delete(User $user, Almacen $almacen): bool
     {
         return false;
     }
@@ -51,7 +51,7 @@ class ControlStockPolicy
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, control_stock $controlStock): bool
+    public function restore(User $user, Almacen $almacen): bool
     {
         return false;
     }
@@ -59,7 +59,7 @@ class ControlStockPolicy
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, control_stock $controlStock): bool
+    public function forceDelete(User $user, Almacen $almacen): bool
     {
         return false;
     }

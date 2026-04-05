@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class Updatecontrol_stockRequest extends FormRequest
+class StoreAlmacenRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

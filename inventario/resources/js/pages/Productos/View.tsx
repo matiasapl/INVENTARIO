@@ -20,13 +20,14 @@ interface Product {
     nombre: string;
     precio_unitario: number;
     M3_unitario: number;
+    estado: boolean;
     descripcion: string;
 }
 
 export default function View({ product }: { product: Product }) {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Crear Producto" />
+            <Head title="Ver Producto" />
             <div className="w-8/12 p-4">
                 <form method="post">
                     <div className="mb-4 gap-1.5">
@@ -84,6 +85,20 @@ export default function View({ product }: { product: Product }) {
                             min={0}
                             max={10000000}
                             value={product.M3_unitario}
+                            disabled
+                        ></Input>
+                    </div>
+
+                    <div className="mb-4 gap-1.5">
+                        <Label htmlFor="Estado" className="mb-1.5 block">
+                            Estado:
+                        </Label>
+                        <Input
+                            type="text"
+                            id="Estado"
+                            value={
+                                product.estado == true ? 'Activo' : 'Inactivo'
+                            }
                             disabled
                         ></Input>
                     </div>
