@@ -34,7 +34,6 @@ export default function Edit({ Almacen }: { Almacen: Almacen }) {
     const [showModal, setShowModal] = useState(false);
 
     const { data, setData, put, processing, errors } = useForm({
-        id: Almacen.id,
         nombre: Almacen.nombre,
         ubicacion: Almacen.ubicacion,
         estado: Almacen.estado,

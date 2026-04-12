@@ -107,8 +107,8 @@ class AlmacenController extends Controller
 
     public function update(UpdateAlmacenRequest $request, Almacen $almacen)
     {
-    //$this->authorizeAlmacen($almacen);
-    //$almacen->update($request->validated());
+    $this->authorizeAlmacen($almacen);
+    $almacen->update($request->validated());
 
         Registro::create([
             'codigo' => $almacen->codigo,
