@@ -26,6 +26,6 @@ class StoreProductRequest extends FormRequest
         'precio_unitario' => ['required', 'numeric', 'min:0', 'max:10000000'],
         'M3_unitario' => ['required', 'numeric', 'min:0', 'max:10000000'],
         'descripcion' => ['nullable', 'string', 'max:255'],
-        ];
+        ]; 
     }
 }

@@ -28,6 +28,15 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/registros', [RegistroController::class, 'index'])->name('registros.index');
 
     Route::get('/almacenes', [AlmacenController::class, 'index'])->name('almacenes.index');
+    Route::get('/almacenes/create', [AlmacenController::class, 'create'])->name('almacenes.create');
+    Route::post('/almacenes/store', [AlmacenController::class, 'store'])->name('almacen.store');
+    Route::get('/almacenes/papelera', [AlmacenController::class, 'papelera'])->name('almacen.papelera');
+
+    //Papelera Almacenes
+    Route::get('/almacenes/{almacen}/habilitar', [AlmacenController::class, 'habilitar'])->name('almacen.habilitar');
+    Route::delete('/almacenes/{almacen}/eliminar', [AlmacenController::class, 'eliminar'])->name('almacen.eliminar');
+
+
     Route::get('/lotes', [LotesController::class, 'index'])->name('lotes.index');
     
     

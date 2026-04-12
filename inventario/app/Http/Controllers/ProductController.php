@@ -86,7 +86,7 @@ class ProductController extends Controller
         /**
      * Habilitar un producto
      */
-        public function habilitar(Product $product)
+    public function habilitar(Product $product)
     {
         $this->authorizeProduct($product);
         $product->habilitar();

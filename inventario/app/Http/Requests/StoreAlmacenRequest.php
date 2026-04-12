@@ -11,7 +11,7 @@ class StoreAlmacenRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,9 @@ class StoreAlmacenRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+        'nombre' => ['required', 'string', 'max:30'],
+        'ubicacion' => ['required', 'string', 'max:30'],
+        'descripcion' => ['nullable', 'string', 'max:255'],
         ];
     }
 }
