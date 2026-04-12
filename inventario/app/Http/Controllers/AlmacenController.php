@@ -64,28 +64,62 @@ class AlmacenController extends Controller
 
         return inertia('Almacenes/Papelera', compact('Almacenes'));
     }
-    /**
-     * Display the specified resource.
-     */
-    public function show(Almacen $almacen)
+
+    public function deshabilitar(Almacen $almacen)
     {
-        //
+        $this->authorizeAlmacen($almacen);
+        $almacen->deshabilitar();
+
+        Registro::create([
+            'codigo' => $almacen->codigo,
+            'nombre' => $almacen->nombre,
+            'accion' => 'Deshabilitar Almacen',
+            'tipo' => 'Manual',
+            'usuario' => Auth::id()
+        ]);
+
+        return redirect()->route('almacenes.index')->with('success', 'Almacen deshabilitado correctamente');
+    }
+
+
+    public function view(Almacen $Almacen)
+    {
+        $this->authorizeAlmacen($Almacen);
+        Registro::create([
+            'codigo' => $Almacen->codigo,
+            'nombre' => $Almacen->nombre,
+            'accion' => 'Ver Almacen',
+            'tipo' => 'Manual',
+            'usuario' => Auth::id()
+        ]);
+        return inertia('Almacenes/View', compact('Almacen'));
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Formulario para editar almacenes.
      */
-    public function edit(Almacen $almacen)
+    public function edit(Almacen $Almacen)
     {
-        //
+        $this->authorizeAlmacen($Almacen);
+
+        return inertia('Almacenes/Edit', compact('Almacen'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(UpdateAlmacenRequest $request, Almacen $almacen)
     {
-        //
+    //$this->authorizeAlmacen($almacen);
+    //$almacen->update($request->validated());
+
+        Registro::create([
+            'codigo' => $almacen->codigo,
+            'nombre' => $request->nombre,
+            'accion' => 'Editar Almacen',
+            'tipo' => 'Manual',
+            'usuario' => Auth::id()
+        ]);
+
+
+        return redirect()->route('almacenes.index')->with('success', 'Almacen Editado Correctamente');
     }
 
     /**
@@ -139,7 +173,7 @@ class AlmacenController extends Controller
     private function authorizeAlmacen(Almacen $almacen)
     {
         if ($almacen->usuario !== Auth::id()) {
-            abort(403, 'No tienes permiso para acceder a almacen.');
+            abort(403, 'No tienes permiso para acceder a este almacen.');
         }
     }
 }

@@ -11,7 +11,7 @@ class Almacen extends Model
     use HasFactory;
 
     protected $fillable = [
-        'codigo', 'nombre', 'descripcion', 'ubicacion', 'estado', 'habilitado', 'eliminado', 'usuario'
+        'nombre', 'descripcion', 'ubicacion', 'estado', 'habilitado', 'eliminado', 'usuario'
     ];
 public function user()
 {

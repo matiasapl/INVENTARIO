@@ -31,11 +31,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/almacenes/create', [AlmacenController::class, 'create'])->name('almacenes.create');
     Route::post('/almacenes/store', [AlmacenController::class, 'store'])->name('almacen.store');
     Route::get('/almacenes/papelera', [AlmacenController::class, 'papelera'])->name('almacen.papelera');
-
+    Route::get('/almacenes/{almacen}/deshabilitar', [AlmacenController::class, 'deshabilitar'])->name('almacen.deshabilitar');
+    Route::get('/almacenes/edit/{almacen}', [AlmacenController::class, 'edit'])->name('almacen.edit');
+    Route::put('/almacenes/update/{almacenes}', [AlmacenController::class, 'update'])->name('almacen.update');
     //Papelera Almacenes
     Route::get('/almacenes/{almacen}/habilitar', [AlmacenController::class, 'habilitar'])->name('almacen.habilitar');
     Route::delete('/almacenes/{almacen}/eliminar', [AlmacenController::class, 'eliminar'])->name('almacen.eliminar');
-
+    Route::get('/almacenes/view/{almacen}', [AlmacenController::class, 'view'])->name('almacen.view');
 
     Route::get('/lotes', [LotesController::class, 'index'])->name('lotes.index');
     
