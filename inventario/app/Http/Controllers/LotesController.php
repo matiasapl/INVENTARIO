@@ -109,6 +109,7 @@ class LotesController extends Controller
 
         $Lotes = Lotes::create($data);
         $Lotes->refresh();
+        
     Registro::create([
         'codigo' => $Lotes->codigo,
         'nombre' => $Lotes->nombre,

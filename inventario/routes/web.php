@@ -34,6 +34,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/lotes/create', [LotesController::class, 'create'])->name('lotes.create');
     Route::get('/lotes/edit/{lote}', [LotesController::class, 'edit'])->name('lotes.edit');
     Route::get('/lotes/view/{lote}', [LotesController::class, 'view'])->name('lotes.view');
+    Route::post('/lotes/store', [LotesController::class, 'store'])->name('lotes.store');
     // Secciones
 
 

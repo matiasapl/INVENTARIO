@@ -1,8 +1,7 @@
-import AlmacenController from '@/actions/App/Http/Controllers/AlmacenController';
+import LotesController from '@/actions/App/Http/Controllers/LotesController';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link, useForm } from '@inertiajs/react';
@@ -10,21 +9,22 @@ import { CircleCheck, CircleX } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Crear Almacen',
-        href: AlmacenController.create().url,
+        title: 'Crear Lote',
+        href: LotesController.create().url,
     },
 ];
 
 export default function Create() {
     const { data, setData, post, processing, errors } = useForm({
-        nombre: '',
         descripcion: '',
-        ubicacion: '',
+        producto: '',
+        cantidad: '',
+        almacen: '',
     });
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        post(AlmacenController.store().url);
+        post(LotesController.store().url);
     };
 
     return (
@@ -33,71 +33,88 @@ export default function Create() {
             <div className="w-8/12 p-4">
                 <form method="post" onSubmit={handleSubmit}>
                     <div className="mb-4 gap-1.5">
-                        <Label htmlFor="Nombre" className="mb-1.5 block">
-                            Nombre de Almacen:
+                        <Label htmlFor="Descripcion" className="mb-1.5 block">
+                            Descripcion de Lote:
                         </Label>
                         <Input
-                            id="Nombre"
-                            placeholder="Nombre de tu Almacen"
+                            id="Descripcion"
+                            placeholder="Nombre de tu Lote"
                             minLength={3}
                             maxLength={30}
-                            onChange={(e) => setData('nombre', e.target.value)}
-                        ></Input>
-                        {errors.nombre && (
-                            <div className="mt-1 flex items-center text-sm text-red-500">
-                                {errors.nombre}
-                            </div>
-                        )}
-                    </div>
-
-                    <div className="mb-4 gap-1.5">
-                        <Label htmlFor="Ubicacion" className="mb-1.5 block">
-                            Ubicacion de Almacen:
-                        </Label>
-                        <Input
-                            id="Ubicacion"
-                            placeholder="Ubicacion de tu Almacen"
-                            minLength={3}
-                            maxLength={30}
-                            onChange={(e) =>
-                                setData('ubicacion', e.target.value)
-                            }
-                        ></Input>
-                        {errors.ubicacion && (
-                            <div className="mt-1 flex items-center text-sm text-red-500">
-                                {errors.ubicacion}
-                            </div>
-                        )}
-                    </div>
-                    <div className="mb-4 gap-1.5">
-                        <Label htmlFor="descripcion" className="mb-1.5 block">
-                            Descripcion:
-                        </Label>
-                        <Textarea
-                            id="descripcion"
-                            placeholder="Una brebe descricion sobre tu almacen"
-                            minLength={0}
-                            maxLength={255}
                             onChange={(e) =>
                                 setData('descripcion', e.target.value)
                             }
-                        ></Textarea>
+                        ></Input>
                         {errors.descripcion && (
                             <div className="mt-1 flex items-center text-sm text-red-500">
                                 {errors.descripcion}
                             </div>
                         )}
                     </div>
+
+                    <div className="mb-4 gap-1.5">
+                        <Label htmlFor="Producto" className="mb-1.5 block">
+                            Producto del Lote:
+                        </Label>
+                        <Input
+                            id="Producto"
+                            placeholder="Selecciona Producto"
+                            onChange={(e) =>
+                                setData('producto', e.target.value)
+                            }
+                        ></Input>
+                        {errors.producto && (
+                            <div className="mt-1 flex items-center text-sm text-red-500">
+                                {errors.producto}
+                            </div>
+                        )}
+                    </div>
+                    <div className="mb-4 gap-1.5">
+                        <Label htmlFor="Cantidad" className="mb-1.5 block">
+                            Unidades de Producto:
+                        </Label>
+                        <Input
+                            id="Cantidad"
+                            placeholder="Cantidad del producto seleccionado que contiene este Lote"
+                            type="numeric"
+                            min={0}
+                            max={10000000}
+                            onChange={(e) =>
+                                setData('cantidad', e.target.value)
+                            }
+                        ></Input>
+                        {errors.cantidad && (
+                            <div className="mt-1 flex items-center text-sm text-red-500">
+                                {errors.cantidad}
+                            </div>
+                        )}
+                    </div>
+                    <div className="mb-4 gap-1.5">
+                        <Label htmlFor="Almacen" className="mb-1.5 block">
+                            Almacen del Lote:
+                        </Label>
+                        <Input
+                            id="Almacen"
+                            placeholder="Selecciona Almacen donde se encuentra tu Lote"
+                            onChange={(e) => setData('almacen', e.target.value)}
+                        ></Input>
+                        {errors.almacen && (
+                            <div className="mt-1 flex items-center text-sm text-red-500">
+                                {errors.almacen}
+                            </div>
+                        )}
+                    </div>
+
                     <div className="flex-row space-x-2">
                         <Button
                             className="mb-4 bg-green-500 hover:bg-green-700"
                             type="submit"
                             disabled={processing}
                         >
-                            <CircleCheck /> Registrar Almacen
+                            <CircleCheck /> Registrar Lote
                         </Button>
 
-                        <Link href={AlmacenController.index().url}>
+                        <Link href={LotesController.index().url}>
                             <Button
                                 className="mb-4 bg-red-500 hover:bg-red-700"
                                 type="button"

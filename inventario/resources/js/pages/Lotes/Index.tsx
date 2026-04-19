@@ -24,9 +24,10 @@ import { useState } from 'react';
 interface Lote {
     id: number;
     codigo: string;
-    nombre: string;
     descripcion: string;
-    ubicacion: string;
+    producto: string;
+    cantidad: string;
+    almacen: string;
     estado: boolean;
 }
 
@@ -78,9 +79,10 @@ export default function Index({ Lotes }: { Lotes: any }) {
                 <TableHeader>
                     <TableRow>
                         <TableHead>Código</TableHead>
-                        <TableHead>Nombre</TableHead>
                         <TableHead>Descripción</TableHead>
-                        <TableHead>Ubicación</TableHead>
+                        <TableHead>Producto</TableHead>
+                        <TableHead>Cantidad</TableHead>
+                        <TableHead>Almacen</TableHead>
                         <TableHead>Estado</TableHead>
                         <TableHead>Acciones</TableHead>
                     </TableRow>
@@ -90,23 +92,17 @@ export default function Index({ Lotes }: { Lotes: any }) {
                         {Lotes.data.map((Lote: any) => (
                             <TableRow key={Lote.codigo}>
                                 <TableCell>{Lote.codigo}</TableCell>
+
                                 <TableCell>
-                                    {Lote.nombre.length > 30
-                                        ? Lote.nombre.substring(0, 30) + '...'
-                                        : Lote.nombre}
+                                    {Lote.descripcion?.length > 50
+                                        ? Lote.descripcion.substring(0, 50) +
+                                          '...'
+                                        : (Lote.descripcion ??
+                                          'Sin Descripcion')}
                                 </TableCell>
-                                <TableCell>
-                                    <TableCell>
-                                        {Lote.descripcion?.length > 50
-                                            ? Lote.descripcion.substring(
-                                                  0,
-                                                  50,
-                                              ) + '...'
-                                            : (Lote.descripcion ??
-                                              'Sin Descripcion')}
-                                    </TableCell>
-                                </TableCell>
-                                <TableCell>{Lote.ubicacion}</TableCell>
+                                <TableCell>{Lote.producto}</TableCell>
+                                <TableCell>{Lote.cantidad}</TableCell>
+                                <TableCell>{Lote.almacen}</TableCell>
                                 <TableCell>
                                     {Lote.estado == true
                                         ? 'Activo'
@@ -153,7 +149,7 @@ export default function Index({ Lotes }: { Lotes: any }) {
                         <div className="text-center">
                             <h3 className="my-5 text-lg font-normal text-gray-500 dark:text-gray-400">
                                 ¿Seguro que quieres enviar{' '}
-                                <strong>{selectedLote.nombre}</strong> a la
+                                <strong>{selectedLote.descripcion}</strong> a la
                                 papelera?
                             </h3>
                             <div className="flex justify-center gap-4">
