@@ -23,7 +23,20 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 
 Route::middleware(['auth'])->group(function () {
+
+
+    //Lotes
+    Route::get('/lotes', [LotesController::class, 'index'])->name('lotes.index');
+    Route::get('/lotes/papelera', [LotesController::class, 'papelera'])->name('lotes.papelera');
+    Route::get('/lotes/{Lote}/deshabilitar', [LotesController::class, 'deshabilitar'])->name('lotes.deshabilitar');
+    Route::get('/lotes/{Lote}/habilitar', [LotesController::class, 'habilitar'])->name('lotes.habilitar');
+    Route::delete('/lotes/{Lote}/eliminar', [LotesController::class, 'eliminar'])->name('lotes.eliminar');
+    Route::get('/lotes/create', [LotesController::class, 'create'])->name('lotes.create');
+    Route::get('/lotes/edit/{lote}', [LotesController::class, 'edit'])->name('lotes.edit');
+    Route::get('/lotes/view/{lote}', [LotesController::class, 'view'])->name('lotes.view');
     // Secciones
+
+
     Route::get('/productos', [ProductController::class, 'index'])->name('products.index');
     Route::get('/registros', [RegistroController::class, 'index'])->name('registros.index');
 
@@ -39,7 +52,7 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/almacenes/{almacen}/eliminar', [AlmacenController::class, 'eliminar'])->name('almacen.eliminar');
     Route::get('/almacenes/view/{almacen}', [AlmacenController::class, 'view'])->name('almacen.view');
 
-    Route::get('/lotes', [LotesController::class, 'index'])->name('lotes.index');
+    
     
     
     //Productos Crear

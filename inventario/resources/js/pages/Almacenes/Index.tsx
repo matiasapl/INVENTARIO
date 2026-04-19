@@ -16,9 +16,9 @@ import {
     CircleCheck,
     CircleX,
     Eye,
-    PackagePlus,
     PencilLine,
     Trash2,
+    Warehouse,
 } from 'lucide-react';
 import { useState } from 'react';
 interface Almacen {
@@ -65,7 +65,7 @@ export default function Index({ Almacenes }: { Almacenes: any }) {
             <nav className="flex-row">
                 <Link href={AlmacenController.create().url}>
                     <Button className="m-4 bg-green-500 hover:bg-green-700">
-                        <PackagePlus /> Crear Almacen
+                        <Warehouse /> Crear Almacen
                     </Button>
                 </Link>
 
