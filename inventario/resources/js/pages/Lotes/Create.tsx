@@ -17,9 +17,9 @@ const breadcrumbs: BreadcrumbItem[] = [
 export default function Create() {
     const { data, setData, post, processing, errors } = useForm({
         descripcion: '',
-        producto: '',
+        producto_id: '',
         cantidad: '',
-        almacen: '',
+        almacen_id: '',
     });
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -29,7 +29,7 @@ export default function Create() {
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Crear Almacen" />
+            <Head title="Crear Lote" />
             <div className="w-8/12 p-4">
                 <form method="post" onSubmit={handleSubmit}>
                     <div className="mb-4 gap-1.5">
@@ -60,12 +60,12 @@ export default function Create() {
                             id="Producto"
                             placeholder="Selecciona Producto"
                             onChange={(e) =>
-                                setData('producto', e.target.value)
+                                setData('producto_id', e.target.value)
                             }
                         ></Input>
-                        {errors.producto && (
+                        {errors.producto_id && (
                             <div className="mt-1 flex items-center text-sm text-red-500">
-                                {errors.producto}
+                                {errors.producto_id}
                             </div>
                         )}
                     </div>
@@ -96,11 +96,13 @@ export default function Create() {
                         <Input
                             id="Almacen"
                             placeholder="Selecciona Almacen donde se encuentra tu Lote"
-                            onChange={(e) => setData('almacen', e.target.value)}
+                            onChange={(e) =>
+                                setData('almacen_id', e.target.value)
+                            }
                         ></Input>
-                        {errors.almacen && (
+                        {errors.almacen_id && (
                             <div className="mt-1 flex items-center text-sm text-red-500">
-                                {errors.almacen}
+                                {errors.almacen_id}
                             </div>
                         )}
                     </div>

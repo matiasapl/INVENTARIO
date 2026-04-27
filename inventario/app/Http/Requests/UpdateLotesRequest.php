@@ -22,10 +22,10 @@ class UpdateLotesRequest extends FormRequest
     public function rules(): array
     {
         return [
-        'descripción' => ['required', 'string', 'max:30'],
+        'descripcion' => ['required', 'string', 'max:30'],
         'producto_id' => ['required', 'numeric'],
         'cantidad' => ['required', 'numeric', 'min:0', 'max:10000000'],
-        'almacen_id' => ['required', 'string', 'max:30'],
+        'almacen_id' => ['required', 'numeric', 'max:30'],
         'estado' => ['required', 'boolean'],
         ];
     }

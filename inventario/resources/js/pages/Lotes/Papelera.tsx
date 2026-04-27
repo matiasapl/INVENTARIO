@@ -1,4 +1,4 @@
-import AlmacenController from '@/actions/App/Http/Controllers/AlmacenController';
+import LotesController from '@/actions/App/Http/Controllers/LotesController';
 import { Button } from '@/components/ui/button';
 import {
     Table,
@@ -14,52 +14,52 @@ import { type BreadcrumbItem } from '@/types';
 import { Head, Link, router } from '@inertiajs/react';
 import { ArrowBigLeft, CircleCheck, CircleX, RotateCcw } from 'lucide-react';
 import { useState } from 'react'; // 1. Importar useState
-interface Almacen {
+
+interface Lote {
     id: number;
-    codigo: number;
-    nombre: string;
+    codigo: string;
     descripcion: string;
-    ubicacion: string;
+    producto: string;
+    cantidad: string;
+    almacen: string;
     estado: boolean;
 }
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Papelera de Almacenes',
-        href: AlmacenController.papelera().url,
+        title: 'Papelera de Lotes',
+        href: LotesController.papelera().url,
     },
 ];
 
-export default function Index({ Almacenes }: { Almacenes: Almacen[] }) {
+export default function Index({ Lotes }: { Lotes: any }) {
     // 2. Definir estados para el modal
     const [showModal, setShowModal] = useState(false);
-    const [selectedAlmacen, setSelectedAlmacen] = useState<Almacen | null>(
-        null,
-    );
+    const [selectedLote, setSelectedLote] = useState<Lote | null>(null);
 
-    const openModal = (Almacen: Almacen) => {
-        setSelectedAlmacen(Almacen);
+    const openModal = (Lote: Lote) => {
+        setSelectedLote(Lote);
         setShowModal(true);
     };
 
     const closeModal = () => {
-        setSelectedAlmacen(null);
+        setSelectedLote(null);
         setShowModal(false);
     };
 
     // 3. Función de eliminación definitiva
     const confirmDelete = () => {
-        if (selectedAlmacen) {
-            router.delete(AlmacenController.eliminar(selectedAlmacen.id).url, {
+        if (selectedLote) {
+            router.delete(LotesController.eliminar(selectedLote.id).url, {
                 onSuccess: () => closeModal(),
             });
         }
     };
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Papelera de Almacenes" />
+            <Head title="Papelera de Lotes" />
             <nav className="flex-row">
-                <Link href={AlmacenController.index().url}>
+                <Link href={LotesController.index().url}>
                     <Button className="m-4 bg-green-500 hover:bg-green-700">
                         <ArrowBigLeft /> Volver
                     </Button>
@@ -67,43 +67,44 @@ export default function Index({ Almacenes }: { Almacenes: Almacen[] }) {
             </nav>
 
             <Table>
-                <TableCaption>Papelera de Almacenes</TableCaption>
+                <TableCaption>Papelera de Lotes</TableCaption>
                 <TableHeader>
                     <TableRow>
-                        <TableHead>Codigo</TableHead>
-                        <TableHead>Nombre</TableHead>
+                        <TableHead>Código</TableHead>
                         <TableHead>Descripción</TableHead>
-                        <TableHead>ubicacion</TableHead>
+                        <TableHead>Producto</TableHead>
+                        <TableHead>Cantidad</TableHead>
+                        <TableHead>Almacen</TableHead>
+                        <TableHead>Estado</TableHead>
+                        <TableHead>Acciones</TableHead>
                     </TableRow>
                 </TableHeader>
-                {Almacenes.length > 0 && (
+                {Lotes.data.length > 0 && (
                     <TableBody>
-                        {Almacenes.map((Almacen) => (
-                            <TableRow key={Almacen.codigo}>
-                                <TableCell>{Almacen.codigo}</TableCell>
-                                <TableCell>
-                                    {Almacen.nombre
-                                        ? Almacen.nombre.length > 30
-                                            ? Almacen.nombre.substring(0, 30) +
-                                              '...'
-                                            : Almacen.nombre
-                                        : ''}
-                                </TableCell>
+                        {Lotes.data.map((Lote: any) => (
+                            <TableRow key={Lote.codigo}>
+                                <TableCell>{Lote.codigo}</TableCell>
 
                                 <TableCell>
-                                    {Almacen.descripcion?.length > 50
-                                        ? Almacen.descripcion.substring(0, 50) +
+                                    {Lote.descripcion?.length > 50
+                                        ? Lote.descripcion.substring(0, 50) +
                                           '...'
-                                        : (Almacen.descripcion ??
+                                        : (Lote.descripcion ??
                                           'Sin Descripcion')}
                                 </TableCell>
-                                <TableCell>{Almacen.ubicacion}</TableCell>
+                                <TableCell>{Lote.producto}</TableCell>
+                                <TableCell>{Lote.cantidad}</TableCell>
+                                <TableCell>{Lote.almacen}</TableCell>
+                                <TableCell>
+                                    {Lote.estado == true
+                                        ? 'Activo'
+                                        : 'Inactivo'}
+                                </TableCell>
                                 <TableCell className="flex-row space-x-2">
                                     <Link
                                         href={
-                                            AlmacenController.habilitar(
-                                                Almacen.id,
-                                            ).url
+                                            LotesController.habilitar(Lote.id)
+                                                .url
                                         }
                                     >
                                         <Button className="bg-green-500 hover:bg-green-700">
@@ -113,7 +114,7 @@ export default function Index({ Almacenes }: { Almacenes: Almacen[] }) {
 
                                     <Button
                                         className="bg-red-500 hover:bg-red-700"
-                                        onClick={() => openModal(Almacen)}
+                                        onClick={() => openModal(Lote)}
                                     >
                                         <CircleX />
                                     </Button>
@@ -125,14 +126,14 @@ export default function Index({ Almacenes }: { Almacenes: Almacen[] }) {
             </Table>
 
             {/* 5. El Modal de Confirmación */}
-            {showModal && selectedAlmacen && (
+            {showModal && selectedLote && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
                     <div className="relative w-full max-w-sm rounded-lg bg-white p-6 shadow-lg dark:bg-slate-900">
                         <div className="text-center">
                             <h3 className="mb-5 text-lg font-normal text-gray-500">
                                 ¿Estás seguro de eliminar{' '}
-                                <strong>definitivamente</strong> el producto{' '}
-                                {selectedAlmacen.nombre}?
+                                <strong>definitivamente</strong> el Lote{' '}
+                                {selectedLote.descripcion}?
                                 <br />
                                 <span className="text-sm text-red-400">
                                     Esta acción no se puede deshacer.

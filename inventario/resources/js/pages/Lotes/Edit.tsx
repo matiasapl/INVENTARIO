@@ -1,4 +1,4 @@
-import AlmacenController from '@/actions/App/Http/Controllers/AlmacenController';
+import LotesController from '@/actions/App/Http/Controllers/LotesController';
 import { Button } from '@/components/ui/button';
 import {
     DropdownMenu,
@@ -9,7 +9,6 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link, useForm } from '@inertiajs/react';
@@ -18,26 +17,29 @@ import { useState } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Editar Almacen',
-        href: '/almacen/edit',
+        title: 'Editar Lote',
+        href: '/lotes/edit',
     },
 ];
-interface Almacen {
+interface Lote {
     id: number;
-    nombre: string;
+    codigo: string;
     descripcion: string;
-    ubicacion: string;
+    producto_id: number;
+    cantidad: string;
+    almacen_id: number;
     estado: boolean;
 }
 
-export default function Edit({ Almacen }: { Almacen: Almacen }) {
+export default function Edit({ Lote }: { Lote: Lote }) {
     const [showModal, setShowModal] = useState(false);
 
     const { data, setData, put, processing, errors } = useForm({
-        nombre: Almacen.nombre,
-        ubicacion: Almacen.ubicacion,
-        estado: Almacen.estado,
-        descripcion: Almacen.descripcion,
+        descripcion: Lote.descripcion,
+        producto_id: Lote.producto_id,
+        cantidad: Lote.cantidad,
+        almacen_id: Lote.almacen_id,
+        estado: Lote.estado,
     });
 
     const preUpdate = (e: React.FormEvent) => {
@@ -47,50 +49,130 @@ export default function Edit({ Almacen }: { Almacen: Almacen }) {
 
     const confirmUpdate = () => {
         setShowModal(false);
-        put(AlmacenController.update(Almacen.id).url);
+        put(LotesController.update(Lote.id).url);
     };
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Editar Almacen" />
+            <Head title="Editar Lote" />
             <div className="w-8/12 p-4">
                 <form method="post" onSubmit={preUpdate}>
                     <div className="mb-4 gap-1.5">
-                        <Label htmlFor="Nombre" className="mb-1.5 block">
-                            Nombre de Almacen:
+                        <Label htmlFor="Descripcion" className="mb-1.5 block">
+                            Descripcion de Lote:
                         </Label>
                         <Input
-                            id="Nombre"
-                            placeholder="Nombre de tu Almacen"
+                            id="Descripcion"
+                            placeholder="Descripcion de tu Lote"
                             minLength={3}
                             maxLength={30}
-                            value={data.nombre}
-                            onChange={(e) => setData('nombre', e.target.value)}
+                            value={data.descripcion}
+                            onChange={(e) =>
+                                setData('descripcion', e.target.value)
+                            }
                         ></Input>
-                        {errors.nombre && (
+                        {errors.descripcion && (
                             <div className="mt-1 flex items-center text-sm text-red-500">
-                                {errors.nombre}
+                                {errors.descripcion}
                             </div>
                         )}
                     </div>
 
                     <div className="mb-4 gap-1.5">
-                        <Label htmlFor="Ubicacion" className="mb-1.5 block">
-                            Ubicacion de Almacen:
+                        <Label htmlFor="Producto" className="mb-1.5 block">
+                            Producto:
+                        </Label>
+                        <DropdownMenu>
+                            <DropdownMenuTrigger>
+                                <Input
+                                    id="Producto"
+                                    placeholder="CLICK AQUI !!!"
+                                    value={data.producto_id}
+                                    disabled={true}
+                                />
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent>
+                                <DropdownMenuLabel>
+                                    Seleccion Producto
+                                </DropdownMenuLabel>
+                                <DropdownMenuItem
+                                    onClick={() => {
+                                        setData('producto_id', 1);
+                                    }}
+                                >
+                                    Primer Producto
+                                </DropdownMenuItem>
+                                <DropdownMenuItem
+                                    onClick={() => {
+                                        setData('producto_id', 2);
+                                    }}
+                                >
+                                    Segundo Producto
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                        {errors.producto_id && (
+                            <div className="mt-1 flex items-center text-sm text-red-500">
+                                {errors.producto_id}
+                            </div>
+                        )}
+                    </div>
+
+                    <div className="mb-4 gap-1.5">
+                        <Label htmlFor="Cantidad" className="mb-1.5 block">
+                            Stock de Producto:
                         </Label>
                         <Input
-                            id="Ubicacion"
-                            placeholder="Ubicacion de tu Almacen"
-                            minLength={3}
-                            maxLength={30}
-                            value={data.ubicacion}
+                            id="Cantidad"
+                            placeholder="Cantidad de tu Lote"
+                            value={data.cantidad}
                             onChange={(e) =>
-                                setData('ubicacion', e.target.value)
+                                setData('cantidad', e.target.value)
                             }
                         ></Input>
-                        {errors.ubicacion && (
+                        {errors.cantidad && (
                             <div className="mt-1 flex items-center text-sm text-red-500">
-                                {errors.ubicacion}
+                                {errors.cantidad}
+                            </div>
+                        )}
+                    </div>
+
+                    <div className="mb-4 gap-1.5">
+                        <Label htmlFor="Almacen" className="mb-1.5 block">
+                            Almacen:
+                        </Label>
+                        <DropdownMenu>
+                            <DropdownMenuTrigger>
+                                <Input
+                                    id="Almacen"
+                                    placeholder="CLICK AQUI !!!"
+                                    value={data.almacen_id}
+                                    disabled={true}
+                                />
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent>
+                                <DropdownMenuLabel>
+                                    Seleccion Almacen
+                                </DropdownMenuLabel>
+                                <DropdownMenuItem
+                                    onClick={() => {
+                                        setData('almacen_id', 1);
+                                    }}
+                                >
+                                    Primer Almacen
+                                </DropdownMenuItem>
+                                <DropdownMenuItem
+                                    onClick={() => {
+                                        setData('almacen_id', 2);
+                                    }}
+                                >
+                                    Calcetines Largos
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                        {errors.almacen_id && (
+                            <div className="mt-1 flex items-center text-sm text-red-500">
+                                {errors.almacen_id}
                             </div>
                         )}
                     </div>
@@ -139,26 +221,6 @@ export default function Edit({ Almacen }: { Almacen: Almacen }) {
                         )}
                     </div>
 
-                    <div className="mb-4 gap-1.5">
-                        <Label htmlFor="descripcion" className="mb-1.5 block">
-                            Descripcion:
-                        </Label>
-                        <Textarea
-                            id="descripcion"
-                            placeholder="Una brebe descricion sobre tu Almacen"
-                            minLength={0}
-                            maxLength={255}
-                            value={data.descripcion}
-                            onChange={(e) =>
-                                setData('descripcion', e.target.value)
-                            }
-                        ></Textarea>
-                        {errors.descripcion && (
-                            <div className="mt-1 flex items-center text-sm text-red-500">
-                                {errors.descripcion}
-                            </div>
-                        )}
-                    </div>
                     <div className="flex-row space-x-2">
                         <Button
                             className="mb-4 bg-yellow-500 hover:bg-yellow-700"
@@ -168,7 +230,7 @@ export default function Edit({ Almacen }: { Almacen: Almacen }) {
                             <CircleCheck /> Editar Almacen
                         </Button>
 
-                        <Link href={AlmacenController.index().url}>
+                        <Link href={LotesController.index().url}>
                             <Button
                                 className="mb-4 bg-green-500 hover:bg-green-700"
                                 type="button"
@@ -193,7 +255,7 @@ export default function Edit({ Almacen }: { Almacen: Almacen }) {
 
                         <div className="text-center">
                             <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-                                ¿Seguro que quieres editar este Almacen?
+                                ¿Seguro que quieres editar este Lote?
                             </h3>
                             <div className="flex justify-center gap-4">
                                 <Button

@@ -12,7 +12,7 @@ class Lotes extends Model
 
     
     protected $fillable = [
-       'descripción', 'producto_id', 'cantidad', 'almacen_id', 'estado', 'usuario', 'habilitado', 'eliminado',
+       'descripcion', 'producto_id', 'cantidad', 'almacen_id', 'estado', 'usuario', 'habilitado', 'eliminado',
     ];
     public function user()
     {

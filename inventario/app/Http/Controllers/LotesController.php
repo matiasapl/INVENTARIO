@@ -13,25 +13,47 @@ class LotesController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        $Lotes = Lotes::where('usuario', Auth::id())
-            ->where('habilitado', true)
-            ->where('eliminado', false)
-            ->paginate(25);
+public function index()
+{
+    $Lotes = Lotes::join('products', 'lotes.producto_id', '=', 'products.id')
+        ->join('almacens', 'lotes.almacen_id', '=', 'almacens.id')
+        ->where('lotes.usuario', auth()->id())
+        ->where('lotes.habilitado', true)
+        ->where('lotes.eliminado', false)
+        ->select(
+            'lotes.id as id',
+            'lotes.codigo as codigo',
+            'lotes.descripcion as descripcion',
+            'products.nombre as producto', // Alias para evitar colisiones
+            'lotes.cantidad as cantidad',
+            'almacens.nombre as almacen',
+            'lotes.estado as estado'
+        )
+        ->paginate(25);
 
-        return inertia('Lotes/Index', [
-            'Lotes' => $Lotes
-        ]);
-    }
+    return inertia('Lotes/Index', [
+        'Lotes' => $Lotes
+    ]);
+}
 
 
     public function papelera()
     {
-        $Lotes = Lotes::where('usuario', Auth::id())
-            ->where('habilitado', false)
-            ->where('eliminado', false)
-            ->get();
+    $Lotes = Lotes::join('products', 'lotes.producto_id', '=', 'products.id')
+        ->join('almacens', 'lotes.almacen_id', '=', 'almacens.id')
+        ->where('lotes.usuario', auth()->id())
+        ->where('lotes.habilitado', false)
+        ->where('lotes.eliminado', false)
+        ->select(
+            'lotes.id as id',
+            'lotes.codigo as codigo',
+            'lotes.descripcion as descripcion',
+            'products.nombre as producto',
+            'lotes.cantidad as cantidad',
+            'almacens.nombre as almacen',
+            'lotes.estado as estado'
+        )
+        ->paginate(25);
 
         return inertia('Lotes/Papelera', compact('Lotes'));
     }
@@ -39,14 +61,14 @@ class LotesController extends Controller
         /**
      * Deshabilitar un Lote
      */
-    public function deshabilitar(Lotes $Lotes)
+    public function deshabilitar(Lotes $Lote)
     {
-        $this->authorizeLotes($Lotes);
-        $Lotes->deshabilitar();
+        $this->authorizeLotes($Lote);
+        $Lote->deshabilitar();
 
     Registro::create([
-        'codigo' => $Lotes->codigo,
-        'nombre' => $Lotes->nombre,
+        'codigo' => $Lote->codigo,
+        'nombre' => $Lote->descripcion,
         'accion' => 'Deshabilitar Lote',
         'tipo' => 'Manual',
         'usuario' => Auth::id()
@@ -57,14 +79,14 @@ class LotesController extends Controller
         /**
      * Habilitar un producto
      */
-    public function habilitar(Lotes $Lotes)
+    public function habilitar(Lotes $Lote)
     {
-        $this->authorizeLotes($Lotes);
-        $Lotes->habilitar();
+        $this->authorizeLotes($Lote);
+        $Lote->habilitar();
 
         Registro::create([
-        'codigo' => $Lotes->codigo,
-        'nombre' => $Lotes->nombre,
+        'codigo' => $Lote->codigo,
+        'nombre' => $Lote->descripcion,
         'accion' => 'Habilitar Lote',
         'tipo' => 'Manual',
         'usuario' => Auth::id()
@@ -75,14 +97,14 @@ class LotesController extends Controller
             /**
      * Eliminar un producto
      */
-    public function eliminar(Lotes $Lotes)
+    public function eliminar(Lotes $Lote)
     {
-        $this->authorizeLotes($Lotes);
-        $Lotes->eliminar();
+        $this->authorizeLotes($Lote);
+        $Lote->eliminar();
 
     Registro::create([
-        'codigo' => $Lotes->codigo,
-        'nombre' => $Lotes->nombre,
+        'codigo' => $Lote->codigo,
+        'nombre' => $Lote->descripcion,
         'accion' => 'Eliminar Lotes',
         'tipo' => 'Manual',
         'usuario' => Auth::id()
@@ -112,7 +134,7 @@ class LotesController extends Controller
         
     Registro::create([
         'codigo' => $Lotes->codigo,
-        'nombre' => $Lotes->nombre,
+        'nombre' => $Lotes->descripcion,
         'accion' => 'Crear Lote',
         'tipo' => 'Manual',
         'usuario' => Auth::id()
@@ -123,42 +145,62 @@ class LotesController extends Controller
     /**
      * Formulario para editar productos.
      */
-    public function edit(Lotes $Lotes)
+    public function edit(Lotes $Lote)
     {
-        $this->authorizeLotes($Lotes);
+        $this->authorizeLotes($Lote);
 
-        return inertia('Lotes/Edit', compact('Lotes'));
+        return inertia('Lotes/Edit', compact('Lote'));
     }
 
     /**
      * Ver producto creado por el usuario autenticado.
      */
-    public function view(Lotes $Lotes)
+    public function view(Lotes $Lote)
     {
-        $this->authorizeLotes($Lotes);
+    $this->authorizeLotes($Lote);
+    
+    $VerLote = Lotes::join('products', 'lotes.producto_id', '=', 'products.id')
+            ->join('almacens', 'lotes.almacen_id', '=', 'almacens.id')
+            ->where('lotes.id', '=', $Lote->id)
+            ->where('lotes.usuario', auth()->id())
+            ->where('lotes.habilitado', true)
+            ->where('lotes.eliminado', false)
+            ->select(
+                'lotes.codigo as codigo',
+                'lotes.descripcion as descripcion',
+                'products.nombre as producto',
+                'lotes.cantidad as cantidad',
+                'almacens.nombre as almacen',
+                'lotes.estado as estado'
+            )->first();
+
+            if (!$VerLote) {
+                return redirect()->route('lotes.index')->with('error', 'No se encontró el lote o no tienes permisos.');
+            }
+    
     Registro::create([
-        'codigo' => $Lotes->codigo,
-        'nombre' => $Lotes->nombre,
+        'codigo' => $Lote->codigo,
+        'nombre' => $Lote->descripcion,
         'accion' => 'Ver Lote',
         'tipo' => 'Manual',
         'usuario' => Auth::id()
     ]);
-        return inertia('Lotes/View', compact('Lotes'));
+        return inertia('Lotes/View', compact('VerLote'));
     }
 
     /**
      * Actualizar producto creado por el usuario autenticado.
      */
-    public function update(UpdateLoteRequest $request, Lotes $Lotes)
+    public function update(UpdateLotesRequest $request, Lotes $Lote)
     {
-        $this->authorizeLotes($Lotes);
+        $this->authorizeLotes($Lote);
 
-        $Lotes->update($request->validated());
+        $Lote->update($request->validated());
 
 
     Registro::create([
-        'codigo' => $Lotes->codigo,
-        'nombre' => $request->nombre,
+        'codigo' => $Lote->codigo,
+        'nombre' => $request->descripcion,
         'accion' => 'Editar Lote',
         'tipo' => 'Manual',
         'usuario' => Auth::id()
@@ -171,7 +213,7 @@ class LotesController extends Controller
      */
     private function authorizeLotes(Lotes $Lotes)
     {
-        if ($Lotes->usuario !== Auth::id()) {
+        if ($Lotes->usuario != Auth::id()) {
             abort(403, 'No tienes permiso para acceder a este Lote.');
         }
     }

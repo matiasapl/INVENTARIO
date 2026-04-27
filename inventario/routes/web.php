@@ -68,9 +68,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     //--------Fin Almacenes--------
 
-
-
-
     //--------Inicio Lotes--------
     //Lotes Index
     Route::get('/lotes/create', [LotesController::class, 'create'])->name('lotes.create');
