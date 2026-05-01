@@ -105,8 +105,8 @@ export default function Index({ Lotes }: { Lotes: any }) {
                                 <TableCell>{Lote.almacen}</TableCell>
                                 <TableCell>
                                     {Lote.estado == true
-                                        ? 'Activo'
-                                        : 'Inactivo'}
+                                        ? 'Disponible'
+                                        : 'Usado'}
                                 </TableCell>
                                 <TableCell className="flex-row space-x-2">
                                     <Link

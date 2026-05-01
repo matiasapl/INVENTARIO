@@ -18,8 +18,12 @@ import { useState } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
+        title: 'Almacenes',
+        href: AlmacenController.index().url,
+    },
+    {
         title: 'Editar Almacen',
-        href: '/almacen/edit',
+        href: '#',
     },
 ];
 interface Almacen {

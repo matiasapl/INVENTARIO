@@ -9,8 +9,12 @@ import { CircleCheck } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
+        title: 'Lotes',
+        href: LotesController.index().url,
+    },
+    {
         title: 'Ver Lote',
-        href: LotesController.view('').url,
+        href: '#',
     },
 ];
 
@@ -69,7 +73,7 @@ export default function View({ VerLote }: { VerLote: Lote }) {
 
                     <div className="mb-4 gap-1.5">
                         <Label htmlFor="cantidad" className="mb-1.5 block">
-                           Stock del Lote:
+                            Stock del Lote:
                         </Label>
                         <Input
                             id="cantidad"
@@ -98,7 +102,9 @@ export default function View({ VerLote }: { VerLote: Lote }) {
                         <Input
                             type="text"
                             id="Estado"
-                            value={VerLote.estado == true ? 'Activo' : 'Inactivo'}
+                            value={
+                                VerLote.estado == true ? 'Disponible' : 'Usado'
+                            }
                             disabled
                         ></Input>
                     </div>

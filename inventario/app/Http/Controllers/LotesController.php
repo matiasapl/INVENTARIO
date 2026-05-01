@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Lotes;
+use App\Models\Product;
+use App\Models\Almacen;
 use App\Http\Requests\StoreLotesRequest;
 use App\Http\Requests\UpdateLotesRequest;
 use Illuminate\Support\Facades\Auth;
@@ -116,10 +118,25 @@ public function index()
     /**
      * Formulario para crear productos.
      */
-    public function create()
-    {
-        return inertia('Lotes/Create');
-    }
+public function create()
+{
+    $products = Product::select('id', 'nombre', 'codigo')
+        ->where('usuario', auth()->id())
+        ->where('habilitado', true)
+        ->where('eliminado', false)
+        ->get();
+
+    $almacens = Almacen::select('id', 'nombre', 'codigo')
+        ->where('usuario', auth()->id())
+        ->where('habilitado', true)
+        ->where('eliminado', false)
+        ->get();
+
+    return inertia('Lotes/Create', [
+        'products' => $products,
+        'almacens' => $almacens
+    ]);
+}
 
     /**
      * Guardar un nuevo producto asociado al usuario autenticado.
@@ -145,12 +162,25 @@ public function index()
     /**
      * Formulario para editar productos.
      */
-    public function edit(Lotes $Lote)
-    {
-        $this->authorizeLotes($Lote);
+public function edit(Lotes $Lote)
+{
+    $this->authorizeLotes($Lote);
 
-        return inertia('Lotes/Edit', compact('Lote'));
-    }
+    $products = Product::select('id', 'nombre', 'codigo')
+        ->where('usuario', auth()->id())
+        ->where('habilitado', true)
+        ->where('eliminado', false)
+        ->get();
+
+    $almacens = Almacen::select('id', 'nombre', 'codigo')
+        ->where('usuario', auth()->id())
+        ->where('habilitado', true)
+        ->where('eliminado', false)
+        ->get();
+
+    // IMPORTANTE: Añadir las variables al compact
+    return inertia('Lotes/Edit', compact('Lote', 'products', 'almacens'));
+}
 
     /**
      * Ver producto creado por el usuario autenticado.

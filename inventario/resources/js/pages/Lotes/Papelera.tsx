@@ -27,8 +27,12 @@ interface Lote {
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Papelera de Lotes',
-        href: LotesController.papelera().url,
+        title: 'Lotes',
+        href: LotesController.index().url,
+    },
+    {
+        title: 'Papelera',
+        href: '#',
     },
 ];
 

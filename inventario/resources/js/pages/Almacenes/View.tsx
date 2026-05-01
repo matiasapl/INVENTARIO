@@ -10,8 +10,12 @@ import { CircleCheck } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
+        title: 'Almacenes',
+        href: AlmacenController.index().url,
+    },
+    {
         title: 'Ver Almacen',
-        href: AlmacenController.view('').url,
+        href: '#',
     },
 ];
 

@@ -34,7 +34,7 @@ interface Product {
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Ver Productos',
+        title: 'Productos',
         href: ProductController.index().url,
     },
 ];

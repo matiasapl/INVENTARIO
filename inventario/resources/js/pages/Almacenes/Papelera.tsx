@@ -25,8 +25,12 @@ interface Almacen {
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
+        title: 'Almacenes',
+        href: AlmacenController.index().url,
+    },
+    {
         title: 'Papelera de Almacenes',
-        href: AlmacenController.papelera().url,
+        href: '#',
     },
 ];
 

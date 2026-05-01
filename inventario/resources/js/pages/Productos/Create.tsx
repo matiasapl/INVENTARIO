@@ -10,8 +10,12 @@ import { CircleCheck, CircleX } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
+        title: 'Productos',
+        href: ProductController.index().url,
+    },
+    {
         title: 'Crear Producto',
-        href: ProductController.create().url,
+        href: '#',
     },
 ];
 

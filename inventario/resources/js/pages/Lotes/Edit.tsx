@@ -17,10 +17,15 @@ import { useState } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
+        title: 'Lotes',
+        href: LotesController.index().url,
+    },
+    {
         title: 'Editar Lote',
-        href: '/lotes/edit',
+        href: '#',
     },
 ];
+
 interface Lote {
     id: number;
     codigo: string;
@@ -31,7 +36,21 @@ interface Lote {
     estado: boolean;
 }
 
-export default function Edit({ Lote }: { Lote: Lote }) {
+interface Item {
+    id: number;
+    nombre: string;
+    codigo: string;
+}
+
+export default function Edit({
+    Lote,
+    products,
+    almacens,
+}: {
+    Lote: Lote;
+    products: Item[];
+    almacens: Item[];
+}) {
     const [showModal, setShowModal] = useState(false);
 
     const { data, setData, put, processing, errors } = useForm({
@@ -52,11 +71,18 @@ export default function Edit({ Lote }: { Lote: Lote }) {
         put(LotesController.update(Lote.id).url);
     };
 
+    // Funciones para obtener el nombre a mostrar en el input deshabilitado
+    const getProductName = (id: number) =>
+        products.find((p) => p.id === id)?.nombre || 'Selecciona Producto';
+    const getAlmacenName = (id: number) =>
+        almacens.find((a) => a.id === id)?.nombre || 'Selecciona Almacen';
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Editar Lote" />
             <div className="w-8/12 p-4">
                 <form method="post" onSubmit={preUpdate}>
+                    {/* Descripcion */}
                     <div className="mb-4 gap-1.5">
                         <Label htmlFor="Descripcion" className="mb-1.5 block">
                             Descripcion de Lote:
@@ -70,7 +96,7 @@ export default function Edit({ Lote }: { Lote: Lote }) {
                             onChange={(e) =>
                                 setData('descripcion', e.target.value)
                             }
-                        ></Input>
+                        />
                         {errors.descripcion && (
                             <div className="mt-1 flex items-center text-sm text-red-500">
                                 {errors.descripcion}
@@ -78,37 +104,35 @@ export default function Edit({ Lote }: { Lote: Lote }) {
                         )}
                     </div>
 
+                    {/* Producto Dinámico */}
                     <div className="mb-4 gap-1.5">
                         <Label htmlFor="Producto" className="mb-1.5 block">
                             Producto:
                         </Label>
                         <DropdownMenu>
-                            <DropdownMenuTrigger>
+                            <DropdownMenuTrigger className="w-full">
                                 <Input
                                     id="Producto"
                                     placeholder="CLICK AQUI !!!"
-                                    value={data.producto_id}
+                                    value={getProductName(data.producto_id)}
                                     disabled={true}
+                                    className="cursor-pointer"
                                 />
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent>
+                            <DropdownMenuContent className="w-[var(--radix-dropdown-menu-trigger-width)]">
                                 <DropdownMenuLabel>
                                     Seleccion Producto
                                 </DropdownMenuLabel>
-                                <DropdownMenuItem
-                                    onClick={() => {
-                                        setData('producto_id', 1);
-                                    }}
-                                >
-                                    Primer Producto
-                                </DropdownMenuItem>
-                                <DropdownMenuItem
-                                    onClick={() => {
-                                        setData('producto_id', 2);
-                                    }}
-                                >
-                                    Segundo Producto
-                                </DropdownMenuItem>
+                                {products.map((p) => (
+                                    <DropdownMenuItem
+                                        key={p.id}
+                                        onClick={() =>
+                                            setData('producto_id', p.id)
+                                        }
+                                    >
+                                        {p.nombre}
+                                    </DropdownMenuItem>
+                                ))}
                             </DropdownMenuContent>
                         </DropdownMenu>
                         {errors.producto_id && (
@@ -118,6 +142,7 @@ export default function Edit({ Lote }: { Lote: Lote }) {
                         )}
                     </div>
 
+                    {/* Cantidad */}
                     <div className="mb-4 gap-1.5">
                         <Label htmlFor="Cantidad" className="mb-1.5 block">
                             Stock de Producto:
@@ -129,7 +154,7 @@ export default function Edit({ Lote }: { Lote: Lote }) {
                             onChange={(e) =>
                                 setData('cantidad', e.target.value)
                             }
-                        ></Input>
+                        />
                         {errors.cantidad && (
                             <div className="mt-1 flex items-center text-sm text-red-500">
                                 {errors.cantidad}
@@ -137,37 +162,35 @@ export default function Edit({ Lote }: { Lote: Lote }) {
                         )}
                     </div>
 
+                    {/* Almacen Dinámico */}
                     <div className="mb-4 gap-1.5">
                         <Label htmlFor="Almacen" className="mb-1.5 block">
                             Almacen:
                         </Label>
                         <DropdownMenu>
-                            <DropdownMenuTrigger>
+                            <DropdownMenuTrigger className="w-full">
                                 <Input
                                     id="Almacen"
                                     placeholder="CLICK AQUI !!!"
-                                    value={data.almacen_id}
+                                    value={getAlmacenName(data.almacen_id)}
                                     disabled={true}
+                                    className="cursor-pointer"
                                 />
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent>
+                            <DropdownMenuContent className="w-[var(--radix-dropdown-menu-trigger-width)]">
                                 <DropdownMenuLabel>
                                     Seleccion Almacen
                                 </DropdownMenuLabel>
-                                <DropdownMenuItem
-                                    onClick={() => {
-                                        setData('almacen_id', 1);
-                                    }}
-                                >
-                                    Primer Almacen
-                                </DropdownMenuItem>
-                                <DropdownMenuItem
-                                    onClick={() => {
-                                        setData('almacen_id', 2);
-                                    }}
-                                >
-                                    Calcetines Largos
-                                </DropdownMenuItem>
+                                {almacens.map((a) => (
+                                    <DropdownMenuItem
+                                        key={a.id}
+                                        onClick={() =>
+                                            setData('almacen_id', a.id)
+                                        }
+                                    >
+                                        {a.nombre}
+                                    </DropdownMenuItem>
+                                ))}
                             </DropdownMenuContent>
                         </DropdownMenu>
                         {errors.almacen_id && (
@@ -177,57 +200,47 @@ export default function Edit({ Lote }: { Lote: Lote }) {
                         )}
                     </div>
 
+                    {/* Estado */}
                     <div className="mb-4 gap-1.5">
                         <Label htmlFor="Estado" className="mb-1.5 block">
                             Estado:
                         </Label>
                         <DropdownMenu>
-                            <DropdownMenuTrigger>
+                            <DropdownMenuTrigger className="w-full">
                                 <Input
                                     id="Estado"
                                     placeholder="CLICK AQUI !!!"
-                                    value={
-                                        data.estado == true
-                                            ? 'Activo'
-                                            : 'Inactivo'
-                                    }
+                                    value={data.estado ? 'Disponible' : 'Usado'}
                                     disabled={true}
+                                    className="cursor-pointer"
                                 />
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent>
+                            <DropdownMenuContent className="w-[var(--radix-dropdown-menu-trigger-width)]">
                                 <DropdownMenuLabel>
                                     Seleccion Estado
                                 </DropdownMenuLabel>
                                 <DropdownMenuItem
-                                    onClick={() => {
-                                        setData('estado', true);
-                                    }}
+                                    onClick={() => setData('estado', true)}
                                 >
-                                    Activo
+                                    Disponible
                                 </DropdownMenuItem>
                                 <DropdownMenuItem
-                                    onClick={() => {
-                                        setData('estado', false);
-                                    }}
+                                    onClick={() => setData('estado', false)}
                                 >
-                                    Inactivo
+                                    Usado
                                 </DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>
-                        {errors.estado && (
-                            <div className="mt-1 flex items-center text-sm text-red-500">
-                                {errors.estado}
-                            </div>
-                        )}
                     </div>
 
-                    <div className="flex-row space-x-2">
+                    {/* Botones */}
+                    <div className="flex flex-row space-x-2">
                         <Button
                             className="mb-4 bg-yellow-500 hover:bg-yellow-700"
                             type="submit"
                             disabled={processing}
                         >
-                            <CircleCheck /> Editar Almacen
+                            <CircleCheck className="mr-2 h-4 w-4" /> Editar Lote
                         </Button>
 
                         <Link href={LotesController.index().url}>
@@ -235,17 +248,17 @@ export default function Edit({ Lote }: { Lote: Lote }) {
                                 className="mb-4 bg-green-500 hover:bg-green-700"
                                 type="button"
                             >
-                                <CircleX /> Cancelar
+                                <CircleX className="mr-2 h-4 w-4" /> Cancelar
                             </Button>
                         </Link>
                     </div>
                 </form>
             </div>
 
+            {/* Modal Manual MVP */}
             {showModal && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
                     <div className="relative w-full max-w-sm rounded-lg bg-white p-6 shadow-lg dark:bg-slate-900">
-                        {/* Botón X de cierre */}
                         <button
                             onClick={() => setShowModal(false)}
                             className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
@@ -262,14 +275,15 @@ export default function Edit({ Lote }: { Lote: Lote }) {
                                     variant="outline"
                                     onClick={() => setShowModal(false)}
                                 >
-                                    <CircleX /> Cancelar
+                                    <CircleX className="mr-2 h-4 w-4" />
+                                    Cancelar
                                 </Button>
                                 <Button
                                     className="bg-green-600 hover:bg-green-700"
                                     onClick={confirmUpdate}
                                 >
-                                    <CircleCheck />
-                                    Sí, confirmo
+                                    <CircleCheck className="mr-2 h-4 w-4" /> Sí,
+                                    confirmo
                                 </Button>
                             </div>
                         </div>
