@@ -74,6 +74,18 @@ export default function Index({ Lotes }: { Lotes: any }) {
                     </Button>
                 </Link>
             </nav>
+
+            <div className="pagination mx-4 flex justify-center gap-2">
+                {Lotes.links.map((link: any, index: number) => (
+                    <a
+                        key={index}
+                        href={link.url || '#'}
+                        className={`rounded border px-3 py-1 ${link.active ? 'bg-blue-500 text-white' : ''}`}
+                        dangerouslySetInnerHTML={{ __html: link.label }}
+                    />
+                ))}
+            </div>
+
             <Table>
                 <TableCaption>Lotes</TableCaption>
                 <TableHeader>
