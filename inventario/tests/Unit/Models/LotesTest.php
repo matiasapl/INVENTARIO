@@ -113,7 +113,7 @@ it('must have a description', function () {
 it('must have quantity greater than zero', function () {
     $lote = Lotes::factory()->create();
 
-    expect($lote->cantidad)->toBeInteger()
+    expect($lote->cantidad)->toBeInt()
         ->and($lote->cantidad)->toBeGreaterThan(0);
 });
 
