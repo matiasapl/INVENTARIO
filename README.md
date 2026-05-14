@@ -149,11 +149,75 @@ Inventario/
 
 ## 🧪 Tests
 
-Ejecutar la suite de tests:
+El proyecto sigue estándares **TDD (Test Driven Development)** y **SDD (Specification Driven Development)** con documentación viva en los tests.
+
+### Ejecutar Tests
 
 ```bash
+# Ejecutar todos los tests
 composer run test
+
+# Ejecutar tests unitarios
+composer run test:unit
+
+# Ejecutar tests de características
+composer run test:feature
+
+# Ejecutar tests con reporte de cobertura
+composer run test:coverage
+
+# Analizar código con PHPStan
+composer run analyse
+
+# Formatear código con Laravel Pint
+composer run format
 ```
+
+### Estructura de Tests
+
+```
+tests/
+├── Unit/                    # Tests unitarios
+│   ├── Models/             # Tests para modelos
+│   ├── Actions/            # Tests para lógica de negocio
+│   └── Policies/           # Tests para políticas
+├── Feature/                # Tests de características
+│   ├── Http/              # Tests para controladores y requests
+│   ├── Auth/              # Tests para autenticación
+│   └── Settings/          # Tests para configuración
+└── Concerns/              # Traits reutilizables para tests
+```
+
+### Cobertura de Tests
+
+Los tests generan reportes de cobertura en:
+
+- `coverage.xml` - Formato Clover para CI/CD
+- `coverage-report/` - Reporte HTML interactivo
+
+### Especificaciones en Tests
+
+Cada test incluye documentación viva con:
+
+- `@spec` - Especificación del comportamiento esperado
+- `@audit` - Notas de auditoría y decisiones técnicas
+
+Ejemplo:
+
+```php
+/**
+ * @test
+ * @spec "Un producto puede ser deshababilitado pero no eliminado permanentemente"
+ * @audit "Requerimiento: Los productos deben mantenerse para auditoría"
+ */
+it('can disable a product but not permanently delete it', function () {
+    // ...
+});
+```
+
+### Base de Datos de Testing
+
+Los tests utilizan una base de datos **MariaDB separada** (`u191434997_Inventario_test`) para no interferir con datos de producción. El trait `RefreshDatabase` limpia la BD después de cada test automáticamente.
 
 ## 🔒 Seguridad
 

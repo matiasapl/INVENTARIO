@@ -1,0 +1,65 @@
+# PHPStan Configuration
+# Nivel 5: Balance entre strictness y pragmatismo
+# https://phpstan.org/user-guide/rule-levels
+
+parameters:
+    level: 5
+    
+    # Directorios a analizar
+    paths:
+        - app
+        - database/factories
+        - database/seeders
+        - tests
+        
+    # Exclusiones
+    excludePaths:
+        - app/Http/Middleware
+        - app/Exceptions
+        - bootstrap
+        - config
+        - public
+        - resources
+        - routes
+        - storage
+        - vendor
+        
+    # Tipos de archivos a incluir
+    fileExtensions:
+        - php
+        
+    # Ignorar errores específicos (solo si es absolutamente necesario)
+    ignoreErrors:
+        # Ignorar errores en archivos generados automáticamente
+        -
+            path: app/Http/Requests
+            message: '#Method.*should return.*but returns#'
+        # Ignorar errores en factories que usan atributos dinámicos
+        -
+            path: database/factories
+            message: '#Unsafe usage of new static\(\)#'
+            
+    # Reportar errores de tipo mixed
+    reportMaybesInMethodSignatures: true
+    
+    # Verificar que todos los tipos sean correctos
+    checkGenericClassInNonGenericObjectType: true
+    
+    # Verificar reglas deprecadas
+    checkDeprecatedParameters: true
+    
+    # Verificar que los métodos existan
+    checkMethodCalledOnUnknownType: true
+    
+    # Verificar propiedades accedidas
+    checkPropertiesAccess: true
+    
+    # Verificar que los tipos de retorno sean correctos
+    checkUnionTypes: true
+    
+    # Memoizar resultados para mejor performance
+    resultCachePath: phpstan-result.php
+
+# Extensiones de Laravel (si están disponibles)
+includes:
+    - vendor/phpstan/extension-installer/extensions.neon
