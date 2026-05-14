@@ -18,7 +18,7 @@ Sistema de gestión de inventario desarrollado con **Laravel 12** y **React 19**
 - **Laravel 12** - Framework PHP 8.2+
 - **Laravel Fortify** - Autenticación y seguridad
 - **Inertia.js** - Puente entre Laravel y React
-- **SQLite** - Base de datos (configurable)
+- **MariaDB** - Base de datos relacional
 
 ### Frontend
 
@@ -35,7 +35,7 @@ Sistema de gestión de inventario desarrollado con **Laravel 12** y **React 19**
 - PHP 8.2 o superior
 - Composer
 - Node.js 18+ y npm
-- SQLite (u otro motor de base de datos compatible con Laravel)
+- **MariaDB** (requerido - el proyecto utiliza la función UUID() nativa de MariaDB)
 
 ## 🔧 Instalación
 
@@ -61,9 +61,26 @@ php artisan key:generate
 
 4. **Configurar la base de datos**
 
+   a. Crea una base de datos en tu servidor MariaDB:
+
+```sql
+CREATE DATABASE inventario CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+```
+
+b. Edita el archivo `.env` con tus credenciales de MariaDB:
+
+```env
+DB_CONNECTION=mariadb
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=inventario
+DB_USERNAME=tu_usuario
+DB_PASSWORD=tu_contraseña
+```
+
+c. Ejecuta las migraciones:
+
 ```bash
-# Por defecto usa SQLite
-touch database/database.sqlite
 php artisan migrate
 ```
 
