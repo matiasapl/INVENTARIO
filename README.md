@@ -219,6 +219,58 @@ it('can disable a product but not permanently delete it', function () {
 
 Los tests utilizan una base de datos **MariaDB separada** (`u191434997_Inventario_test`) para no interferir con datos de producción. El trait `RefreshDatabase` limpia la BD después de cada test automáticamente.
 
+## 🔄 CI/CD (Integración y Entrega Continua)
+
+El proyecto cuenta con **GitHub Actions** para automatizar la calidad del código en cada push o pull request.
+
+### Flujos Automatizados
+
+```yaml
+# .github/workflows/tests.yml
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+```
+
+### Pasos del Pipeline
+
+1. **Tests con Cobertura** - Ejecuta todos los tests y genera reporte de cobertura
+2. **Análisis Estático** - PHPStan nivel 5 para detectar errores de tipo
+3. **Code Style** - Laravel Pint para verificar formato de código
+4. **Seguridad** - Escaneo de dependencias vulnerables
+5. **Reporte** - Sube resultados como artifacts
+
+### Comandos Locales Equivalentes
+
+```bash
+# Ejecutar todo el pipeline localmente
+composer run test:coverage    # Tests con cobertura
+composer run analyse          # PHPStan
+composer run format           # Laravel Pint (format)
+```
+
+### Configuración de Cobertura
+
+- **Mínimo requerido**: 80% de cobertura
+- **Reportes**:
+  - `coverage.xml` - Formato Clover para CI
+  - `coverage-report/` - HTML interactivo local
+
+## 📊 Métricas de Calidad
+
+| Métrica                      | Estado | Detalle                     |
+| ---------------------------- | ------ | --------------------------- |
+| **Tests Unitarios**          | ✅     | 39 tests (Modelos)          |
+| **Tests de Integración**     | ✅     | 66 tests (Controladores)    |
+| **Tests de Características** | ✅     | 15 tests (Flujos completos) |
+| **Total Tests**              | ✅     | ~120 tests                  |
+| **Análisis Estático**        | ✅     | PHPStan nivel 5             |
+| **Code Style**               | ✅     | Laravel Pint                |
+| **CI/CD**                    | ✅     | GitHub Actions              |
+| **Cobertura**                | 🎯     | Objetivo 80%+               |
+
 ## 🔒 Seguridad
 
 - Eliminación lógica de registros (soft delete)
