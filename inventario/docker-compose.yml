@@ -1,0 +1,38 @@
+services:
+  apache:
+    build: .
+    ports:
+      - '8000:80'
+      - '443:443'
+    restart: always
+    links:
+      - mariadb
+      - phpmyadmin
+    volumes:
+      - .:/var/www/html
+    container_name: inventario-apache
+
+  mariadb:
+    image: mariadb:10.11
+    ports:
+      - '3307:3306'
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=admin
+      - MYSQL_DATABASE=inventario-dev
+    volumes:
+      - db_data:/var/lib/mariadb
+    container_name: inventario-mariadb
+
+  phpmyadmin:
+    image: phpmyadmin:5.2.2-apache
+    ports:
+      - '8081:80'
+    restart: always
+    environment:
+      - PMA_HOST=mariadb
+      - PMA_PORT=3306
+    container_name: inventario-phpmyadmin
+
+volumes:
+  db_data:
