@@ -1,135 +1,90 @@
 # Guía para agentes — INVENTARIO
 
-## 1. Propósito y límites
+## 1. Función y documentos relacionados
 
-INVENTARIO es una aplicación multiusuario de gestión de inventario. Cada usuario puede consultar y modificar únicamente la información que le pertenece.
+Este archivo define cómo trabajar en el proyecto. Antes de modificarlo, leer `CONSTITUTION.md`, este archivo y `MEMORY.md`.
 
-Este archivo define el flujo general de trabajo de los agentes. No autoriza a:
+- `CONSTITUTION.md`: propósito, principios y reglas duraderas del dominio.
+- `AGENTS.md`: procedimientos, seguridad de ejecución y verificaciones.
+- `MEMORY.md`: contexto técnico verificado, brechas conocidas y decisiones pendientes.
+- Especificaciones: resultado y criterios de aceptación de cada cambio no trivial.
 
-- modificar el alcance o las reglas de negocio sin confirmación;
-- acceder a producción, usar credenciales reales o desplegar;
-- hacer merge de un Pull Request (PR);
-- sobrescribir cambios existentes del usuario;
-- ejecutar acciones destructivas o migraciones contra una base no aislada.
+La prioridad normativa y la distinción entre requisitos y estado actual están en la constitución. No interpretar una brecha registrada en memoria como autorización para corregirla fuera de la tarea.
 
-Trabaja solo en la tarea solicitada. **Ante cualquier inconsistencia entre la solicitud, una especificación, el código, las pruebas o la documentación, detente y consulta al usuario.** No resuelvas contradicciones por intuición ni inventes reglas.
+## 2. Alcance y autonomía
 
-## 2. Proyecto y tecnologías
+Trabajar en la tarea solicitada y realizar el cambio mínimo suficiente. Reutilizar herramientas y convenciones existentes antes de introducir dependencias, abstracciones o cambios de arquitectura.
 
-- Backend: PHP 8.2+, Laravel 12, Eloquent, Fortify y Pest/PHPUnit.
-- Frontend: React 19, TypeScript, Inertia.js, Vite y Tailwind CSS.
-- Base de datos: MariaDB.
-- Directorio de aplicación: `inventario/`.
-- Rutas principales: `inventario/routes/`.
-- Código backend: `inventario/app/`.
-- Frontend: `inventario/resources/js/`.
-- Migraciones y datos de prueba: `inventario/database/`.
-- Pruebas: `inventario/tests/`.
+Resolver con evidencia las diferencias cuyo resultado esperado ya esté definido por la solicitud o una especificación aprobada. Una prueba desactualizada o un incumplimiento conocido del código no obliga por sí solo a detener todo el trabajo.
 
-Antes de cambiar archivos, inspecciona la estructura y convenciones actuales. No supongas que una funcionalidad está implementada porque exista una policy, pantalla, migración o prueba aislada: verifica el flujo completo.
+Consultar cuando falte una decisión de negocio, existan instrucciones incompatibles o la solución requiera ampliar el alcance. Continuar las partes independientes mientras se aclara lo afectado. No inventar reglas ni corregir problemas ajenos a la tarea.
 
-## 3. Dominio y reglas confirmadas
+Una solicitud de cambio no autoriza por sí sola acceso a producción, uso de credenciales reales, merge, despliegue, acciones destructivas o migraciones sobre bases no aisladas. Esas acciones requieren autorización específica y las comprobaciones de seguridad correspondientes.
 
-### Usuarios y propiedad de datos
+## 3. Inspección y protección del trabajo existente
 
-- No hay roles ni administradores globales actualmente.
-- Cada usuario solo puede ver y modificar sus propios productos, almacenes, lotes y registros.
-- No confíes en IDs enviados por el cliente: valida la propiedad en servidor para el recurso solicitado y para todas sus relaciones.
-- Mantén el diseño razonablemente extensible a un futuro SaaS freemium, pero no implementes cuentas, planes, roles o multi-tenancy adicional sin una especificación y aprobación.
+1. Leer la solicitud y los documentos aplicables; inspeccionar código, configuración y pruebas pertinentes.
+2. Antes de editar, revisar estado y diff de Git. Tratar los cambios ajenos como trabajo del usuario y revisar el diff de cada archivo ya modificado.
+3. No sobrescribir, revertir, reformatear ni limpiar cambios ajenos. Si no es posible aislar una edición, explicar el conflicto antes de modificar ese fragmento.
+4. No editar dependencias instaladas ni salidas generadas manualmente. Si una herramienta genera archivos, revisar que sean pertinentes y reportarlos.
+5. Verificar el flujo completo: una policy, pantalla, migración o prueba aislada no demuestra que una funcionalidad esté implementada.
 
-### Productos y almacenes
+Las consultas de lectura y auditorías documentales no necesitan ramas, PR ni comprobaciones operativas ajenas al objetivo.
 
-- Productos y almacenes pertenecen a un usuario.
-- `habilitado` determina si están en uso normal o en papelera.
-- `eliminado` representa soft delete. Los registros eliminados no deben aparecer en las vistas normales ni en la papelera; no realices borrado físico salvo que una especificación lo solicite y el usuario lo apruebe.
-- `estado` indica si un producto o almacén puede usarse al asociarlo a un lote.
-- No se puede deshabilitar ni eliminar un producto o almacén mientras exista un lote que lo use.
-- Solo se pueden asignar a lotes productos y almacenes habilitados para uso.
+## 4. Especificación proporcional
 
-### Lotes
+Para cambios no triviales, definir antes de implementar: objetivo, alcance, criterios de aceptación, riesgos y verificación. No se requiere instalar herramientas SDD.
 
-- Un lote representa unidades físicas de un producto ubicadas en un almacén. Por ejemplo, 10 paquetes de un producto en una caja o estantería.
-- Cada lote debe referenciar un producto y un almacén del mismo usuario.
-- `estado` indica disponibilidad/consumo: disponible o consumido/vendido.
-- La transición entre disponible y consumido es reversible.
-- No permitas cantidades negativas ni relaciones con recursos ajenos.
+Cuando convenga conservar una especificación, usar `specs/<nombre-descriptivo>/` en la raíz del repositorio:
 
-### Registro de actividad / auditoría
+- `SPEC.md`: comportamiento esperado, límites, decisiones pendientes y criterios de aceptación.
+- `PLAN.md`: enfoque, archivos afectados, riesgos y verificaciones.
+- `TASKS.md`: tareas comprobables y su progreso.
 
-- Toda operación iniciada por una persona que modifique la base de datos debe quedar auditada.
-- Cada modificación debe registrar el estado anterior y el estado nuevo, vinculados a la misma operación y en ese orden.
-- Los registros deben identificar al actor, la entidad afectada, la acción y la fecha. No guardes contraseñas, tokens ni otros secretos.
-- Mantén el cambio de negocio y sus entradas de auditoría atómicos cuando sea posible: si una parte falla, no debe quedar una modificación sin auditar.
-- Los registros de auditoría no deben modificarse silenciosamente ni borrarse en cascada sin una decisión de negocio explícita.
-- El modelo actual `Registro` no contiene todavía snapshots anterior/nuevo ni un identificador de operación. No asumas que el requisito ya está cubierto: propone el cambio de esquema y pruebas cuando la tarea lo requiera.
+Este es el convenio para nuevas especificaciones; no implica que ya existan. Los ajustes pequeños pueden describirse en la conversación. No modificar criterios aprobados para hacer coincidir una implementación defectuosa.
 
-### Autenticación
+## 5. Implementación y entrega
 
-- El registro de usuarios permanece abierto.
-- La verificación de correo y el segundo factor son opcionales.
-- No los conviertas en requisitos obligatorios sin una especificación y aprobación.
+1. Resumir el alcance y cómo se comprobará el resultado.
+2. Para cambios de código, usar una rama de trabajo desde la base acordada o continuar una rama existente destinada a la misma tarea. No mezclar tareas independientes ni modificar la rama principal salvo instrucción explícita.
+3. Para reglas de negocio, permisos y regresiones, aplicar TDD pragmático: prueba focalizada, fallo por el motivo esperado, cambio mínimo y comprobación posterior. Si el entorno impide ejecutar la prueba, comunicarlo sin afirmar que se completó el ciclo.
+4. Para texto, documentación o presentación trivial, usar comprobaciones proporcionales; no crear pruebas artificiales.
+5. Revisar el diff final, los riesgos de autorización, los secretos y las migraciones incompatibles.
+6. Preparar un PR cuando la entrega acordada incluya publicación y exista acceso. Si se pidió una entrega local o publicar no es posible, entregar el cambio revisable e indicar lo pendiente; no afirmar que existe un PR.
+7. Informar qué cambió, qué se comprobó y qué limitaciones quedan. No hacer merge ni desplegar sin autorización específica.
 
-## 4. Especificaciones y fuentes de verdad
+## 6. Seguridad de ejecución
 
-En el futuro, cada especificación vivirá en su propia carpeta, nombrada según la spec, e incluirá:
-
-- `SPEC.md`: comportamiento y criterios de aceptación;
-- `PLAN.md`: planificación;
-- `TASKS.md`: lista verificable de tareas cuyo progreso puede actualizar el agente.
-
-La especificación y el código son fuentes de verdad. Si se contradicen, si una regla no está clara o si las pruebas/documentación señalan otra conducta, **detente y consulta al usuario**. No elijas una fuente sobre otra ni marques una tarea como terminada hasta resolver la inconsistencia.
-
-## 5. Flujo de trabajo por tarea
-
-1. **Entender:** leer la solicitud, la spec aplicable, el código y las pruebas relacionadas. Revisar `git status` y preservar cambios preexistentes.
-2. **Planificar:** resumir alcance, archivos probables, riesgos y pruebas. Dividir trabajo por módulos solo si los contratos entre módulos están claros.
-3. **Rama:** trabajar en una rama nueva por modificación, creada desde la rama base acordada. No trabajar directamente sobre la rama principal. No mezclar tareas independientes en una misma rama.
-4. **TDD pragmático:** para reglas de negocio, permisos y regresiones:
-   - escribir primero una prueba pequeña que exprese el comportamiento;
-   - ejecutar esa prueba y comprobar que falla por el motivo esperado;
-   - implementar el cambio mínimo;
-   - ejecutar la prueba y comprobar que pasa;
-   - refactorizar sin cambiar el comportamiento y volver a probar.
-
-   Para cambios triviales de texto o presentación, usa criterio proporcional; no crees pruebas artificiales que no aporten protección.
-5. **Verificar:** ejecutar las pruebas focalizadas y las verificaciones relevantes para los archivos modificados. Reportar exactamente qué se ejecutó y qué no.
-6. **Revisar:** inspeccionar el diff completo, buscar secretos, cambios fuera de alcance, riesgos de autorización y migraciones incompatibles.
-7. **Entregar:** preparar un PR para revisión humana, con resumen, motivo, pruebas/resultados, riesgos y decisiones pendientes. No hacer merge ni despliegue.
-
-## 6. Seguridad de datos y ejecución de pruebas
-
-- Nunca muestres, copies, incluyas en logs ni envíes a herramientas externas credenciales, datos personales o secretos.
-- No ejecutes pruebas, migraciones, seeders ni comandos de limpieza hasta confirmar que apuntan a una base local/efímera y aislada.
-- La configuración actual de PHPUnit debe inspeccionarse antes de ejecutar pruebas, porque podría apuntar a una base externa.
-- No uses datos de producción. Usa factories y datos sintéticos.
-- No ejecutes comandos destructivos o que alteren historial compartido sin autorización explícita.
-- Toda autorización debe verificarse en el backend; ocultar botones en frontend no es un control de acceso.
-- Las solicitudes `GET` deben ser de solo lectura y no modificar el estado del servidor.
-- Para operaciones que cambian datos, utiliza el método HTTP que corresponda (`POST`, `PATCH`, `PUT` o `DELETE`) y aplica autenticación, autorización y protección CSRF donde corresponda.
+- No mostrar, copiar a documentación, registrar en logs ni enviar a servicios externos credenciales, datos personales o secretos. Al inspeccionar configuración sensible, extraer solo metadatos necesarios y ocultar valores.
+- Antes de ejecutar pruebas que accedan a datos, migraciones, seeders o limpieza, demostrar que la conexión efectiva apunta a una base local o efímera y aislada. Revisar configuración de pruebas, variables de entorno y caché de configuración aplicables, sin divulgar secretos.
+- Un host local o un nombre terminado en `test` no demuestra aislamiento. Si no puede establecerse, no ejecutar esas operaciones y comunicar la limitación.
+- Usar factories y datos sintéticos. No usar datos de producción.
+- No ejecutar acciones destructivas ni alterar historial compartido sin autorización explícita.
+- Revisar los scripts antes de ejecutarlos: una verificación puede reformatear archivos, limpiar cachés o generar artefactos.
 
 ## 7. Verificaciones
 
-Adapta los comandos al entorno disponible y al cambio. No afirmes que una verificación pasó si no se ejecutó.
+Ejecutar desde `inventario/`, adaptando el comando al entorno y al alcance:
 
-Comandos disponibles en el proyecto incluyen:
+| Comprobación | Comando | Condiciones |
+| --- | --- | --- |
+| Backend | `php artisan test` | Confirmar aislamiento; preferir primero pruebas focalizadas. |
+| Análisis PHP | `composer run analyse` | Revisar el script y sus efectos auxiliares. |
+| Estilo PHP | `vendor/bin/pint --test` | Comprobar sin reformatear. |
+| Tipos frontend | `npm run types` | Comprobar contratos TypeScript. |
+| Formato frontend | `npm run format:check` | Comprobar sin reformatear. |
+| Build frontend | `npm run build` | Puede generar artefactos; revisar efectos. |
 
-- Backend: `cd inventario && php artisan test`
-- PHPStan: `cd inventario && composer run analyse`
-- Estilo PHP sin modificar archivos: `cd inventario && vendor/bin/pint --test`
-- Tipos TypeScript: `cd inventario && npm run types`
-- Formato frontend sin modificar archivos: `cd inventario && npm run format:check`
-- Build frontend: `cd inventario && npm run build`
+Para lint, comprobar primero el script. No usar una variante con corrección automática como si fuera de solo lectura; elegir el modo de comprobación de la herramienta instalada cuando corresponda.
 
-Antes de ejecutar pruebas, confirma el aislamiento de la base. Evita `npm run lint` si no se ha confirmado su comportamiento: actualmente el script incluye `--fix` y puede modificar archivos.
+Para permisos y relaciones, comprobar tanto el recurso solicitado como sus referencias. Para cambios visuales, revisar navegación, adaptación de pantalla y accesibilidad básica cuando corresponda.
 
-## 8. Criterios de terminado
+Si una comprobación falla, determinar con evidencia si el problema fue introducido o era preexistente. Corregir los errores propios sin ampliar el alcance para resolver los ajenos. Si el origen es incierto, decirlo. No declarar exitosa una comprobación fallida, omitida o no ejecutable.
 
-Una tarea está lista para revisión cuando:
+## 8. Criterios de entrega y mantenimiento documental
 
-- cumple la spec y los criterios de aceptación;
-- respeta el aislamiento entre usuarios y las reglas del dominio;
-- incluye pruebas proporcionadas al riesgo, especialmente para permisos y transiciones de estado;
-- las verificaciones relevantes se ejecutaron y sus resultados están anotados;
-- el diff no contiene secretos, artefactos ni cambios ajenos;
-- cualquier migración, limitación o riesgo queda explicado en el PR;
-- existe una rama de trabajo y un PR pendiente de aprobación humana.
+Una modificación está lista para revisión cuando cumple los criterios acordados, preserva cambios ajenos, incluye validación proporcional y explica riesgos, migraciones y limitaciones. No declarar terminada una funcionalidad con criterios pendientes; distinguir cambio entregado de verificación pendiente.
+
+Actualizar `MEMORY.md` solo con contexto duradero y verificado. Mantenerlo compacto, sustituir información obsoleta y diferenciar estado actual, brechas y decisiones pendientes. No guardar secretos, un historial de tareas ni copias de las reglas de estos documentos.
+
+Cambiar la constitución solo cuando la tarea autorice la modificación de sus principios o reglas. Mantener alineadas las referencias entre documentos.
