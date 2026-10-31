@@ -20,8 +20,7 @@ use Tests\TestCase;
 pest()
     ->extend(TestCase::class)
     ->use(RefreshDatabase::class)
-    ->in('Feature')
-    ->in('Unit');
+    ->in('Feature', 'Unit');
 
 /*
 |--------------------------------------------------------------------------
@@ -35,7 +34,7 @@ pest()
 
 expect()->extend('toBeValidUuid', function () {
     return $this->toBeString()
-        ->and(preg_match('/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i', $this->value))->toBeTrue();
+        ->and(preg_match('/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i', $this->value) === 1)->toBeTrue();
 });
 
 expect()->extend('toBeActiveProduct', function () {

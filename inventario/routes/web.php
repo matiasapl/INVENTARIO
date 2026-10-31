@@ -34,10 +34,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/productos/papelera', [ProductController::class, 'papelera'])->name('products.papelera');
     Route::get('/productos/edit/{product}', [ProductController::class, 'edit'])->name('products.edit');
     Route::get('/productos/view/{product}', [ProductController::class, 'view'])->name('products.view');
-    Route::get('/productos/{product}/deshabilitar', [ProductController::class, 'deshabilitar'])->name('products.deshabilitar');
+    Route::post('/productos/{product}/deshabilitar', [ProductController::class, 'deshabilitar'])->name('products.deshabilitar');
 
     //Productos Papelera 
-    Route::get('/productos/{product}/habilitar', [ProductController::class, 'habilitar'])->name('products.habilitar');
+    Route::post('/productos/{product}/habilitar', [ProductController::class, 'habilitar'])->name('products.habilitar');
     Route::delete('/productos/{product}/eliminar', [ProductController::class, 'eliminar'])->name('products.eliminar');
 
     //Crear Productos 
@@ -54,10 +54,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/almacenes/papelera', [AlmacenController::class, 'papelera'])->name('almacen.papelera');
     Route::get('/almacenes/edit/{almacen}', [AlmacenController::class, 'edit'])->name('almacen.edit');
     Route::get('/almacenes/view/{almacen}', [AlmacenController::class, 'view'])->name('almacen.view');
-    Route::get('/almacenes/{almacen}/deshabilitar', [AlmacenController::class, 'deshabilitar'])->name('almacen.deshabilitar');
+    Route::post('/almacenes/{almacen}/deshabilitar', [AlmacenController::class, 'deshabilitar'])->name('almacen.deshabilitar');
     
     //Almacenes Papelera 
-    Route::get('/almacenes/{almacen}/habilitar', [AlmacenController::class, 'habilitar'])->name('almacen.habilitar');
+    Route::post('/almacenes/{almacen}/habilitar', [AlmacenController::class, 'habilitar'])->name('almacen.habilitar');
     Route::delete('/almacenes/{almacen}/eliminar', [AlmacenController::class, 'eliminar'])->name('almacen.eliminar');
 
     //Almacenes Crear
@@ -74,10 +74,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/lotes/papelera', [LotesController::class, 'papelera'])->name('lotes.papelera');
     Route::get('/lotes/edit/{lote}', [LotesController::class, 'edit'])->name('lotes.edit');
     Route::get('/lotes/view/{lote}', [LotesController::class, 'view'])->name('lotes.view');
-    Route::get('/lotes/{Lote}/deshabilitar', [LotesController::class, 'deshabilitar'])->name('lotes.deshabilitar');
+    Route::post('/lotes/{Lote}/deshabilitar', [LotesController::class, 'deshabilitar'])->name('lotes.deshabilitar');
     
     //Lotes Papelera
-    Route::get('/lotes/{Lote}/habilitar', [LotesController::class, 'habilitar'])->name('lotes.habilitar');
+    Route::post('/lotes/{Lote}/habilitar', [LotesController::class, 'habilitar'])->name('lotes.habilitar');
     Route::delete('/lotes/{Lote}/eliminar', [LotesController::class, 'eliminar'])->name('lotes.eliminar');
 
     //Lotes Crear
@@ -89,6 +89,5 @@ Route::middleware(['auth', 'verified'])->group(function () {
     //--------Fin Lotes--------
     });
 require __DIR__.'/settings.php';
-
 
 

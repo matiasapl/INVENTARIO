@@ -11,8 +11,16 @@ class Registro extends Model
     use HasFactory;
 
     protected $fillable = [
-        'codigo', 'nombre', 'accion', 'tipo','usuario'
+        'codigo', 'nombre', 'accion', 'tipo', 'usuario', 'operacion_id', 'anterior', 'nuevo',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'anterior' => 'array',
+            'nuevo' => 'array',
+        ];
+    }
 
     public function user()
     {

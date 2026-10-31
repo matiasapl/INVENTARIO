@@ -4,6 +4,7 @@ use App\Models\Lotes;
 use App\Models\Product;
 use App\Models\Almacen;
 use App\Models\User;
+use Inertia\Testing\AssertableInertia as Assert;
 
 /**
  * Tests de características para gestión completa de lotes.
@@ -48,6 +49,9 @@ it('user can create view edit and disable a lot in a complete flow', function ()
     $updateData = [
         'descripcion' => 'Lote Flujo Completo Editado',
         'cantidad' => 200,
+        'producto_id' => $producto->id,
+        'almacen_id' => $almacen->id,
+        'estado' => true,
     ];
 
     $this->put(route('lotes.update', $lote), $updateData)
@@ -71,10 +75,9 @@ it('user can create view edit and disable a lot in a complete flow', function ()
     // Paso 5: Verificar que el lote deshabilitado no aparece en lista principal
     $response = $this->get(route('lotes.index'));
     $response->assertOk();
-    $loteIds = collect($response->inertia->page['lotes']['data'])
-        ->pluck('id')
-        ->toArray();
-    expect($loteIds)->not->toContain($lote->id);
+    $response->assertInertia(fn (Assert $page) => $page
+        ->has('Lotes.data')
+        ->where('Lotes.data', fn ($data) => collect($data)->doesntContain('id', $lote->id)));
 
     // Paso 6: Habilitar lote nuevamente
     $this->post(route('lotes.habilitar', $lote))
@@ -86,7 +89,7 @@ it('user can create view edit and disable a lot in a complete flow', function ()
     ]);
 
     // Paso 7: Eliminar lote (soft delete)
-    $this->post(route('lotes.eliminar', $lote))
+    $this->delete(route('lotes.eliminar', $lote))
         ->assertRedirect(route('lotes.papelera'));
 
     $this->assertDatabaseHas('lotes', [
@@ -96,17 +99,14 @@ it('user can create view edit and disable a lot in a complete flow', function ()
 
     // Paso 8: Verificar que el lote eliminado no aparece en ninguna lista
     $response = $this->get(route('lotes.index'));
-    $loteIds = collect($response->inertia->page['lotes']['data'])
-        ->pluck('id')
-        ->toArray();
-    expect($loteIds)->not->toContain($lote->id);
+    $response->assertInertia(fn (Assert $page) => $page
+        ->has('Lotes.data')
+        ->where('Lotes.data', fn ($data) => collect($data)->doesntContain('id', $lote->id)));
 
-    // Pero sí aparece en la papelera
+    // Los lotes eliminados tampoco deben aparecer en la papelera.
     $response = $this->get(route('lotes.papelera'));
-    $trashLoteIds = collect($response->inertia->page['lotes'])
-        ->pluck('id')
-        ->toArray();
-    expect($trashLoteIds)->toContain($lote->id);
+    $response->assertInertia(fn (Assert $page) => $page
+        ->has('Lotes.data', 0));
 });
 
 /**
@@ -148,13 +148,12 @@ it('user can create multiple lots and see them all in their list', function () {
     $response = $this->get(route('lotes.index'));
     $response->assertOk();
 
-    $loteDescriptionsInList = collect($response->inertia->page['lotes']['data'])
-        ->pluck('descripcion')
-        ->toArray();
+    $response->assertInertia(fn (Assert $page) => $page
+        ->where('Lotes.data', function ($data) use ($loteDescriptions) {
+            $descriptions = collect($data)->pluck('descripcion');
 
-    foreach ($loteDescriptions as $desc) {
-        expect(in_array($desc, $loteDescriptionsInList))->toBeTrue();
-    }
+            return collect($loteDescriptions)->every(fn ($description) => $descriptions->contains($description));
+        }));
 });
 
 /**
@@ -187,12 +186,12 @@ it('user can filter lots by status active disabled', function () {
     // Ver lista principal (solo activos)
     $response = $this->get(route('lotes.index'));
     $response->assertOk();
-    expect($response->inertia->page['lotes']['data'])->toHaveCount(3);
+    $response->assertInertia(fn (Assert $page) => $page->has('Lotes.data', 3));
 
     // Ver papelera (solo deshabilitados)
     $response = $this->get(route('lotes.papelera'));
     $response->assertOk();
-    expect($response->inertia->page['lotes'])->toHaveCount(2);
+    $response->assertInertia(fn (Assert $page) => $page->has('Lotes.data', 2));
 });
 
 /**

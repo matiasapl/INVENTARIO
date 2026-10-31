@@ -19,7 +19,6 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-
 export default function Index({ Registros }: { Registros: any }) {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -70,4 +69,3 @@ export default function Index({ Registros }: { Registros: any }) {
         </AppLayout>
     );
 }
-

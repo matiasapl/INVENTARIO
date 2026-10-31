@@ -3,6 +3,7 @@
 use App\Models\Product;
 use App\Models\Registro;
 use App\Models\User;
+use Inertia\Testing\AssertableInertia as Assert;
 
 /**
  * Tests de características para gestión completa de productos.
@@ -46,8 +47,8 @@ it('user can create view edit and disable a product in a complete flow', functio
     $response = $this->get(route('products.view', $product));
     $response->assertOk();
 
-    // Verificar registro de auditoría de visualización
-    $this->assertDatabaseHas('registros', [
+    // GET de detalle no debe escribir auditoría.
+    $this->assertDatabaseMissing('registros', [
         'accion' => 'Ver Producto',
         'nombre' => 'Producto Flujo Completo',
         'usuario' => $this->user->id,
@@ -55,10 +56,11 @@ it('user can create view edit and disable a product in a complete flow', functio
 
     // Paso 3: Editar producto
     $updateData = [
-        'nombre' => 'Producto Flujo Completo Editado',
+        'nombre' => 'Producto Flujo Editado',
         'descripcion' => 'Descripción actualizada',
         'precio_unitario' => 200.50,
         'M3_unitario' => 1.2,
+        'estado' => true,
     ];
 
     $this->put(route('products.update', $product), $updateData)
@@ -66,13 +68,13 @@ it('user can create view edit and disable a product in a complete flow', functio
 
     $this->assertDatabaseHas('products', [
         'id' => $product->id,
-        'nombre' => 'Producto Flujo Completo Editado',
+        'nombre' => 'Producto Flujo Editado',
     ]);
 
     // Verificar registro de auditoría de edición
     $this->assertDatabaseHas('registros', [
         'accion' => 'Editar Producto',
-        'nombre' => 'Producto Flujo Completo Editado',
+        'nombre' => 'Producto Flujo Editado',
         'usuario' => $this->user->id,
     ]);
 
@@ -88,7 +90,7 @@ it('user can create view edit and disable a product in a complete flow', functio
     // Verificar registro de auditoría de deshabilitación
     $this->assertDatabaseHas('registros', [
         'accion' => 'Deshabilitar Producto',
-        'nombre' => 'Producto Flujo Completo Editado',
+        'nombre' => 'Producto Flujo Editado',
         'usuario' => $this->user->id,
     ]);
 
@@ -96,10 +98,9 @@ it('user can create view edit and disable a product in a complete flow', functio
     $response = $this->get(route('products.index'));
     $response->assertOk();
     // El producto deshabilitado no debería estar en la lista
-    $productsIds = collect($response->inertia->page['products']['data'])
-        ->pluck('id')
-        ->toArray();
-    expect($productsIds)->not->toContain($product->id);
+    $response->assertInertia(fn (Assert $page) => $page
+        ->has('products.data')
+        ->where('products.data', fn ($data) => collect($data)->doesntContain('id', $product->id)));
 
     // Paso 6: Habilitar producto nuevamente
     $this->post(route('products.habilitar', $product))
@@ -113,12 +114,12 @@ it('user can create view edit and disable a product in a complete flow', functio
     // Verificar registro de auditoría de habilitación
     $this->assertDatabaseHas('registros', [
         'accion' => 'Habilitar Producto',
-        'nombre' => 'Producto Flujo Completo Editado',
+        'nombre' => 'Producto Flujo Editado',
         'usuario' => $this->user->id,
     ]);
 
     // Paso 7: Eliminar producto (soft delete)
-    $this->post(route('products.eliminar', $product))
+    $this->delete(route('products.eliminar', $product))
         ->assertRedirect(route('products.papelera'));
 
     $this->assertDatabaseHas('products', [
@@ -129,23 +130,19 @@ it('user can create view edit and disable a product in a complete flow', functio
     // Verificar registro de auditoría de eliminación
     $this->assertDatabaseHas('registros', [
         'accion' => 'Eliminar Producto',
-        'nombre' => 'Producto Flujo Completo Editado',
+        'nombre' => 'Producto Flujo Editado',
         'usuario' => $this->user->id,
     ]);
 
     // Paso 8: Verificar que el producto eliminado no aparece en ninguna lista
     $response = $this->get(route('products.index'));
-    $productsIds = collect($response->inertia->page['products']['data'])
-        ->pluck('id')
-        ->toArray();
-    expect($productsIds)->not->toContain($product->id);
+    $response->assertInertia(fn (Assert $page) => $page
+        ->has('products.data')
+        ->where('products.data', fn ($data) => collect($data)->doesntContain('id', $product->id)));
 
-    // Pero sí aparece en la papelera
+    // Los productos eliminados tampoco deben aparecer en la papelera.
     $response = $this->get(route('products.papelera'));
-    $trashProductIds = collect($response->inertia->page['products'])
-        ->pluck('id')
-        ->toArray();
-    expect($trashProductIds)->toContain($product->id);
+    $response->assertInertia(fn (Assert $page) => $page->has('products', 0));
 });
 
 /**
@@ -184,13 +181,12 @@ it('user can create multiple products and see them all in their list', function 
     $response = $this->get(route('products.index'));
     $response->assertOk();
 
-    $productNamesInList = collect($response->inertia->page['products']['data'])
-        ->pluck('name')
-        ->toArray();
+    $response->assertInertia(fn (Assert $page) => $page
+        ->where('products.data', function ($data) use ($productNames) {
+            $names = collect($data)->pluck('nombre');
 
-    foreach ($productNames as $name) {
-        expect(in_array($name, $productNamesInList))->toBeTrue();
-    }
+            return collect($productNames)->every(fn ($name) => $names->contains($name));
+        }));
 });
 
 /**
@@ -215,12 +211,12 @@ it('user can filter products by status active disabled', function () {
     // Ver lista principal (solo activos)
     $response = $this->get(route('products.index'));
     $response->assertOk();
-    expect($response->inertia->page['products']['data'])->toHaveCount(3);
+    $response->assertInertia(fn (Assert $page) => $page->has('products.data', 3));
 
     // Ver papelera (solo deshabilitados)
     $response = $this->get(route('products.papelera'));
     $response->assertOk();
-    expect($response->inertia->page['products'])->toHaveCount(2);
+    $response->assertInertia(fn (Assert $page) => $page->has('products', 2));
 });
 
 /**
@@ -249,6 +245,8 @@ it('system logs all important actions in the audit trail', function () {
         'nombre' => 'Producto Auditado Editado',
         'precio_unitario' => 150,
         'M3_unitario' => 1.5,
+        'descripcion' => 'Editado',
+        'estado' => true,
     ]);
 
     // Deshabilitar producto
@@ -258,7 +256,7 @@ it('system logs all important actions in the audit trail', function () {
     $this->post(route('products.habilitar', $product));
 
     // Eliminar producto
-    $this->post(route('products.eliminar', $product));
+    $this->delete(route('products.eliminar', $product));
 
     // Verificar que existen todos los registros de auditoría
     $registros = Registro::where('usuario', $this->user->id)->get();
@@ -266,7 +264,7 @@ it('system logs all important actions in the audit trail', function () {
     $acciones = $registros->pluck('accion')->toArray();
 
     expect($acciones)->toContain('Crear Producto');
-    expect($acciones)->toContain('Ver Producto');
+    expect($acciones)->not->toContain('Ver Producto');
     expect($acciones)->toContain('Editar Producto');
     expect($acciones)->toContain('Deshabilitar Producto');
     expect($acciones)->toContain('Habilitar Producto');

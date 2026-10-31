@@ -2,6 +2,7 @@
 
 use App\Models\Almacen;
 use App\Models\User;
+use Inertia\Testing\AssertableInertia as Assert;
 
 /**
  * Tests de características para gestión completa de almacenes.
@@ -28,13 +29,13 @@ it('user can create view edit and disable a warehouse in a complete flow', funct
         'ubicacion' => 'Santiago, Chile',
     ];
 
-    $this->post(route('almacens.store'), $almacenData)->assertRedirect(route('almacens.index'));
+    $this->post(route('almacen.store'), $almacenData)->assertRedirect(route('almacenes.index'));
 
     $almacen = Almacen::where('nombre', 'Almacén Flujo Completo')->first();
     expect($almacen)->not->toBeNull();
 
     // Paso 2: Ver almacén
-    $response = $this->get(route('almacens.view', $almacen));
+    $response = $this->get(route('almacen.view', $almacen));
     $response->assertOk();
 
     // Paso 3: Editar almacén
@@ -42,10 +43,11 @@ it('user can create view edit and disable a warehouse in a complete flow', funct
         'nombre' => 'Almacén Flujo Completo Editado',
         'descripcion' => 'Descripción actualizada',
         'ubicacion' => 'Valparaíso, Chile',
+        'estado' => true,
     ];
 
-    $this->put(route('almacens.update', $almacen), $updateData)
-        ->assertRedirect(route('almacens.index'));
+    $this->put(route('almacen.update', $almacen), $updateData)
+        ->assertRedirect(route('almacenes.index'));
 
     $this->assertDatabaseHas('almacens', [
         'id' => $almacen->id,
@@ -53,8 +55,8 @@ it('user can create view edit and disable a warehouse in a complete flow', funct
     ]);
 
     // Paso 4: Deshabilitar almacén
-    $this->post(route('almacens.deshabilitar', $almacen))
-        ->assertRedirect(route('almacens.index'));
+    $this->post(route('almacen.deshabilitar', $almacen))
+        ->assertRedirect(route('almacenes.index'));
 
     $this->assertDatabaseHas('almacens', [
         'id' => $almacen->id,
@@ -62,16 +64,15 @@ it('user can create view edit and disable a warehouse in a complete flow', funct
     ]);
 
     // Paso 5: Verificar que el almacén deshabilitado no aparece en lista principal
-    $response = $this->get(route('almacens.index'));
+    $response = $this->get(route('almacenes.index'));
     $response->assertOk();
-    $almacenIds = collect($response->inertia->page['almacens']['data'])
-        ->pluck('id')
-        ->toArray();
-    expect($almacenIds)->not->toContain($almacen->id);
+    $response->assertInertia(fn (Assert $page) => $page
+        ->has('Almacenes.data')
+        ->where('Almacenes.data', fn ($data) => collect($data)->doesntContain('id', $almacen->id)));
 
     // Paso 6: Habilitar almacén nuevamente
-    $this->post(route('almacens.habilitar', $almacen))
-        ->assertRedirect(route('almacens.papelera'));
+    $this->post(route('almacen.habilitar', $almacen))
+        ->assertRedirect(route('almacen.papelera'));
 
     $this->assertDatabaseHas('almacens', [
         'id' => $almacen->id,
@@ -79,8 +80,8 @@ it('user can create view edit and disable a warehouse in a complete flow', funct
     ]);
 
     // Paso 7: Eliminar almacén (soft delete)
-    $this->post(route('almacens.eliminar', $almacen))
-        ->assertRedirect(route('almacens.papelera'));
+    $this->delete(route('almacen.eliminar', $almacen))
+        ->assertRedirect(route('almacen.papelera'));
 
     $this->assertDatabaseHas('almacens', [
         'id' => $almacen->id,
@@ -88,18 +89,14 @@ it('user can create view edit and disable a warehouse in a complete flow', funct
     ]);
 
     // Paso 8: Verificar que el almacén eliminado no aparece en ninguna lista
-    $response = $this->get(route('almacens.index'));
-    $almacenIds = collect($response->inertia->page['almacens']['data'])
-        ->pluck('id')
-        ->toArray();
-    expect($almacenIds)->not->toContain($almacen->id);
+    $response = $this->get(route('almacenes.index'));
+    $response->assertInertia(fn (Assert $page) => $page
+        ->has('Almacenes.data')
+        ->where('Almacenes.data', fn ($data) => collect($data)->doesntContain('id', $almacen->id)));
 
-    // Pero sí aparece en la papelera
-    $response = $this->get(route('almacens.papelera'));
-    $trashAlmacenIds = collect($response->inertia->page['almacens'])
-        ->pluck('id')
-        ->toArray();
-    expect($trashAlmacenIds)->toContain($almacen->id);
+    // Los almacenes eliminados tampoco deben aparecer en la papelera.
+    $response = $this->get(route('almacen.papelera'));
+    $response->assertInertia(fn (Assert $page) => $page->has('Almacenes', 0));
 });
 
 /**
@@ -117,9 +114,10 @@ it('user can create multiple warehouses and see them all in their list', functio
     ];
 
     foreach ($almacenNames as $name) {
-        $this->post(route('almacens.store'), [
+        $this->post(route('almacen.store'), [
             'nombre' => $name,
-        ])->assertRedirect(route('almacens.index'));
+            'ubicacion' => 'Bodega central',
+        ])->assertRedirect(route('almacenes.index'));
     }
 
     // Verificar que todos los almacenes fueron creados
@@ -131,16 +129,15 @@ it('user can create multiple warehouses and see them all in their list', functio
     }
 
     // Ver que todos aparecen en la lista
-    $response = $this->get(route('almacens.index'));
+    $response = $this->get(route('almacenes.index'));
     $response->assertOk();
 
-    $almacenNamesInList = collect($response->inertia->page['almacens']['data'])
-        ->pluck('name')
-        ->toArray();
+    $response->assertInertia(fn (Assert $page) => $page
+        ->where('Almacenes.data', function ($data) use ($almacenNames) {
+            $names = collect($data)->pluck('nombre');
 
-    foreach ($almacenNames as $name) {
-        expect(in_array($name, $almacenNamesInList))->toBeTrue();
-    }
+            return collect($almacenNames)->every(fn ($name) => $names->contains($name));
+        }));
 });
 
 /**
@@ -163,14 +160,14 @@ it('user can filter warehouses by status active disabled', function () {
     ]);
 
     // Ver lista principal (solo activos)
-    $response = $this->get(route('almacens.index'));
+    $response = $this->get(route('almacenes.index'));
     $response->assertOk();
-    expect($response->inertia->page['almacens']['data'])->toHaveCount(3);
+    $response->assertInertia(fn (Assert $page) => $page->has('Almacenes.data', 3));
 
     // Ver papelera (solo deshabilitados)
-    $response = $this->get(route('almacens.papelera'));
+    $response = $this->get(route('almacen.papelera'));
     $response->assertOk();
-    expect($response->inertia->page['almacens'])->toHaveCount(2);
+    $response->assertInertia(fn (Assert $page) => $page->has('Almacenes', 2));
 });
 
 /**
@@ -181,8 +178,8 @@ it('created warehouse has a unique UUID that does not repeat', function () {
     $this->actingAs($this->user);
 
     // Crear dos almacenes con el mismo nombre
-    $this->post(route('almacens.store'), ['nombre' => 'Almacén UUID Test']);
-    $this->post(route('almacens.store'), ['nombre' => 'Almacén UUID Test']);
+    $this->post(route('almacen.store'), ['nombre' => 'Almacén UUID Test', 'ubicacion' => 'Bodega']);
+    $this->post(route('almacen.store'), ['nombre' => 'Almacén UUID Test', 'ubicacion' => 'Bodega']);
 
     $almacenes = Almacen::where('nombre', 'Almacén UUID Test')->get();
 

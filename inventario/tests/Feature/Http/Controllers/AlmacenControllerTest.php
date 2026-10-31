@@ -2,6 +2,7 @@
 
 use App\Models\Almacen;
 use App\Models\User;
+use Inertia\Testing\AssertableInertia as Assert;
 
 /**
  * Tests de integración para AlmacenController.
@@ -20,7 +21,7 @@ beforeEach(function () {
  * @spec "Un usuario no autenticado es redirigido al login al intentar ver almacenes"
  */
 it('redirects unauthenticated users to login when viewing warehouses', function () {
-    $this->get(route('almacens.index'))->assertRedirect(route('login'));
+    $this->get(route('almacenes.index'))->assertRedirect(route('login'));
 });
 
 /**
@@ -33,10 +34,10 @@ it('authenticated user can view warehouses list', function () {
     Almacen::factory()->count(3)->create(['usuario' => $this->user->id]);
     Almacen::factory()->count(2)->create(['usuario' => $this->otherUser->id]);
 
-    $response = $this->get(route('almacens.index'));
+    $response = $this->get(route('almacenes.index'));
 
     $response->assertOk();
-    expect($response->inertia->page['almacens']['data'])->toHaveCount(3);
+    $response->assertInertia(fn (Assert $page) => $page->has('Almacenes.data', 3));
 });
 
 /**
@@ -66,11 +67,11 @@ it('authenticated user only sees their own active warehouses', function () {
         'eliminado' => true,
     ]);
 
-    $response = $this->get(route('almacens.index'));
+    $response = $this->get(route('almacenes.index'));
 
     $response->assertOk();
     // Solo deberían aparecer los 2 almacenes activos
-    expect($response->inertia->page['almacens']['data'])->toHaveCount(2);
+    $response->assertInertia(fn (Assert $page) => $page->has('Almacenes.data', 2));
 });
 
 /**
@@ -80,7 +81,7 @@ it('authenticated user only sees their own active warehouses', function () {
 it('authenticated user can view create warehouse form', function () {
     $this->actingAs($this->user);
 
-    $response = $this->get(route('almacens.create'));
+    $response = $this->get(route('almacenes.create'));
 
     $response->assertOk();
 });
@@ -98,9 +99,9 @@ it('authenticated user can create a warehouse', function () {
         'ubicacion' => 'Santiago, Chile',
     ];
 
-    $response = $this->post(route('almacens.store'), $almacenData);
+    $response = $this->post(route('almacen.store'), $almacenData);
 
-    $response->assertRedirect(route('almacens.index'));
+    $response->assertRedirect(route('almacenes.index'));
     $this->assertDatabaseHas('almacens', [
         'nombre' => 'Almacén Central',
         'usuario' => $this->user->id,
@@ -116,9 +117,10 @@ it('created warehouse has a unique UUID code', function () {
 
     $almacenData = [
         'nombre' => 'Almacén UUID Test',
+        'ubicacion' => 'Bodega central',
     ];
 
-    $this->post(route('almacens.store'), $almacenData);
+    $this->post(route('almacen.store'), $almacenData);
 
     $almacen = Almacen::where('nombre', 'Almacén UUID Test')->first();
 
@@ -134,9 +136,10 @@ it('user cannot create warehouse without name', function () {
 
     $almacenData = [
         'nombre' => '',
+        'ubicacion' => 'Bodega central',
     ];
 
-    $response = $this->post(route('almacens.store'), $almacenData);
+    $response = $this->post(route('almacen.store'), $almacenData);
 
     $response->assertSessionHasErrors('nombre');
 });
@@ -150,7 +153,7 @@ it('authenticated user can view their own warehouse', function () {
 
     $almacen = Almacen::factory()->create(['usuario' => $this->user->id]);
 
-    $response = $this->get(route('almacens.view', $almacen));
+    $response = $this->get(route('almacen.view', $almacen));
 
     $response->assertOk();
 });
@@ -164,7 +167,7 @@ it('user cannot view another user warehouse', function () {
 
     $almacen = Almacen::factory()->create(['usuario' => $this->otherUser->id]);
 
-    $response = $this->get(route('almacens.view', $almacen));
+    $response = $this->get(route('almacen.view', $almacen));
 
     $response->assertForbidden();
 });
@@ -178,7 +181,7 @@ it('authenticated user can view edit form for their warehouse', function () {
 
     $almacen = Almacen::factory()->create(['usuario' => $this->user->id]);
 
-    $response = $this->get(route('almacens.edit', $almacen));
+    $response = $this->get(route('almacen.edit', $almacen));
 
     $response->assertOk();
 });
@@ -192,7 +195,7 @@ it('user cannot edit another user warehouse', function () {
 
     $almacen = Almacen::factory()->create(['usuario' => $this->otherUser->id]);
 
-    $response = $this->get(route('almacens.edit', $almacen));
+    $response = $this->get(route('almacen.edit', $almacen));
 
     $response->assertForbidden();
 });
@@ -210,11 +213,12 @@ it('authenticated user can update their warehouse', function () {
         'nombre' => 'Almacén Actualizado',
         'descripcion' => 'Nueva descripción',
         'ubicacion' => 'Valparaíso, Chile',
+        'estado' => true,
     ];
 
-    $response = $this->put(route('almacens.update', $almacen), $updateData);
+    $response = $this->put(route('almacen.update', $almacen), $updateData);
 
-    $response->assertRedirect(route('almacens.index'));
+    $response->assertRedirect(route('almacenes.index'));
     $this->assertDatabaseHas('almacens', [
         'id' => $almacen->id,
         'nombre' => 'Almacén Actualizado',
@@ -232,9 +236,11 @@ it('user cannot update another user warehouse', function () {
 
     $updateData = [
         'nombre' => 'Intento de actualización',
+        'ubicacion' => 'Bodega sur',
+        'estado' => true,
     ];
 
-    $response = $this->put(route('almacens.update', $almacen), $updateData);
+    $response = $this->put(route('almacen.update', $almacen), $updateData);
 
     $response->assertForbidden();
 });
@@ -251,9 +257,9 @@ it('authenticated user can disable their warehouse', function () {
         'habilitado' => true,
     ]);
 
-    $response = $this->post(route('almacens.deshabilitar', $almacen));
+    $response = $this->post(route('almacen.deshabilitar', $almacen));
 
-    $response->assertRedirect(route('almacens.index'));
+    $response->assertRedirect(route('almacenes.index'));
     $this->assertDatabaseHas('almacens', [
         'id' => $almacen->id,
         'habilitado' => false,
@@ -272,7 +278,7 @@ it('user cannot disable another user warehouse', function () {
         'habilitado' => true,
     ]);
 
-    $response = $this->post(route('almacens.deshabilitar', $almacen));
+    $response = $this->post(route('almacen.deshabilitar', $almacen));
 
     $response->assertForbidden();
 });
@@ -286,9 +292,9 @@ it('authenticated user can enable their disabled warehouse', function () {
 
     $almacen = Almacen::factory()->disabled()->create(['usuario' => $this->user->id]);
 
-    $response = $this->post(route('almacens.habilitar', $almacen));
+    $response = $this->post(route('almacen.habilitar', $almacen));
 
-    $response->assertRedirect(route('almacens.papelera'));
+    $response->assertRedirect(route('almacen.papelera'));
     $this->assertDatabaseHas('almacens', [
         'id' => $almacen->id,
         'habilitado' => true,
@@ -307,9 +313,9 @@ it('authenticated user can delete their warehouse (soft delete)', function () {
         'eliminado' => false,
     ]);
 
-    $response = $this->post(route('almacens.eliminar', $almacen));
+    $response = $this->delete(route('almacen.eliminar', $almacen));
 
-    $response->assertRedirect(route('almacens.papelera'));
+    $response->assertRedirect(route('almacen.papelera'));
     $this->assertDatabaseHas('almacens', [
         'id' => $almacen->id,
         'eliminado' => true,
@@ -328,7 +334,7 @@ it('user cannot delete another user warehouse', function () {
         'eliminado' => false,
     ]);
 
-    $response = $this->post(route('almacens.eliminar', $almacen));
+    $response = $this->delete(route('almacen.eliminar', $almacen));
 
     $response->assertForbidden();
 });
@@ -346,9 +352,9 @@ it('authenticated user can view trash with disabled warehouses', function () {
     // Almacenes activos del usuario (no deberían aparecer en papelera)
     Almacen::factory()->count(3)->create(['usuario' => $this->user->id]);
 
-    $response = $this->get(route('almacens.papelera'));
+    $response = $this->get(route('almacen.papelera'));
 
     $response->assertOk();
     // Solo deberían aparecer los almacenes deshabilitados
-    expect($response->inertia->page['almacens'])->toHaveCount(2);
+    $response->assertInertia(fn (Assert $page) => $page->has('Almacenes', 2));
 });

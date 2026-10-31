@@ -15,9 +15,8 @@ class RegistroController extends Controller
     public function index()
     {
         $Registros = \DB::table('registros')
-            ->join('users', 'registros.usuario', '=', 'users.id')
             ->where('registros.usuario', Auth::id())
-            ->select('registros.codigo', 'registros.nombre', 'registros.accion', 'registros.tipo','users.name as responsable', 'registros.created_at as fecha')
+            ->select('registros.codigo', 'registros.nombre', 'registros.accion', 'registros.tipo', \DB::raw("CONCAT('Actor #', registros.usuario) as responsable"), 'registros.created_at as fecha')
             ->latest('fecha')
             ->paginate(25);
 

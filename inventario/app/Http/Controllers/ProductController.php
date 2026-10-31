@@ -6,7 +6,7 @@ use App\Models\Product;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Registro;
+use App\Services\InventoryAudit;
 
 class ProductController extends Controller
 {
@@ -68,54 +68,52 @@ class ProductController extends Controller
         /**
      * Deshabilitar un producto
      */
-    public function deshabilitar(Product $product)
+    public function deshabilitar(Product $product, InventoryAudit $audit)
     {
         $this->authorizeProduct($product);
-        $product->deshabilitar();
 
-    Registro::create([
-        'codigo' => $product->codigo,
-        'nombre' => $product->nombre,
-        'accion' => 'Deshabilitar Producto',
-        'tipo' => 'Manual',
-        'usuario' => Auth::id()
-    ]);
+        if ($product->lotes()->exists()) {
+            return redirect()->route('products.index')->with('error', 'No se puede deshabilitar un producto asociado a lotes.');
+        }
+
+        $audit->mutate('Deshabilitar Producto', $product, function (Product $product): Product {
+            $product->deshabilitar();
+
+            return $product;
+        });
 
         return redirect()->route('products.index')->with('success', 'Producto deshabilitado correctamente');
     }
         /**
      * Habilitar un producto
      */
-    public function habilitar(Product $product)
+    public function habilitar(Product $product, InventoryAudit $audit)
     {
         $this->authorizeProduct($product);
-        $product->habilitar();
+        $audit->mutate('Habilitar Producto', $product, function (Product $product): Product {
+            $product->habilitar();
 
-        Registro::create([
-        'codigo' => $product->codigo,
-        'nombre' => $product->nombre,
-        'accion' => 'Habilitar Producto',
-        'tipo' => 'Manual',
-        'usuario' => Auth::id()
-        ]);
+            return $product;
+        });
         return redirect()->route('products.papelera')->with('success', 'Producto habilitado correctamente');
     }
 
             /**
      * Eliminar un producto
      */
-    public function eliminar(Product $product)
+    public function eliminar(Product $product, InventoryAudit $audit)
     {
         $this->authorizeProduct($product);
-        $product->eliminar();
 
-    Registro::create([
-        'codigo' => $product->codigo,
-        'nombre' => $product->nombre,
-        'accion' => 'Eliminar Producto',
-        'tipo' => 'Manual',
-        'usuario' => Auth::id()
-    ]);
+        if ($product->lotes()->exists()) {
+            return redirect()->route('products.index')->with('error', 'No se puede eliminar un producto asociado a lotes.');
+        }
+
+        $audit->mutate('Eliminar Producto', $product, function (Product $product): Product {
+            $product->eliminar();
+
+            return $product;
+        });
         return redirect()->route('products.papelera')->with('success', 'Producto eliminado correctamente');
     }
 
@@ -131,20 +129,12 @@ class ProductController extends Controller
     /**
      * Guardar un nuevo producto asociado al usuario autenticado.
      */
-    public function store(StoreProductRequest $request)
+    public function store(StoreProductRequest $request, InventoryAudit $audit)
     {
         $data = $request->validated();
         $data['usuario'] = Auth::id();
 
-        $product = Product::create($data);
-        $product->refresh();
-    Registro::create([
-        'codigo' => $product->codigo,
-        'nombre' => $product->nombre,
-        'accion' => 'Crear Producto',
-        'tipo' => 'Manual',
-        'usuario' => Auth::id()
-    ]);
+        $audit->mutate('Crear Producto', null, fn (): Product => Product::create($data));
         return redirect()->route('products.index')->with('success', 'Producto creado correctamente');
     }
 
@@ -164,33 +154,22 @@ class ProductController extends Controller
     public function view(Product $product)
     {
         $this->authorizeProduct($product);
-    Registro::create([
-        'codigo' => $product->codigo,
-        'nombre' => $product->nombre,
-        'accion' => 'Ver Producto',
-        'tipo' => 'Manual',
-        'usuario' => Auth::id()
-    ]);
         return inertia('Productos/View', compact('product'));
     }
 
     /**
      * Actualizar producto creado por el usuario autenticado.
      */
-    public function update(UpdateProductRequest $request, Product $product)
+    public function update(UpdateProductRequest $request, Product $product, InventoryAudit $audit)
     {
         $this->authorizeProduct($product);
 
-        $product->update($request->validated());
+        $data = $request->validated();
+        $audit->mutate('Editar Producto', $product, function (Product $product) use ($data): Product {
+            $product->update($data);
 
-
-    Registro::create([
-        'codigo' => $product->codigo,
-        'nombre' => $request->nombre,
-        'accion' => 'Editar Producto',
-        'tipo' => 'Manual',
-        'usuario' => Auth::id()
-    ]);
+            return $product;
+        });
         return redirect()->route('products.index')->with('success', 'Producto editado correctamente');
     }
 
@@ -204,4 +183,3 @@ class ProductController extends Controller
         }
     }
 }
-
