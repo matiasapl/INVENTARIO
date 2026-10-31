@@ -1,7 +1,6 @@
 import { index } from '@/actions/App/Http/Controllers/ProductController';
-import { login, register, } from '@/routes';
+import { login, register } from '@/routes';
 import { type SharedData } from '@/types';
-import { Button } from '@headlessui/react';
 import { Head, Link, usePage } from '@inertiajs/react';
 
 export default function Welcome({
@@ -20,7 +19,7 @@ export default function Welcome({
                     rel="stylesheet"
                 />
             </Head>
-            <div className="flex min-h-screen flex-col items-end bg-[#FDFDFC] text-[#1b1b18] dark:bg-[#0a0a0a] dark:text-[#FDFDFC] mx-8">
+            <div className="mx-8 flex min-h-screen flex-col items-end bg-[#FDFDFC] text-[#1b1b18] dark:bg-[#0a0a0a] dark:text-[#FDFDFC]">
                 <header className="static top-0 right-0 m-6 w-full max-w-[335px] text-sm not-has-[nav]:hidden lg:max-w-4xl">
                     <nav className="items-top flex justify-end">
                         {auth.user ? (
@@ -34,7 +33,7 @@ export default function Welcome({
                             <>
                                 <Link
                                     href={login()}
-                                    className="inline-block mx-2 rounded-sm border border-transparent px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#19140035] dark:text-[#EDEDEC] dark:hover:border-[#3E3E3A]"
+                                    className="mx-2 inline-block rounded-sm border border-transparent px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#19140035] dark:text-[#EDEDEC] dark:hover:border-[#3E3E3A]"
                                 >
                                     Iniciar Sesion
                                 </Link>
@@ -51,7 +50,11 @@ export default function Welcome({
                     </nav>
                 </header>
                 <div className="m-4 flex min-w-full flex-col border-4 p-4 font-bold">
-                    <h2>Esto es un Proyecto de aprendizaje en desarrollo continuo usalo bajo tu propio riesgo</h2> <br />
+                    <h2>
+                        Esto es un Proyecto de aprendizaje en desarrollo
+                        continuo usalo bajo tu propio riesgo
+                    </h2>{' '}
+                    <br />
                     <br />
                     <h1>Web App - Inventarios</h1>
                     <span>Autor: Matias APL</span>

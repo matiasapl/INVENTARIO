@@ -10,7 +10,7 @@ import {
     TableRow,
 } from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout';
-import { type BreadcrumbItem } from '@/types';
+import { type BreadcrumbItem, type Paginated } from '@/types';
 import { Head, Link, router } from '@inertiajs/react';
 import {
     Boxes,
@@ -26,7 +26,7 @@ interface Lote {
     codigo: string;
     descripcion: string;
     producto: string;
-    cantidad: string;
+    cantidad: number;
     almacen: string;
     estado: boolean;
 }
@@ -38,7 +38,7 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-export default function Index({ Lotes }: { Lotes: any }) {
+export default function Index({ Lotes }: { Lotes: Paginated<Lote> }) {
     const [showModal, setShowModal] = useState(false);
     const [selectedLote, setSelectedLote] = useState<Lote | null>(null);
 
@@ -54,7 +54,7 @@ export default function Index({ Lotes }: { Lotes: any }) {
 
     const confirmDisable = () => {
         if (selectedLote) {
-            router.get(LotesController.deshabilitar(selectedLote.id).url);
+            router.post(LotesController.deshabilitar(selectedLote.id).url);
         }
     };
 
@@ -76,7 +76,7 @@ export default function Index({ Lotes }: { Lotes: any }) {
             </nav>
 
             <div className="pagination mx-4 flex justify-center gap-2">
-                {Lotes.links.map((link: any, index: number) => (
+                {Lotes.links.map((link, index) => (
                     <a
                         key={index}
                         href={link.url || '#'}
@@ -101,35 +101,35 @@ export default function Index({ Lotes }: { Lotes: any }) {
                 </TableHeader>
                 {Lotes.data.length > 0 && (
                     <TableBody>
-                        {Lotes.data.map((Lote: any) => (
-                            <TableRow key={Lote.codigo}>
-                                <TableCell>{Lote.codigo}</TableCell>
+                        {Lotes.data.map((lote) => (
+                            <TableRow key={lote.codigo}>
+                                <TableCell>{lote.codigo}</TableCell>
 
                                 <TableCell>
-                                    {Lote.descripcion?.length > 50
-                                        ? Lote.descripcion.substring(0, 50) +
+                                    {lote.descripcion?.length > 50
+                                        ? lote.descripcion.substring(0, 50) +
                                           '...'
-                                        : (Lote.descripcion ??
+                                        : (lote.descripcion ??
                                           'Sin Descripcion')}
                                 </TableCell>
-                                <TableCell>{Lote.producto}</TableCell>
-                                <TableCell>{Lote.cantidad}</TableCell>
-                                <TableCell>{Lote.almacen}</TableCell>
+                                <TableCell>{lote.producto}</TableCell>
+                                <TableCell>{lote.cantidad}</TableCell>
+                                <TableCell>{lote.almacen}</TableCell>
                                 <TableCell>
-                                    {Lote.estado == true
+                                    {lote.estado == true
                                         ? 'Disponible'
                                         : 'Usado'}
                                 </TableCell>
                                 <TableCell className="flex-row space-x-2">
                                     <Link
-                                        href={LotesController.view(Lote.id).url}
+                                        href={LotesController.view(lote.id).url}
                                     >
                                         <Button className="bg-yellow-500 hover:bg-yellow-700">
                                             <Eye />
                                         </Button>
                                     </Link>
                                     <Link
-                                        href={LotesController.edit(Lote.id).url}
+                                        href={LotesController.edit(lote.id).url}
                                     >
                                         <Button className="bg-orange-500 hover:bg-orange-700">
                                             <PencilLine />
@@ -137,7 +137,7 @@ export default function Index({ Lotes }: { Lotes: any }) {
                                     </Link>
                                     <Button
                                         className="bg-red-500 hover:bg-red-700"
-                                        onClick={() => openModal(Lote)}
+                                        onClick={() => openModal(lote)}
                                     >
                                         <Trash2 />
                                     </Button>

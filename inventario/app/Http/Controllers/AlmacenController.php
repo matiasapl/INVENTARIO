@@ -6,7 +6,7 @@ use App\Models\Almacen;
 use App\Http\Requests\StoreAlmacenRequest;
 use App\Http\Requests\UpdateAlmacenRequest;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Registro;
+use App\Services\InventoryAudit;
 
 class AlmacenController extends Controller
 {
@@ -36,21 +36,12 @@ class AlmacenController extends Controller
     /**
      * Guardar un nuevo producto asociado al usuario autenticado.
      */
-    public function store(StoreAlmacenRequest $request)
+    public function store(StoreAlmacenRequest $request, InventoryAudit $audit)
     {
         $data = $request->validated();
         $data['usuario'] = Auth::id();
 
-        $almacen = Almacen::create($data);
-        $almacen->refresh();
-    
-        Registro::create([
-        'codigo' => $almacen->codigo,
-        'nombre' => $almacen->nombre,
-        'accion' => 'Crear Almacen',
-        'tipo' => 'Manual',
-        'usuario' => Auth::id()
-    ]);
+        $audit->mutate('Crear Almacen', null, fn (): Almacen => Almacen::create($data));
         return redirect()->route('almacenes.index')->with('success', 'Almacen creado correctamente');
     }
 
@@ -65,18 +56,19 @@ class AlmacenController extends Controller
         return inertia('Almacenes/Papelera', compact('Almacenes'));
     }
 
-    public function deshabilitar(Almacen $almacen)
+    public function deshabilitar(Almacen $almacen, InventoryAudit $audit)
     {
         $this->authorizeAlmacen($almacen);
-        $almacen->deshabilitar();
 
-        Registro::create([
-            'codigo' => $almacen->codigo,
-            'nombre' => $almacen->nombre,
-            'accion' => 'Deshabilitar Almacen',
-            'tipo' => 'Manual',
-            'usuario' => Auth::id()
-        ]);
+        if ($almacen->lotes()->exists()) {
+            return redirect()->route('almacenes.index')->with('error', 'No se puede deshabilitar un almacén asociado a lotes.');
+        }
+
+        $audit->mutate('Deshabilitar Almacen', $almacen, function (Almacen $almacen): Almacen {
+            $almacen->deshabilitar();
+
+            return $almacen;
+        });
 
         return redirect()->route('almacenes.index')->with('success', 'Almacen deshabilitado correctamente');
     }
@@ -85,13 +77,6 @@ class AlmacenController extends Controller
     public function view(Almacen $Almacen)
     {
         $this->authorizeAlmacen($Almacen);
-        Registro::create([
-            'codigo' => $Almacen->codigo,
-            'nombre' => $Almacen->nombre,
-            'accion' => 'Ver Almacen',
-            'tipo' => 'Manual',
-            'usuario' => Auth::id()
-        ]);
         return inertia('Almacenes/View', compact('Almacen'));
     }
 
@@ -105,18 +90,15 @@ class AlmacenController extends Controller
         return inertia('Almacenes/Edit', compact('Almacen'));
     }
 
-    public function update(UpdateAlmacenRequest $request, Almacen $almacen)
+    public function update(UpdateAlmacenRequest $request, Almacen $almacen, InventoryAudit $audit)
     {
     $this->authorizeAlmacen($almacen);
-    $almacen->update($request->validated());
+        $data = $request->validated();
+        $audit->mutate('Editar Almacen', $almacen, function (Almacen $almacen) use ($data): Almacen {
+            $almacen->update($data);
 
-        Registro::create([
-            'codigo' => $almacen->codigo,
-            'nombre' => $request->nombre,
-            'accion' => 'Editar Almacen',
-            'tipo' => 'Manual',
-            'usuario' => Auth::id()
-        ]);
+            return $almacen;
+        });
 
 
         return redirect()->route('almacenes.index')->with('success', 'Almacen Editado Correctamente');
@@ -131,36 +113,32 @@ class AlmacenController extends Controller
     }
 
 
-    public function habilitar(Almacen $almacen)
+    public function habilitar(Almacen $almacen, InventoryAudit $audit)
     {
         $this->authorizeAlmacen($almacen);
-        $almacen->habilitar();
+        $audit->mutate('Habilitar Almacen', $almacen, function (Almacen $almacen): Almacen {
+            $almacen->habilitar();
 
-        Registro::create([
-        'codigo' => $almacen->codigo,
-        'nombre' => $almacen->nombre,
-        'accion' => 'Habilitar Almacen',
-        'tipo' => 'Manual',
-        'usuario' => Auth::id()
-        ]);
+            return $almacen;
+        });
         return redirect()->route('almacen.papelera')->with('success', 'Producto habilitado correctamente');
     }
 
 
 
-    public function eliminar(Almacen $almacen)
+    public function eliminar(Almacen $almacen, InventoryAudit $audit)
     {
         $this->authorizeAlmacen($almacen);
-        $almacen->eliminar();
 
-        
-    Registro::create([
-        'codigo' => $almacen->codigo,
-        'nombre' => $almacen->nombre,
-        'accion' => 'Eliminar Almacen',
-        'tipo' => 'Manual',
-        'usuario' => Auth::id()
-    ]);
+        if ($almacen->lotes()->exists()) {
+            return redirect()->route('almacenes.index')->with('error', 'No se puede eliminar un almacén asociado a lotes.');
+        }
+
+        $audit->mutate('Eliminar Almacen', $almacen, function (Almacen $almacen): Almacen {
+            $almacen->eliminar();
+
+            return $almacen;
+        });
         return redirect()->route('almacen.papelera')->with('success', 'Almacen Eliminado Correctamente');
     }
 

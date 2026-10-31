@@ -106,17 +106,18 @@ export default function Index({ products }: { products: Product[] }) {
                                 <TableCell>{product.precio_unitario}</TableCell>
                                 <TableCell>{product.M3_unitario}</TableCell>
                                 <TableCell className="flex-row space-x-2">
-                                    <Link
-                                        href={
-                                            ProductController.habilitar(
-                                                product.id,
-                                            ).url
+                                    <Button
+                                        className="bg-green-500 hover:bg-green-700"
+                                        onClick={() =>
+                                            router.post(
+                                                ProductController.habilitar(
+                                                    product.id,
+                                                ).url,
+                                            )
                                         }
                                     >
-                                        <Button className="bg-green-500 hover:bg-green-700">
-                                            <RotateCcw />
-                                        </Button>
-                                    </Link>
+                                        <RotateCcw />
+                                    </Button>
 
                                     <Button
                                         className="bg-red-500 hover:bg-red-700"

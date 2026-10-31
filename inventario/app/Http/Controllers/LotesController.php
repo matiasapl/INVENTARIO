@@ -8,7 +8,7 @@ use App\Models\Almacen;
 use App\Http\Requests\StoreLotesRequest;
 use App\Http\Requests\UpdateLotesRequest;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Registro;
+use App\Services\InventoryAudit;
 
 class LotesController extends Controller
 {
@@ -63,54 +63,42 @@ public function index()
         /**
      * Deshabilitar un Lote
      */
-    public function deshabilitar(Lotes $Lote)
+    public function deshabilitar(Lotes $Lote, InventoryAudit $audit)
     {
         $this->authorizeLotes($Lote);
-        $Lote->deshabilitar();
+        $audit->mutate('Deshabilitar Lote', $Lote, function (Lotes $Lote): Lotes {
+            $Lote->deshabilitar();
 
-    Registro::create([
-        'codigo' => $Lote->codigo,
-        'nombre' => $Lote->descripcion,
-        'accion' => 'Deshabilitar Lote',
-        'tipo' => 'Manual',
-        'usuario' => Auth::id()
-    ]);
+            return $Lote;
+        });
 
         return redirect()->route('lotes.index')->with('success', 'Lote deshabilitado correctamente');
     }
         /**
      * Habilitar un producto
      */
-    public function habilitar(Lotes $Lote)
+    public function habilitar(Lotes $Lote, InventoryAudit $audit)
     {
         $this->authorizeLotes($Lote);
-        $Lote->habilitar();
+        $audit->mutate('Habilitar Lote', $Lote, function (Lotes $Lote): Lotes {
+            $Lote->habilitar();
 
-        Registro::create([
-        'codigo' => $Lote->codigo,
-        'nombre' => $Lote->descripcion,
-        'accion' => 'Habilitar Lote',
-        'tipo' => 'Manual',
-        'usuario' => Auth::id()
-        ]);
+            return $Lote;
+        });
         return redirect()->route('lotes.papelera')->with('success', 'Lote habilitado correctamente');
     }
 
             /**
      * Eliminar un producto
      */
-    public function eliminar(Lotes $Lote)
+    public function eliminar(Lotes $Lote, InventoryAudit $audit)
     {
         $this->authorizeLotes($Lote);
-        $Lote->eliminar();
+        $audit->mutate('Eliminar Lotes', $Lote, function (Lotes $Lote): Lotes {
+            $Lote->eliminar();
 
-    Registro::create([
-        'codigo' => $Lote->codigo,
-        'nombre' => $Lote->descripcion,
-        'accion' => 'Eliminar Lotes',
-        'tipo' => 'Manual',
-        'usuario' => Auth::id()
-    ]);
+            return $Lote;
+        });
         return redirect()->route('lotes.papelera')->with('success', 'Lotes eliminado correctamente');
     }
 
@@ -141,21 +129,12 @@ public function create()
     /**
      * Guardar un nuevo producto asociado al usuario autenticado.
      */
-    public function store(StoreLotesRequest $request)
+    public function store(StoreLotesRequest $request, InventoryAudit $audit)
     {
         $data = $request->validated();
         $data['usuario'] = Auth::id();
 
-        $Lotes = Lotes::create($data);
-        $Lotes->refresh();
-        
-    Registro::create([
-        'codigo' => $Lotes->codigo,
-        'nombre' => $Lotes->descripcion,
-        'accion' => 'Crear Lote',
-        'tipo' => 'Manual',
-        'usuario' => Auth::id()
-    ]);
+        $audit->mutate('Crear Lote', null, fn (): Lotes => Lotes::create($data));
         return redirect()->route('lotes.index')->with('success', 'Lote creado correctamente');
     }
 
@@ -208,33 +187,22 @@ public function edit(Lotes $Lote)
                 return redirect()->route('lotes.index')->with('error', 'No se encontró el lote o no tienes permisos.');
             }
     
-    Registro::create([
-        'codigo' => $Lote->codigo,
-        'nombre' => $Lote->descripcion,
-        'accion' => 'Ver Lote',
-        'tipo' => 'Manual',
-        'usuario' => Auth::id()
-    ]);
         return inertia('Lotes/View', compact('VerLote'));
     }
 
     /**
      * Actualizar producto creado por el usuario autenticado.
      */
-    public function update(UpdateLotesRequest $request, Lotes $Lote)
+    public function update(UpdateLotesRequest $request, Lotes $Lote, InventoryAudit $audit)
     {
         $this->authorizeLotes($Lote);
 
-        $Lote->update($request->validated());
+        $data = $request->validated();
+        $audit->mutate('Editar Lote', $Lote, function (Lotes $Lote) use ($data): Lotes {
+            $Lote->update($data);
 
-
-    Registro::create([
-        'codigo' => $Lote->codigo,
-        'nombre' => $request->descripcion,
-        'accion' => 'Editar Lote',
-        'tipo' => 'Manual',
-        'usuario' => Auth::id()
-    ]);
+            return $Lote;
+        });
         return redirect()->route('lotes.index')->with('success', 'Lote editado correctamente');
     }
 

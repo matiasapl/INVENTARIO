@@ -10,7 +10,7 @@ import {
     TableRow,
 } from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout';
-import { type BreadcrumbItem } from '@/types';
+import { type BreadcrumbItem, type Paginated } from '@/types';
 import { Head, Link, router } from '@inertiajs/react';
 import { ArrowBigLeft, CircleCheck, CircleX, RotateCcw } from 'lucide-react';
 import { useState } from 'react'; // 1. Importar useState
@@ -20,7 +20,7 @@ interface Lote {
     codigo: string;
     descripcion: string;
     producto: string;
-    cantidad: string;
+    cantidad: number;
     almacen: string;
     estado: boolean;
 }
@@ -36,7 +36,7 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-export default function Index({ Lotes }: { Lotes: any }) {
+export default function Index({ Lotes }: { Lotes: Paginated<Lote> }) {
     // 2. Definir estados para el modal
     const [showModal, setShowModal] = useState(false);
     const [selectedLote, setSelectedLote] = useState<Lote | null>(null);
@@ -85,40 +85,42 @@ export default function Index({ Lotes }: { Lotes: any }) {
                 </TableHeader>
                 {Lotes.data.length > 0 && (
                     <TableBody>
-                        {Lotes.data.map((Lote: any) => (
-                            <TableRow key={Lote.codigo}>
-                                <TableCell>{Lote.codigo}</TableCell>
+                        {Lotes.data.map((lote) => (
+                            <TableRow key={lote.codigo}>
+                                <TableCell>{lote.codigo}</TableCell>
 
                                 <TableCell>
-                                    {Lote.descripcion?.length > 50
-                                        ? Lote.descripcion.substring(0, 50) +
+                                    {lote.descripcion?.length > 50
+                                        ? lote.descripcion.substring(0, 50) +
                                           '...'
-                                        : (Lote.descripcion ??
+                                        : (lote.descripcion ??
                                           'Sin Descripcion')}
                                 </TableCell>
-                                <TableCell>{Lote.producto}</TableCell>
-                                <TableCell>{Lote.cantidad}</TableCell>
-                                <TableCell>{Lote.almacen}</TableCell>
+                                <TableCell>{lote.producto}</TableCell>
+                                <TableCell>{lote.cantidad}</TableCell>
+                                <TableCell>{lote.almacen}</TableCell>
                                 <TableCell>
-                                    {Lote.estado == true
+                                    {lote.estado == true
                                         ? 'Activo'
                                         : 'Inactivo'}
                                 </TableCell>
                                 <TableCell className="flex-row space-x-2">
-                                    <Link
-                                        href={
-                                            LotesController.habilitar(Lote.id)
-                                                .url
+                                    <Button
+                                        className="bg-green-500 hover:bg-green-700"
+                                        onClick={() =>
+                                            router.post(
+                                                LotesController.habilitar(
+                                                    lote.id,
+                                                ).url,
+                                            )
                                         }
                                     >
-                                        <Button className="bg-green-500 hover:bg-green-700">
-                                            <RotateCcw />
-                                        </Button>
-                                    </Link>
+                                        <RotateCcw />
+                                    </Button>
 
                                     <Button
                                         className="bg-red-500 hover:bg-red-700"
-                                        onClick={() => openModal(Lote)}
+                                        onClick={() => openModal(lote)}
                                     >
                                         <CircleX />
                                     </Button>

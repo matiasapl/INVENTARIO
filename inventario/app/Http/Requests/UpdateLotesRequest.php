@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class UpdateLotesRequest extends FormRequest
 {
@@ -23,9 +25,25 @@ class UpdateLotesRequest extends FormRequest
     {
         return [
         'descripcion' => ['required', 'string', 'max:30'],
-        'producto_id' => ['required', 'numeric'],
+        'producto_id' => [
+            'required',
+            'integer',
+            Rule::exists('products', 'id')
+                ->where('usuario', Auth::id())
+                ->where('estado', true)
+                ->where('habilitado', true)
+                ->where('eliminado', false),
+        ],
         'cantidad' => ['required', 'numeric', 'min:0', 'max:10000000'],
-        'almacen_id' => ['required', 'numeric', 'max:30'],
+        'almacen_id' => [
+            'required',
+            'integer',
+            Rule::exists('almacens', 'id')
+                ->where('usuario', Auth::id())
+                ->where('estado', true)
+                ->where('habilitado', true)
+                ->where('eliminado', false),
+        ],
         'estado' => ['required', 'boolean'],
         ];
     }

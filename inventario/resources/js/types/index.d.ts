@@ -10,6 +10,17 @@ export interface BreadcrumbItem {
     href: string;
 }
 
+export interface PaginationLink {
+    url: string | null;
+    label: string;
+    active: boolean;
+}
+
+export interface Paginated<T> {
+    data: T[];
+    links: PaginationLink[];
+}
+
 export interface NavGroup {
     title: string;
     items: NavItem[];

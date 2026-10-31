@@ -110,6 +110,19 @@ Esto iniciará simultáneamente:
 - Vite dev server para frontend
 - Queue worker para procesos en segundo plano
 
+## 🐳 Desarrollo con Docker Compose
+
+Docker instala dependencias y compila los assets durante el build de la imagen. El arranque no instala paquetes, genera claves ni ejecuta migraciones. MariaDB persiste en el volumen `db_data`, montado en su directorio de datos `/var/lib/mysql`.
+
+```bash
+cp .env.example .env
+php artisan key:generate
+docker compose up -d --build
+docker compose exec apache php artisan migrate
+```
+
+Reconstruye la imagen después de cambiar código o dependencias. `docker compose down` conserva la base; `docker compose down -v` la elimina. Las credenciales de `.env.example` son solo para desarrollo local desechable.
+
 ## 📁 Estructura del Proyecto
 
 ```
@@ -149,7 +162,7 @@ Inventario/
 
 ## 🧪 Tests
 
-El proyecto sigue estándares **TDD (Test Driven Development)** y **SDD (Specification Driven Development)** con documentación viva en los tests.
+El proyecto adopta un flujo de especificaciones y TDD para cambios no triviales. Consulta [`specs/README.md`](specs/README.md) para el proceso; los tests existentes no certifican por sí solos que todos los módulos sigan ese flujo.
 
 ### Ejecutar Tests
 
@@ -188,13 +201,6 @@ tests/
 └── Concerns/              # Traits reutilizables para tests
 ```
 
-### Cobertura de Tests
-
-Los tests generan reportes de cobertura en:
-
-- `coverage.xml` - Formato Clover para CI/CD
-- `coverage-report/` - Reporte HTML interactivo
-
 ### Especificaciones en Tests
 
 Cada test incluye documentación viva con:
@@ -217,59 +223,22 @@ it('can disable a product but not permanently delete it', function () {
 
 ### Base de Datos de Testing
 
-Los tests utilizan una base de datos **MariaDB separada** (`u191434997_Inventario_test`) para no interferir con datos de producción. El trait `RefreshDatabase` limpia la BD después de cada test automáticamente.
+Las pruebas que acceden a datos requieren una base de pruebas aislada, configurada localmente. Antes de ejecutarlas, confirma que la conexión efectiva apunta a una base desechable; `RefreshDatabase` puede modificar su esquema y datos. El repositorio no configura ni garantiza una instancia CI de pruebas.
 
-## 🔄 CI/CD (Integración y Entrega Continua)
+## Verificación local
 
-El proyecto cuenta con **GitHub Actions** para automatizar la calidad del código en cada push o pull request.
-
-### Flujos Automatizados
-
-```yaml
-# .github/workflows/tests.yml
-on:
-  push:
-    branches: [main, develop]
-  pull_request:
-    branches: [main, develop]
-```
-
-### Pasos del Pipeline
-
-1. **Tests con Cobertura** - Ejecuta todos los tests y genera reporte de cobertura
-2. **Análisis Estático** - PHPStan nivel 5 para detectar errores de tipo
-3. **Code Style** - Laravel Pint para verificar formato de código
-4. **Seguridad** - Escaneo de dependencias vulnerables
-5. **Reporte** - Sube resultados como artifacts
-
-### Comandos Locales Equivalentes
+No hay un pipeline CI/CD activo en este repositorio. Los comandos locales disponibles para validación incluyen:
 
 ```bash
-# Ejecutar todo el pipeline localmente
-composer run test:coverage    # Tests con cobertura
-composer run analyse          # PHPStan
-composer run format           # Laravel Pint (format)
+composer run test
+composer run analyse
+vendor/bin/pint --test
+npm run types
+npm run format:check
+npm run build
 ```
 
-### Configuración de Cobertura
-
-- **Mínimo requerido**: 80% de cobertura
-- **Reportes**:
-  - `coverage.xml` - Formato Clover para CI
-  - `coverage-report/` - HTML interactivo local
-
-## 📊 Métricas de Calidad
-
-| Métrica                      | Estado | Detalle                     |
-| ---------------------------- | ------ | --------------------------- |
-| **Tests Unitarios**          | ✅     | 39 tests (Modelos)          |
-| **Tests de Integración**     | ✅     | 66 tests (Controladores)    |
-| **Tests de Características** | ✅     | 15 tests (Flujos completos) |
-| **Total Tests**              | ✅     | ~120 tests                  |
-| **Análisis Estático**        | ✅     | PHPStan nivel 5             |
-| **Code Style**               | ✅     | Laravel Pint                |
-| **CI/CD**                    | ✅     | GitHub Actions              |
-| **Cobertura**                | 🎯     | Objetivo 80%+               |
+Revisa los scripts antes de ejecutarlos: algunos pueden limpiar configuración, modificar archivos o generar artefactos. No se publican métricas de cobertura certificadas.
 
 ## 🔒 Seguridad
 

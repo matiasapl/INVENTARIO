@@ -32,6 +32,11 @@ class Product extends Model
         return $this->belongsTo(User::class, 'usuario');
     }
 
+    public function lotes()
+    {
+        return $this->hasMany(Lotes::class, 'producto_id');
+    }
+
     public function deshabilitar()
     {
         $this->habilitado = false;

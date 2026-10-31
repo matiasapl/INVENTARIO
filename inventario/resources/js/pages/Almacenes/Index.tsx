@@ -10,7 +10,7 @@ import {
     TableRow,
 } from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout';
-import { type BreadcrumbItem } from '@/types';
+import { type BreadcrumbItem, type Paginated } from '@/types';
 import { Head, Link, router } from '@inertiajs/react';
 import {
     CircleCheck,
@@ -25,7 +25,7 @@ interface Almacen {
     id: number;
     codigo: string;
     nombre: string;
-    descripcion: string;
+    descripcion: string | null;
     ubicacion: string;
     estado: boolean;
 }
@@ -37,7 +37,11 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-export default function Index({ Almacenes }: { Almacenes: any }) {
+export default function Index({
+    Almacenes,
+}: {
+    Almacenes: Paginated<Almacen>;
+}) {
     const [showModal, setShowModal] = useState(false);
     const [selectedAlmacen, setSelectedAlmacen] = useState<Almacen | null>(
         null,
@@ -55,7 +59,7 @@ export default function Index({ Almacenes }: { Almacenes: any }) {
 
     const confirmDisable = () => {
         if (selectedAlmacen) {
-            router.get(AlmacenController.deshabilitar(selectedAlmacen).url);
+            router.post(AlmacenController.deshabilitar(selectedAlmacen).url);
         }
     };
 
@@ -76,7 +80,7 @@ export default function Index({ Almacenes }: { Almacenes: any }) {
                 </Link>
             </nav>
             <div className="pagination mx-4 flex justify-center gap-2">
-                {Almacenes.links.map((link: any, index: number) => (
+                {Almacenes.links.map((link, index) => (
                     <a
                         key={index}
                         href={link.url || '#'}
@@ -99,36 +103,37 @@ export default function Index({ Almacenes }: { Almacenes: any }) {
                 </TableHeader>
                 {Almacenes.data.length > 0 && (
                     <TableBody>
-                        {Almacenes.data.map((Almacenes: any) => (
-                            <TableRow key={Almacenes.codigo}>
-                                <TableCell>{Almacenes.codigo}</TableCell>
+                        {Almacenes.data.map((almacen) => (
+                            <TableRow key={almacen.codigo}>
+                                <TableCell>{almacen.codigo}</TableCell>
                                 <TableCell>
-                                    {Almacenes.nombre.length > 30
-                                        ? Almacenes.nombre.substring(0, 30) +
+                                    {almacen.nombre.length > 30
+                                        ? almacen.nombre.substring(0, 30) +
                                           '...'
-                                        : Almacenes.nombre}
+                                        : almacen.nombre}
                                 </TableCell>
                                 <TableCell>
                                     <TableCell>
-                                        {Almacenes.descripcion?.length > 50
-                                            ? Almacenes.descripcion.substring(
+                                        {almacen.descripcion &&
+                                        almacen.descripcion.length > 50
+                                            ? almacen.descripcion.substring(
                                                   0,
                                                   50,
                                               ) + '...'
-                                            : (Almacenes.descripcion ??
+                                            : (almacen.descripcion ??
                                               'Sin Descripcion')}
                                     </TableCell>
                                 </TableCell>
-                                <TableCell>{Almacenes.ubicacion}</TableCell>
+                                <TableCell>{almacen.ubicacion}</TableCell>
                                 <TableCell>
-                                    {Almacenes.estado == true
+                                    {almacen.estado == true
                                         ? 'Activo'
                                         : 'Inactivo'}
                                 </TableCell>
                                 <TableCell className="flex-row space-x-2">
                                     <Link
                                         href={
-                                            AlmacenController.view(Almacenes.id)
+                                            AlmacenController.view(almacen.id)
                                                 .url
                                         }
                                     >
@@ -138,7 +143,7 @@ export default function Index({ Almacenes }: { Almacenes: any }) {
                                     </Link>
                                     <Link
                                         href={
-                                            AlmacenController.edit(Almacenes.id)
+                                            AlmacenController.edit(almacen.id)
                                                 .url
                                         }
                                     >
@@ -148,7 +153,7 @@ export default function Index({ Almacenes }: { Almacenes: any }) {
                                     </Link>
                                     <Button
                                         className="bg-red-500 hover:bg-red-700"
-                                        onClick={() => openModal(Almacenes)}
+                                        onClick={() => openModal(almacen)}
                                     >
                                         <Trash2 />
                                     </Button>

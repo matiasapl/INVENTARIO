@@ -103,17 +103,18 @@ export default function Index({ Almacenes }: { Almacenes: Almacen[] }) {
                                 </TableCell>
                                 <TableCell>{Almacen.ubicacion}</TableCell>
                                 <TableCell className="flex-row space-x-2">
-                                    <Link
-                                        href={
-                                            AlmacenController.habilitar(
-                                                Almacen.id,
-                                            ).url
+                                    <Button
+                                        className="bg-green-500 hover:bg-green-700"
+                                        onClick={() =>
+                                            router.post(
+                                                AlmacenController.habilitar(
+                                                    Almacen.id,
+                                                ).url,
+                                            )
                                         }
                                     >
-                                        <Button className="bg-green-500 hover:bg-green-700">
-                                            <RotateCcw />
-                                        </Button>
-                                    </Link>
+                                        <RotateCcw />
+                                    </Button>
 
                                     <Button
                                         className="bg-red-500 hover:bg-red-700"

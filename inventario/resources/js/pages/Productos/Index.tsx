@@ -10,7 +10,7 @@ import {
     TableRow,
 } from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout';
-import { type BreadcrumbItem } from '@/types';
+import { type BreadcrumbItem, type Paginated } from '@/types';
 import { Head, Link, router } from '@inertiajs/react';
 import {
     CircleCheck,
@@ -24,9 +24,9 @@ import { useState } from 'react';
 
 interface Product {
     id: number;
-    codigo: number;
+    codigo: string;
     nombre: string;
-    descripcion: string;
+    descripcion: string | null;
     precio_unitario: number;
     M3_unitario: number;
     estado: boolean;
@@ -39,7 +39,7 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-export default function Index({ products }: { products: any }) {
+export default function Index({ products }: { products: Paginated<Product> }) {
     const [showModal, setShowModal] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState<Product | null>(
         null,
@@ -57,7 +57,7 @@ export default function Index({ products }: { products: any }) {
 
     const confirmDisable = () => {
         if (selectedProduct) {
-            router.get(ProductController.deshabilitar(selectedProduct).url);
+            router.post(ProductController.deshabilitar(selectedProduct).url);
         }
     };
 
@@ -78,7 +78,7 @@ export default function Index({ products }: { products: any }) {
             </nav>
 
             <div className="pagination mx-4 flex justify-center gap-2">
-                {products.links.map((link: any, index: number) => (
+                {products.links.map((link, index) => (
                     <a
                         key={index}
                         href={link.url || '#'}
@@ -102,7 +102,7 @@ export default function Index({ products }: { products: any }) {
                 </TableHeader>
                 {products.data.length > 0 && (
                     <TableBody>
-                        {products.data.map((product: any) => (
+                        {products.data.map((product) => (
                             <TableRow key={product.codigo}>
                                 <TableCell>{product.codigo}</TableCell>
                                 <TableCell>
@@ -113,7 +113,8 @@ export default function Index({ products }: { products: any }) {
                                 </TableCell>
                                 <TableCell>
                                     <TableCell>
-                                        {product.descripcion?.length > 50
+                                        {product.descripcion &&
+                                        product.descripcion.length > 50
                                             ? product.descripcion.substring(
                                                   0,
                                                   50,

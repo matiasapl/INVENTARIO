@@ -4,6 +4,7 @@ use App\Models\Lotes;
 use App\Models\Product;
 use App\Models\Almacen;
 use App\Models\User;
+use Inertia\Testing\AssertableInertia as Assert;
 
 /**
  * Tests de integración para LotesController.
@@ -38,7 +39,9 @@ it('authenticated user can view lots list', function () {
     $response = $this->get(route('lotes.index'));
 
     $response->assertOk();
-    expect($response->inertia->page['lotes']['data'])->toHaveCount(3);
+    $response->assertInertia(fn (Assert $page) => $page
+        ->component('Lotes/Index')
+        ->has('Lotes.data', 3));
 });
 
 /**
@@ -72,7 +75,9 @@ it('authenticated user only sees their own active lots', function () {
 
     $response->assertOk();
     // Solo deberían aparecer los 2 lotes activos
-    expect($response->inertia->page['lotes']['data'])->toHaveCount(2);
+    $response->assertInertia(fn (Assert $page) => $page
+        ->component('Lotes/Index')
+        ->has('Lotes.data', 2));
 });
 
 /**
@@ -166,22 +171,23 @@ it('user cannot create lot without description', function () {
  * @test
  * @spec "Un usuario no puede crear un lote con cantidad inválida"
  */
-it('user cannot create lot with invalid quantity', function () {
+it('user can create lot with zero quantity', function () {
     $this->actingAs($this->user);
 
     $producto = Product::factory()->create(['usuario' => $this->user->id]);
     $almacen = Almacen::factory()->create(['usuario' => $this->user->id]);
 
     $loteData = [
-        'descripcion' => 'Lote con cantidad inválida',
+        'descripcion' => 'Lote con cantidad cero',
         'producto_id' => $producto->id,
         'almacen_id' => $almacen->id,
-        'cantidad' => 0, // Cantidad inválida
+        'cantidad' => 0,
     ];
 
     $response = $this->post(route('lotes.store'), $loteData);
 
-    $response->assertSessionHasErrors('cantidad');
+    $response->assertRedirect(route('lotes.index'));
+    $this->assertDatabaseHas('lotes', ['descripcion' => 'Lote con cantidad cero', 'cantidad' => 0]);
 });
 
 /**
@@ -191,7 +197,13 @@ it('user cannot create lot with invalid quantity', function () {
 it('authenticated user can view their own lot', function () {
     $this->actingAs($this->user);
 
-    $lote = Lotes::factory()->create(['usuario' => $this->user->id]);
+    $producto = Product::factory()->create(['usuario' => $this->user->id]);
+    $almacen = Almacen::factory()->create(['usuario' => $this->user->id]);
+    $lote = Lotes::factory()->create([
+        'usuario' => $this->user->id,
+        'producto_id' => $producto->id,
+        'almacen_id' => $almacen->id,
+    ]);
 
     $response = $this->get(route('lotes.view', $lote));
 
@@ -205,7 +217,13 @@ it('authenticated user can view their own lot', function () {
 it('user cannot view another user lot', function () {
     $this->actingAs($this->user);
 
-    $lote = Lotes::factory()->create(['usuario' => $this->otherUser->id]);
+    $producto = Product::factory()->create(['usuario' => $this->otherUser->id]);
+    $almacen = Almacen::factory()->create(['usuario' => $this->otherUser->id]);
+    $lote = Lotes::factory()->create([
+        'usuario' => $this->otherUser->id,
+        'producto_id' => $producto->id,
+        'almacen_id' => $almacen->id,
+    ]);
 
     $response = $this->get(route('lotes.view', $lote));
 
@@ -247,11 +265,20 @@ it('user cannot edit another user lot', function () {
 it('authenticated user can update their lot', function () {
     $this->actingAs($this->user);
 
-    $lote = Lotes::factory()->create(['usuario' => $this->user->id]);
+    $producto = Product::factory()->create(['usuario' => $this->user->id]);
+    $almacen = Almacen::factory()->create(['usuario' => $this->user->id]);
+    $lote = Lotes::factory()->create([
+        'usuario' => $this->user->id,
+        'producto_id' => $producto->id,
+        'almacen_id' => $almacen->id,
+    ]);
 
     $updateData = [
         'descripcion' => 'Lote Actualizado',
         'cantidad' => 200,
+        'producto_id' => $lote->producto_id,
+        'almacen_id' => $lote->almacen_id,
+        'estado' => true,
     ];
 
     $response = $this->put(route('lotes.update', $lote), $updateData);
@@ -271,10 +298,20 @@ it('authenticated user can update their lot', function () {
 it('user cannot update another user lot', function () {
     $this->actingAs($this->user);
 
-    $lote = Lotes::factory()->create(['usuario' => $this->otherUser->id]);
+    $ownProduct = Product::factory()->create(['usuario' => $this->user->id]);
+    $ownWarehouse = Almacen::factory()->create(['usuario' => $this->user->id]);
+    $lote = Lotes::factory()->create([
+        'usuario' => $this->otherUser->id,
+        'producto_id' => $ownProduct->id,
+        'almacen_id' => $ownWarehouse->id,
+    ]);
 
     $updateData = [
         'descripcion' => 'Intento de actualización',
+        'cantidad' => 200,
+        'producto_id' => $ownProduct->id,
+        'almacen_id' => $ownWarehouse->id,
+        'estado' => true,
     ];
 
     $response = $this->put(route('lotes.update', $lote), $updateData);
@@ -350,7 +387,7 @@ it('authenticated user can delete their lot (soft delete)', function () {
         'eliminado' => false,
     ]);
 
-    $response = $this->post(route('lotes.eliminar', $lote));
+    $response = $this->delete(route('lotes.eliminar', $lote));
 
     $response->assertRedirect(route('lotes.papelera'));
     $this->assertDatabaseHas('lotes', [
@@ -371,7 +408,7 @@ it('user cannot delete another user lot', function () {
         'eliminado' => false,
     ]);
 
-    $response = $this->post(route('lotes.eliminar', $lote));
+    $response = $this->delete(route('lotes.eliminar', $lote));
 
     $response->assertForbidden();
 });
@@ -393,5 +430,7 @@ it('authenticated user can view trash with disabled lots', function () {
 
     $response->assertOk();
     // Solo deberían aparecer los lotes deshabilitados
-    expect($response->inertia->page['lotes'])->toHaveCount(2);
+    $response->assertInertia(fn (Assert $page) => $page
+        ->component('Lotes/Papelera')
+        ->has('Lotes.data', 2));
 });

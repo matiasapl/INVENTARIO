@@ -79,7 +79,7 @@
         ],
         "analyse": [
             "@php artisan config:clear --ansi",
-            "./vendor/bin/phpstan analyse --memory-limit=2G"
+            "@php vendor/bin/phpstan analyse --memory-limit=2G"
         ],
         "format": [
             "./vendor/bin/pint"
