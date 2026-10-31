@@ -1,261 +1,110 @@
 # INVENTARIO
 
-Sistema de gestión de inventario desarrollado con **Laravel 12** y **React 19**, integrados mediante **Inertia.js**.
+Aplicación web de gestión de inventario con Laravel 12, React 19 e Inertia.js. Es un proyecto de portafolio en desarrollo; no usar para administrar inventario real ni introducir datos sensibles.
 
-## 🚀 Características
+## Funcionalidades
 
-- **Gestión de Productos** - CRUD completo con eliminación lógica
-- **Administración de Almacenes** - Múltiples ubicaciones de almacenamiento
-- **Control de Lotes** - Seguimiento de lotes por producto y almacén
-- **Registro de Actividades** - Auditoría completa de operaciones
-- **Autenticación Segura** - Laravel Fortify con verificación de dos factores
-- **Interfaz Moderna** - React con Tailwind CSS y componentes Radix UI
+- Gestión de productos y almacenes.
+- Lotes vinculados a productos y almacenes, con cantidades.
+- Registro de operaciones de inventario.
+- Registro individual, autenticación con Laravel Fortify y segundo factor opcional.
+- Landing pública con capturas sintéticas para explorar el proyecto.
 
-## 🛠️ Stack Tecnológico
+El registro de operaciones no equivale a una auditoría completa de todos los eventos de la aplicación ni a una certificación de seguridad.
 
-### Backend
+## Tecnologías
 
-- **Laravel 12** - Framework PHP 8.2+
-- **Laravel Fortify** - Autenticación y seguridad
-- **Inertia.js** - Puente entre Laravel y React
-- **MariaDB** - Base de datos relacional
+- PHP `^8.2`, Laravel `^12.0`, Fortify e Inertia Laravel.
+- React 19, TypeScript, Tailwind CSS 4 e Inertia React.
+- MariaDB; Docker Compose usa MariaDB 10.11.
+- Node.js `^20.19.0` o `>=22.12.0` y npm, según la versión de Vite fijada en `inventario/package-lock.json`.
 
-### Frontend
+## Instalación local
 
-- **React 19** - Biblioteca de interfaz de usuario
-- **TypeScript** - Tipado estático
-- **Tailwind CSS 4** - Estilos utilitarios
-- **Radix UI** - Componentes accesibles
-- **React Hook Form** - Gestión de formularios
-- **Zod** - Validación de datos
-- **Vite** - Build tool y dev server
-
-## 📋 Requisitos
-
-- PHP 8.2 o superior
-- Composer
-- Node.js 18+ y npm
-- **MariaDB** (requerido - el proyecto utiliza la función UUID() nativa de MariaDB)
-
-## 🔧 Instalación
-
-1. **Clonar el repositorio**
+El código de la aplicación está dentro de `inventario/`. Ejecuta los comandos siguientes desde esa carpeta:
 
 ```bash
 git clone https://github.com/matiasapl/INVENTARIO.git
-cd Inventario
-```
-
-2. **Instalar dependencias de PHP**
-
-```bash
+cd INVENTARIO/inventario
 composer install
-```
-
-3. **Configurar el entorno**
-
-```bash
 cp .env.example .env
 php artisan key:generate
 ```
 
-4. **Configurar la base de datos**
-
-   a. Crea una base de datos en tu servidor MariaDB:
-
-```sql
-CREATE DATABASE inventario CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-```
-
-b. Edita el archivo `.env` con tus credenciales de MariaDB:
-
-```env
-DB_CONNECTION=mariadb
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=inventario
-DB_USERNAME=tu_usuario
-DB_PASSWORD=tu_contraseña
-```
-
-c. Ejecuta las migraciones:
+Configura en `.env` una base de datos MariaDB local y desechable. Para ejecutar Laravel fuera de Docker, configura el host y puerto de MariaDB accesibles desde tu máquina, por ejemplo `127.0.0.1:3306`. Después:
 
 ```bash
 php artisan migrate
-```
-
-5. **Instalar dependencias de Node.js**
-
-```bash
-npm install
-```
-
-6. **Compilar assets (para producción)**
-
-```bash
+npm ci
 npm run build
 ```
 
-## 🏃 Desarrollo
+No reutilices datos ni credenciales de producción. Mantén `.env` fuera del control de versiones.
 
-Iniciar el servidor de desarrollo con hot reload:
+## Desarrollo
+
+Desde `inventario/`, ejecuta:
 
 ```bash
 composer run dev
 ```
 
-Esto iniciará simultáneamente:
+El script inicia el servidor Laravel, Vite y el worker de colas. La aplicación queda normalmente en `http://localhost:8000`.
 
-- Servidor de Laravel en `http://localhost:8000`
-- Vite dev server para frontend
-- Queue worker para procesos en segundo plano
+## Desarrollo con Docker Compose
 
-## 🐳 Desarrollo con Docker Compose
-
-Docker instala dependencias y compila los assets durante el build de la imagen. El arranque no instala paquetes, genera claves ni ejecuta migraciones. MariaDB persiste en el volumen `db_data`, montado en su directorio de datos `/var/lib/mysql`.
+Ejecuta desde `inventario/`. Antes de levantar Compose, prepara `.env` con valores exclusivos para desarrollo local. En una instalación nueva, copia `.env.example` a `.env` si el archivo aún no existe; ejecuta `composer install` para poder usar Artisan en el host y `php artisan key:generate` solo si `APP_KEY` está vacía. Compose construye la imagen y compila los assets; el arranque no instala dependencias, genera la clave ni aplica migraciones.
 
 ```bash
+composer install
+# Solo si .env todavía no existe:
 cp .env.example .env
+# Solo en una instalación nueva con APP_KEY vacía:
 php artisan key:generate
-docker compose up -d --build
+docker compose up --build -d
+docker compose ps
 docker compose exec apache php artisan migrate
 ```
 
-Reconstruye la imagen después de cambiar código o dependencias. `docker compose down` conserva la base; `docker compose down -v` la elimina. Las credenciales de `.env.example` son solo para desarrollo local desechable.
+La aplicación queda en `http://localhost:8000`, phpMyAdmin en `http://localhost:8081` y MariaDB se publica en el puerto local `3307`. MariaDB guarda sus datos en el volumen persistente `db_data`. `docker compose down` conserva ese volumen; `docker compose down -v` lo elimina junto con la base de datos. Las credenciales de `.env.example` son solo valores de ejemplo para una instalación local desechable.
 
-## 📁 Estructura del Proyecto
+## Estructura
 
-```
-Inventario/
-├── app/
-│   ├── Models/           # Modelos Eloquent (Product, Almacen, Lotes, etc.)
-│   ├── Http/
-│   │   ├── Controllers/  # Controladores
-│   │   └── Requests/     # Validaciones
-│   ├── Policies/         # Políticas de autorización
-│   └── Actions/          # Acciones reutilizables
-├── resources/
-│   ├── js/
-│   │   ├── pages/        # Páginas por módulo
-│   │   ├── components/   # Componentes React
-│   │   ├── layouts/      # Layouts principales
-│   │   └── types/        # Tipos TypeScript
-│   └── views/            # Vistas Blade
-├── routes/
-│   ├── web.php           # Rutas web principales
-│   └── settings.php      # Rutas de configuración
-└── database/
-    └── migrations/       # Migraciones de base de datos
+```text
+INVENTARIO/
+├── inventario/
+│   ├── app/                 # Controladores, modelos, requests y servicios
+│   ├── database/            # Migraciones y factories
+│   ├── resources/           # Interfaz React y vistas Blade
+│   ├── routes/              # Rutas web
+│   ├── tests/               # Pruebas Pest
+│   └── docker-compose.yml
+├── specs/                   # Especificaciones de cambios no triviales
+├── AGENTS.md
+├── CONSTITUTION.md
+└── MEMORY.md
 ```
 
-## 🗄️ Modelo de Datos
+## Pruebas y verificaciones
 
-### Entidades Principales
-
-| Entidad      | Descripción                                            |
-| ------------ | ------------------------------------------------------ |
-| **User**     | Usuarios del sistema con autenticación                 |
-| **Product**  | Productos con precio unitario, descripción y estado    |
-| **Almacen**  | Ubicaciones de almacenamiento con código UUID          |
-| **Lotes**    | Lotes de productos con cantidad y ubicación específica |
-| **Registro** | Registro de acciones y auditoría del sistema           |
-
-## 🧪 Tests
-
-El proyecto adopta un flujo de especificaciones y TDD para cambios no triviales. Consulta [`specs/README.md`](specs/README.md) para el proceso; los tests existentes no certifican por sí solos que todos los módulos sigan ese flujo.
-
-### Ejecutar Tests
+Ejecuta los comandos de esta sección desde `inventario/`. Las pruebas Feature y Unit usan `RefreshDatabase`; antes de ejecutarlas, confirma que la conexión efectiva apunta a una base local/efímera aislada. No las ejecutes contra bases con datos que quieras conservar.
 
 ```bash
-# Ejecutar todos los tests
 composer run test
-
-# Ejecutar tests unitarios
 composer run test:unit
-
-# Ejecutar tests de características
 composer run test:feature
-
-# Ejecutar tests con reporte de cobertura
-composer run test:coverage
-
-# Analizar código con PHPStan
-composer run analyse
-
-# Formatear código con Laravel Pint
-composer run format
-```
-
-### Estructura de Tests
-
-```
-tests/
-├── Unit/                    # Tests unitarios
-│   ├── Models/             # Tests para modelos
-│   ├── Actions/            # Tests para lógica de negocio
-│   └── Policies/           # Tests para políticas
-├── Feature/                # Tests de características
-│   ├── Http/              # Tests para controladores y requests
-│   ├── Auth/              # Tests para autenticación
-│   └── Settings/          # Tests para configuración
-└── Concerns/              # Traits reutilizables para tests
-```
-
-### Especificaciones en Tests
-
-Cada test incluye documentación viva con:
-
-- `@spec` - Especificación del comportamiento esperado
-- `@audit` - Notas de auditoría y decisiones técnicas
-
-Ejemplo:
-
-```php
-/**
- * @test
- * @spec "Un producto puede ser deshababilitado pero no eliminado permanentemente"
- * @audit "Requerimiento: Los productos deben mantenerse para auditoría"
- */
-it('can disable a product but not permanently delete it', function () {
-    // ...
-});
-```
-
-### Base de Datos de Testing
-
-Las pruebas que acceden a datos requieren una base de pruebas aislada, configurada localmente. Antes de ejecutarlas, confirma que la conexión efectiva apunta a una base desechable; `RefreshDatabase` puede modificar su esquema y datos. El repositorio no configura ni garantiza una instancia CI de pruebas.
-
-## Verificación local
-
-No hay un pipeline CI/CD activo en este repositorio. Los comandos locales disponibles para validación incluyen:
-
-```bash
-composer run test
-composer run analyse
 vendor/bin/pint --test
 npm run types
 npm run format:check
 npm run build
 ```
 
-Revisa los scripts antes de ejecutarlos: algunos pueden limpiar configuración, modificar archivos o generar artefactos. No se publican métricas de cobertura certificadas.
+`composer run test` limpia la configuración de Laravel antes de iniciar Pest. `composer run analyse` también limpia esa configuración antes de ejecutar PHPStan. `composer run format` y `npm run lint` modifican archivos; no son comandos de solo comprobación. `composer run test:coverage` requiere un controlador de cobertura PHP compatible instalado (por ejemplo, Xdebug o PCOV).
 
-## 🔒 Seguridad
+Las pruebas se organizan bajo `inventario/tests/Feature/` y `inventario/tests/Unit/`. La existencia de pruebas no garantiza por sí sola que todas las capacidades estén cubiertas. Actualmente no hay workflows de CI versionados en el repositorio; la verificación debe ejecutarse localmente.
 
-- Eliminación lógica de registros (soft delete)
-- Políticas de autorización por recurso
-- Validación de datos en frontend y backend
-- Protección CSRF automática
-- Autenticación de dos factores opcional
+Para el proceso de especificación y revisión de cambios no triviales, consulta [`specs/README.md`](specs/README.md).
 
-## 📄 Licencia
+## Licencia y autoría
 
-MIT License
-
-## 👤 Autor
-
-Desarrollado por [matiasapl](https://github.com/matiasapl)
-
----
-
-**Nota:** Este proyecto utiliza Laravel React Starter Kit como base.
+Licencia MIT. Desarrollado por [matiasapl](https://github.com/matiasapl).
